@@ -4,195 +4,152 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#111c2d">
-<title>Zebra Etikettstudio – bildeeditor</title>
+<title>Zebra Etikettstudio</title>
 <style>
-:root { color-scheme:light; --bg:#edf2f7; --card:#fff; --ink:#152439; --muted:#64758b; --border:#dbe4ee; --blue:#145be3; --navy:#111c2d; --good:#16734a; --amber:#8a5910; }
-*{box-sizing:border-box}html{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}body{background:var(--bg);color:var(--ink);margin:0}.wrap{max-width:740px;margin:0 auto;padding:0 14px max(42px,env(safe-area-inset-bottom))}.hero{background:linear-gradient(140deg,#0f1d33,#203c65);color:#fff;padding:25px 20px 26px;margin:0 -14px 18px;border-radius:0 0 24px 24px}.hero h1{font-size:26px;letter-spacing:-.8px;margin:7px 0 4px}.hero p{opacity:.84;line-height:1.45;margin:0;font-size:14px}.eyebrow{text-transform:uppercase;font-weight:800;letter-spacing:2px;font-size:10px;color:#a4c8ff}.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:17px;margin:14px 0;box-shadow:0 4px 20px #18375609}.row-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}h2{font-size:17px;margin:0;letter-spacing:-.3px}.pill{font-size:11px;border-radius:50px;padding:5px 9px;background:#e8f0ff;color:#144caa;font-weight:750}.label{font-size:13px;font-weight:730;margin:13px 0 6px;display:block}.sub{color:var(--muted);font-size:12px;line-height:1.5;margin:5px 0 12px}.control{border:1px solid #c9d7e7;border-radius:11px;background:#fff;color:var(--ink);padding:12px;width:100%;font:inherit;font-size:16px;outline-offset:2px}.control:focus-visible{outline:2px solid #226df0}textarea.control{min-height:100px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:11px}.triple{display:grid;grid-template-columns:1fr 1fr 1fr;gap:9px}.btn{border:0;background:#e9f0fb;border-radius:12px;color:#1e406b;font:inherit;font-size:14px;line-height:1.3;font-weight:750;padding:13px 12px;cursor:pointer;min-height:46px;text-align:center}.btn:active{transform:translateY(1px)}.btn.main{background:var(--blue);color:#fff}.btn.dark{background:var(--navy);color:#fff}.btn.white{background:#fff;border:1px solid var(--border)}.btn.ghost{background:transparent;border:1px solid var(--border)}.btn:disabled{opacity:.5;cursor:wait}.full{width:100%;display:block}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}.upload{display:block;border:1.5px dashed #a9c2e3;background:#f0f6ff;border-radius:13px;text-align:center;font-size:14px;font-weight:750;padding:17px 12px;color:#174a9d;cursor:pointer}.upload input{display:none}.checkline{display:flex;gap:8px;align-items:center;margin-top:13px;font-size:13px}.checkline input{width:18px;height:18px}.preview-zone{background:#e9eef4;min-height:155px;border-radius:14px;display:grid;place-items:center;padding:18px;overflow:auto}.preview-zone canvas{max-width:100%;height:auto;background:white;box-shadow:0 6px 22px #15223926;image-rendering:auto;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}.preview-zone canvas:active{cursor:grabbing}.hint{font-size:12px;color:var(--muted);line-height:1.55;margin:11px 0 0}.status{margin-top:10px;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;background:#eef4fb;color:#264d78}.status:empty{display:none}.status.success{background:#e9f7ef;color:#145d3b}.status.warn{background:#fff5e3;color:#76500c}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-.2px}details{margin-top:13px}summary{cursor:pointer;color:#244e88;font-weight:750;font-size:13px}.help{font-size:13px;line-height:1.5;color:#53677f}.help p{margin:9px 0}.info{background:#fff8eb;color:#74541d;border-radius:12px;padding:12px;font-size:12px;line-height:1.6;margin-top:12px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}input[type="range"]{width:100%;accent-color:var(--blue)}.spacer{height:8px}footer{text-align:center;font-size:11px;color:#78879b;margin:20px 0}.methods{display:grid;grid-template-columns:1fr;gap:8px;margin-top:12px}@media(min-width:540px){.hero{margin:0 -14px 18px}.methods{grid-template-columns:1fr 1fr}}@media print{body{background:#fff}.hero,.card:not(#previewCard),#previewCard .row-head,#previewCard .hint,#previewCard .buttons,#previewCard .status,footer{display:none!important}#previewCard{border:0;box-shadow:none;margin:0;padding:0}.wrap{padding:0;max-width:none}.preview-zone{padding:0;background:#fff;display:block;min-height:0;overflow:visible}.preview-zone canvas{box-shadow:none;max-width:none!important;width:var(--paperwidth)!important;height:var(--paperheight)!important}@page{margin:0}}
-.editor-box{margin-top:14px;padding:14px;border:1px solid var(--border);border-radius:14px;background:#f8fbff}.touch-instructions{margin:0 0 10px}
+:root{color-scheme:light;--bg:#edf2f7;--card:#fff;--ink:#152439;--muted:#64758b;--border:#dbe4ee;--blue:#145be3;--navy:#111c2d;--good:#16734a;--amber:#8a5910}
+*{box-sizing:border-box}html{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}body{background:var(--bg);color:var(--ink);margin:0}.wrap{max-width:780px;margin:0 auto;padding:0 14px max(42px,env(safe-area-inset-bottom))}.hero{background:linear-gradient(140deg,#0f1d33,#203c65);color:#fff;padding:25px 20px 26px;margin:0 -14px 18px;border-radius:0 0 24px 24px}.hero h1{font-size:26px;letter-spacing:-.8px;margin:7px 0 4px}.hero p{opacity:.88;line-height:1.45;margin:0;font-size:14px}.eyebrow{text-transform:uppercase;font-weight:800;letter-spacing:2px;font-size:10px;color:#a4c8ff}.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:17px;margin:14px 0;box-shadow:0 4px 20px #18375609}.row-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}h2{font-size:17px;margin:0;letter-spacing:-.3px}.pill{font-size:11px;border-radius:50px;padding:5px 9px;background:#e8f0ff;color:#144caa;font-weight:750}.label{font-size:13px;font-weight:730;margin:13px 0 6px;display:block}.control{border:1px solid #c9d7e7;border-radius:11px;background:#fff;color:var(--ink);padding:12px;width:100%;font:inherit;font-size:16px;outline-offset:2px}.control:focus-visible{outline:2px solid #226df0}textarea.control{min-height:100px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:11px}.btn{border:0;background:#e9f0fb;border-radius:12px;color:#1e406b;font:inherit;font-size:14px;line-height:1.3;font-weight:750;padding:13px 12px;cursor:pointer;min-height:46px;text-align:center}.btn:active{transform:translateY(1px)}.btn.main{background:var(--blue);color:#fff}.btn.white{background:#fff;border:1px solid var(--border)}.btn.ghost{background:transparent;border:1px solid var(--border)}.btn:disabled{opacity:.5;cursor:wait}.full{width:100%;display:block}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}.upload{display:block;border:1.5px dashed #a9c2e3;background:#f0f6ff;border-radius:13px;text-align:center;font-size:14px;font-weight:750;padding:17px 12px;color:#174a9d;cursor:pointer}.upload input{display:none}.checkline{display:flex;gap:8px;align-items:center;margin-top:13px;font-size:13px}.checkline input{width:18px;height:18px}.preview-zone{background:#e9eef4;min-height:155px;border-radius:14px;display:grid;place-items:center;padding:18px;overflow:auto}.preview-zone canvas{max-width:100%;height:auto;background:#fff;box-shadow:0 6px 22px #15223926;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}.preview-zone canvas:active{cursor:grabbing}.hint{font-size:12px;color:var(--muted);line-height:1.55;margin:11px 0 0}.status{margin-top:10px;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;background:#eef4fb;color:#264d78}.status:empty{display:none}.status.success{background:#e9f7ef;color:#145d3b}.status.warn{background:#fff5e3;color:#76500c}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-.2px}.info{background:#fff8eb;color:#74541d;border-radius:12px;padding:12px;font-size:12px;line-height:1.6;margin-top:12px}.editor-box{margin-top:14px;padding:14px;border:1px solid var(--border);border-radius:14px;background:#f8fbff}input[type="range"]{width:100%;accent-color:var(--blue)}footer{text-align:center;font-size:11px;color:#78879b;margin:20px 0}@media(min-width:540px){.hero{margin:0 -14px 18px}}@media print{body{background:#fff}.hero,.card:not(#previewCard),#previewCard .row-head,#previewCard .hint,#previewCard .status,footer{display:none!important}#previewCard{border:0;box-shadow:none;margin:0;padding:0}.wrap{padding:0;max-width:none}.preview-zone{padding:0;background:#fff;display:block;min-height:0;overflow:visible}.preview-zone canvas{box-shadow:none;max-width:none!important;width:var(--paperwidth)!important;height:var(--paperheight)!important}@page{margin:0}}
 </style>
 </head>
 <body>
 <main class="wrap">
-<header class="hero"><div class="eyebrow">Zebra · ZPL · mobil</div><h1>🏷️ Etikettstudio</h1><p>Lag etiketter, last opp bilder og forsøk direkteutskrift på lokale Zebra-skrivere. Ingen konto, sporing eller mellomserver.</p></header>
-<section class="card" aria-labelledby="connectHeading"><div class="row-head"><h2 id="connectHeading">1. Velg nettverksskriver</h2><span class="pill">ZD421 / ZPL</span></div>
-<label class="label" for="printerIp">Skriverens IP-adresse</label><input class="control mono" id="printerIp" inputmode="decimal" spellcheck="false" autocorrect="off" autocomplete="off" placeholder="F.eks. 192.168.1.50">
-<div class="buttons" style="margin-top:10px"><button class="btn white" id="openPrinter" type="button">↗ Åpne skriverens webside</button><button class="btn ghost" id="rememberIp" type="button">✓ Lagre IP lokalt</button></div>
-<p class="hint">Telefonen må være på samme Wi-Fi som skriveren. Chrome på iPhone kan ikke automatisk oppdage skrivere på lokalnettet. Finn IP-adressen på etiketten med skriverens nettverkskonfigurasjon eller i ruteren.</p><div id="ipStatus" class="status" role="status" aria-live="polite"></div></section>
-<section class="card"><div class="row-head"><h2>2. Lag etiketten</h2><span class="pill">Bilde + tekst</span></div>
-<label class="upload" for="upload">📷 Velg et bilde fra telefonen<input id="upload" type="file" accept="image/*"></label><button id="clearImage" type="button" class="btn ghost full" style="margin-top:8px">Fjern bilde</button>
-<a class="btn main full" href="#imageTools" style="margin-top:10px;text-decoration:none;display:block">✂️ Åpne bildeverktøy – crop, zoom og rotasjon ↓</a>
-<p class="hint" style="margin-top:6px">Etter at du har valgt et bilde, trykk her for å gå direkte til redigeringsverktøyene under forhåndsvisningen.</p>
+<header class="hero"><div class="eyebrow">Zebra · ZPL · nettleser</div><h1>🏷️ Etikettstudio</h1><p>Lag etiketter, last opp bilder og skriv ut direkte til Zebra-skriveren din. Fungerer både på datamaskin og mobil.</p></header>
 
-<label class="label" for="labelText">Tekst</label><textarea class="control" id="labelText" placeholder="Skriv tekst som skal skrives ut …"></textarea>
-<div class="two"><div><label class="label" for="width">Bredde (mm)</label><input class="control" id="width" type="number" value="100" min="10" max="104" step="1"></div><div><label class="label" for="height">Høyde (mm)</label><input class="control" id="height" type="number" value="60" min="10" max="300" step="1"></div></div>
-<div class="two"><div><label class="label" for="dpi">Skriveroppløsning</label><select id="dpi" class="control"><option value="203">203 dpi</option><option value="300">300 dpi</option></select></div><div><label class="label" for="font">Tekststørrelse</label><select id="font" class="control"><option value="20">Liten</option><option value="28" selected>Middels</option><option value="38">Stor</option><option value="54">Ekstra stor</option></select></div></div>
-<label class="label" for="threshold">Bildekontrast: <span id="thValue">145</span></label><input id="threshold" type="range" min="40" max="230" value="145"><label class="checkline" for="invert"><input id="invert" type="checkbox"> Inverter svart og hvitt</label>
+<section class="card" aria-labelledby="connectHeading">
+  <div class="row-head"><h2 id="connectHeading">1. Skriver</h2><span class="pill">ZD421 / ZPL</span></div>
+  <label class="label" for="printerIp">Skriverens IP-adresse</label>
+  <input class="control mono" id="printerIp" inputmode="decimal" spellcheck="false" autocorrect="off" autocomplete="off" placeholder="For eksempel 192.168.1.50">
+  <div class="buttons" style="margin-top:10px"><button class="btn white" id="openPrinter" type="button">Åpne skriverens webside</button><button class="btn ghost" id="rememberIp" type="button">Lagre IP på denne enheten</button></div>
+  <p class="hint">Appen skanner ikke automatisk etter skrivere. Oppgi IP-adressen manuelt, eller åpne skriverens webside for å kontrollere at adressen er riktig.</p>
+  <div id="ipStatus" class="status" role="status" aria-live="polite"></div>
 </section>
-<section class="card" id="previewCard"><div class="row-head"><h2>3. Forhåndsvisning</h2><span class="pill" id="sizeBadge">100 × 60 mm</span></div><p class="hint touch-instructions">Dra bildet med én finger for å flytte det. Bruk to fingre for å zoome. Juster også med kontrollene under.</p><div class="preview-zone"><canvas id="preview" width="800" height="480" aria-label="Interaktiv forhåndsvisning av etiketten"></canvas></div>
-<div class="editor-box" id="imageTools" style="scroll-margin-top:18px">
-<div class="row-head" style="margin:14px 0 8px"><h2 style="font-size:15px">Bildeverktøy</h2><span class="pill">Crop / zoom</span></div>
-<div class="two"><div><label class="label" for="fitMode">Bildeplassering</label><select id="fitMode" class="control"><option value="fill" selected>Fyll etiketten (beskjær)</option><option value="contain">Vis hele bildet (uten beskjæring)</option></select></div><div><label class="label" for="orientation">Rotasjon</label><select id="orientation" class="control"><option value="auto" selected>Automatisk</option><option value="0">0°</option><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select></div></div>
-<label class="label" for="zoom">Zoom / skalering: <span id="zoomValue">100</span>%</label><input id="zoom" type="range" min="50" max="400" step="1" value="100">
-<label class="label" for="panX">Flytt sidelengs: <span id="panXValue">0</span></label><input id="panX" type="range" min="-100" max="100" step="1" value="0">
-<label class="label" for="panY">Flytt opp / ned: <span id="panYValue">0</span></label><input id="panY" type="range" min="-100" max="100" step="1" value="0">
-<label class="label" for="margin">Kantmarg: <span id="marginValue">1</span> mm</label><input id="margin" type="range" min="0" max="10" step="0.5" value="1">
-<div class="buttons" style="margin-top:10px"><button id="centerImage" type="button" class="btn white">Sentrer bilde</button><button id="resetImage" type="button" class="btn ghost">Nullstill bilde</button></div>
-<p class="hint" id="orientationInfo">Velg et bilde for å bruke zoom, crop og flytting.</p>
-</div><p class="hint">Forhåndsvisningen og utskriften bruker samme utsnitt. Beskjæring endrer ikke originalbildet på telefonen.</p><div id="renderStatus" class="status warn" role="status"></div></section>
-<section class="card"><div class="row-head"><h2>4. Skriv ut</h2><span class="pill">Lokalt nettverk</span></div>
-<button class="btn main full" id="directPrint" type="button">🖨️ Skriv ut etikett</button>
-<div class="buttons" style="margin-top:9px"><button class="btn white" id="testPrint" type="button">✓ Skriv testetikett</button><button class="btn white" id="formPrint" type="button">Alternativ HTTP (reserve)</button></div>
-<div class="methods"><button class="btn white" id="airPrint" type="button">AirPrint (hvis støttet)</button></div>
-<div id="printStatus" class="status" role="status" aria-live="polite"></div>
-<div class="info"><strong>Viktig:</strong> Hovedknappen bruker HTML-skjema-POST til skriverens <span class="mono">/pstprnt</span> – metoden som er bekreftet fungerende på din iPhone. Et nytt vindu eller en ny fane kan åpnes. Appen får ingen utskriftskvittering, så prøv bare én etikett om gangen. Etikettdata sendes kun til IP-adressen du har oppgitt.</div>
-<details><summary>Hvilken metode bør jeg bruke?</summary><div class="help"><p><strong>Skriv ut etikett og testetikett:</strong> sender ZPL via HTML-skjema-POST i en ny fane. Dette er metoden som fungerte i testen din. Den krever ikke CORS-lesetilgang. Noen iPhone-oppsett kan likevel vise en advarsel. Skjemaet legger til et <span class="mono">=</span> etter ZPL, som din skriver allerede har akseptert.</p><p><strong>Alternativ HTTP (reserve):</strong> prøver fetch-basert POST uten lesetilgang til svaret; enkelte nettlesere blokkerer den.</p><p><strong>AirPrint:</strong> åpner den vanlige utskriftsdialogen. ZD421 er ikke bekreftet AirPrint-kompatibel.</p><p><strong>Hvis begge HTTP-metoder feiler:</strong> bruk Apples innebygde Snarveier. Denne metoden flytter selve nettverksforespørselen ut av nettleseren og krever verken Docker eller en egen printserver.</p></div></details>
+
+<section class="card">
+  <div class="row-head"><h2>2. Innhold</h2><span class="pill">Bilde + tekst</span></div>
+  <label class="upload" for="upload">Velg et bilde<input id="upload" type="file" accept="image/*"></label>
+  <button id="clearImage" type="button" class="btn ghost full" style="margin-top:8px">Fjern bilde</button>
+  <label class="label" for="labelText">Tekst</label>
+  <textarea class="control" id="labelText" placeholder="Skriv tekst som skal skrives ut …"></textarea>
+  <div class="two"><div><label class="label" for="width">Bredde (mm)</label><input class="control" id="width" type="number" value="100" min="10" max="104" step="1"></div><div><label class="label" for="height">Høyde (mm)</label><input class="control" id="height" type="number" value="60" min="10" max="300" step="1"></div></div>
+  <div class="two"><div><label class="label" for="dpi">Skriveroppløsning</label><select id="dpi" class="control"><option value="203">203 dpi</option><option value="300">300 dpi</option></select></div><div><label class="label" for="font">Tekststørrelse</label><select id="font" class="control"><option value="20">Liten</option><option value="28" selected>Middels</option><option value="38">Stor</option><option value="54">Ekstra stor</option></select></div></div>
+  <label class="label" for="threshold">Bildekontrast: <span id="thValue">145</span></label>
+  <input id="threshold" type="range" min="40" max="230" value="145">
+  <label class="checkline" for="invert"><input id="invert" type="checkbox"> Inverter svart og hvitt</label>
 </section>
-<section class="card"><div class="row-head"><h2>5. Utskrift via iOS Snarveier</h2><span class="pill">Uten server</span></div>
-<p class="sub">Dersom Chrome blokkerer lokal HTTP, kan du bruke den innebygde appen Snarveier til å sende samme ZPL direkte til skriveren. Opprett snarveien én gang; deretter bruker du de to knappene under.</p>
-<div class="buttons"><button class="btn dark" id="copyZpl" type="button">1. Kopier etikett</button><button class="btn main" id="runShortcut" type="button">2. Åpne ZebraPrint</button></div>
-<div id="shortcutStatus" class="status" role="status" aria-live="polite"></div>
-<details><summary>Oppsett av Snarveier – vis trinn</summary><div class="help">
-<p>Åpne <strong>Snarveier</strong> på iPhone, opprett en ny snarvei, og gi den navnet <strong>ZebraPrint</strong> (skriv nøyaktig slik).</p>
-<p>Legg til handlingen <strong>URL</strong>, med <span class="mono" id="shortcutUrl">http://SKRIVER-IP/pstprnt</span>.</p>
-<p>Legg til <strong>Hent innholdet i URL</strong>. Velg <strong>POST</strong>, forespørselsinnhold <strong>Fil</strong>, og bruk <strong>Snarvei-inndata</strong> (eller opprett en fil fra inndatateksten) som fil. Bruk resultatet fra den første URL-handlingen som adresse.</p>
-<p>Første gang kan iOS be om tillatelse til å kontakte skriveren. Test med én liten etikett. Oppsettet er basert på Apples POST/Fil-støtte, men er ikke testet mot din skriver.</p>
-<p>Knapp 1 kopierer ZPL til utklippstavlen. Knapp 2 starter snarveien og sender utklippstavlen som inndata; IP-adressen settes i snarveien én gang.</p>
-</div></details>
+
+<section class="card" id="previewCard">
+  <div class="row-head"><h2>3. Forhåndsvisning og bildeverktøy</h2><span class="pill" id="sizeBadge">100 × 60 mm</span></div>
+  <p class="hint">Dra bildet med mus eller finger for å flytte det. Bruk styreflate/musehjul eller to fingre for å zoome. Du kan også bruke kontrollene under.</p>
+  <div class="preview-zone"><canvas id="preview" width="800" height="480" aria-label="Interaktiv forhåndsvisning av etiketten"></canvas></div>
+  <div class="editor-box">
+    <div class="two"><div><label class="label" for="fitMode">Bildeplassering</label><select id="fitMode" class="control"><option value="fill" selected>Fyll etiketten (beskjær)</option><option value="contain">Vis hele bildet</option></select></div><div><label class="label" for="orientation">Rotasjon</label><select id="orientation" class="control"><option value="auto" selected>Automatisk</option><option value="0">0°</option><option value="90">90°</option><option value="180">180°</option><option value="270">270°</option></select></div></div>
+    <label class="label" for="zoom">Zoom / skalering: <span id="zoomValue">100</span>%</label><input id="zoom" type="range" min="50" max="400" step="1" value="100">
+    <label class="label" for="panX">Flytt sidelengs: <span id="panXValue">0</span></label><input id="panX" type="range" min="-100" max="100" step="1" value="0">
+    <label class="label" for="panY">Flytt opp / ned: <span id="panYValue">0</span></label><input id="panY" type="range" min="-100" max="100" step="1" value="0">
+    <label class="label" for="margin">Kantmarg: <span id="marginValue">1</span> mm</label><input id="margin" type="range" min="0" max="10" step="0.5" value="1">
+    <div class="buttons" style="margin-top:10px"><button id="centerImage" type="button" class="btn white">Sentrer bilde</button><button id="resetImage" type="button" class="btn ghost">Nullstill bilde</button></div>
+    <p class="hint" id="orientationInfo">Velg et bilde for å bruke zoom, crop og flytting.</p>
+  </div>
+  <p class="hint">Forhåndsvisningen og utskriften bruker samme utsnitt. Beskjæring endrer ikke originalbildet.</p>
+  <div id="renderStatus" class="status warn" role="status"></div>
 </section>
-<section class="card"><div class="row-head"><h2>6. Lagre eller del</h2><span class="pill">Uten nettverk</span></div><div class="buttons"><button class="btn white" id="saveZpl" type="button">⬇ Lagre ZPL</button><button class="btn white" id="savePng" type="button">⬇ Lagre bilde</button></div><div class="buttons" style="margin-top:9px"><button class="btn ghost" id="shareZpl" type="button">↗ Del ZPL-fil</button><button class="btn ghost" id="sharePng" type="button">↗ Del bilde</button></div><p class="hint">ZPL kan også deles som fil via iOS-delearket og brukes i en snarvei som sender HTTP POST.</p><div id="saveStatus" class="status" role="status" aria-live="polite"></div></section>
-<footer>Alt innhold behandles lokalt i nettleseren. Appen har ingen eksterne skript eller analysetjenester.</footer>
+
+<section class="card">
+  <div class="row-head"><h2>4. Skriv ut</h2><span class="pill">Direkte til skriver</span></div>
+  <button class="btn main full" id="directPrint" type="button">Skriv ut etikett</button>
+  <div class="buttons" style="margin-top:9px"><button class="btn white" id="testPrint" type="button">Skriv testetikett</button><button class="btn ghost" id="savePng" type="button">Lagre forhåndsvisning som PNG</button></div>
+  <div id="printStatus" class="status" role="status" aria-live="polite"></div>
+  <div class="info"><strong>Viktig:</strong> Utskrift skjer ved å sende ZPL direkte til <span class="mono">http://SKRIVER-IP/pstprnt</span>. Appen får ikke en sikker kvittering fra skriveren, så send én etikett om gangen og kontroller resultatet før du skriver ut flere.</div>
+</section>
+
+<footer>Alt innhold behandles lokalt i nettleseren. Ingen eksterne skript, kontoer eller mellomservere.</footer>
 </main>
 <script>
 (()=>{'use strict';
 const el=id=>document.getElementById(id),canvas=el('preview'),ctx=canvas.getContext('2d',{willReadFrequently:true});
 let photo=null;
 const localKey='zebra-etikettstudio-printer-ip';
-try {el('printerIp').value=localStorage.getItem(localKey)||''} catch(e){}
+try{el('printerIp').value=localStorage.getItem(localKey)||''}catch(e){}
 function setStatus(id,message,kind=''){const target=el(id);target.textContent=message;target.className='status'+(kind?' '+kind:'')}
-function privateIp(){const ip=el('printerIp').value.trim();const parts=ip.split('.');if(parts.length!==4||parts.some(x=>!/^\d{1,3}$/.test(x)||Number(x)>255))return null;const b=parts.map(Number);if(!(b[0]===10||(b[0]===172&&b[1]>=16&&b[1]<=31)||(b[0]===192&&b[1]===168)||(b[0]===169&&b[1]===254)))return null;return b.join('.')}
+function privateIp(){const ip=el('printerIp').value.trim();const parts=ip.split('.');if(parts.length!==4||parts.some(x=>!/^[0-9]{1,3}$/.test(x)||Number(x)>255))return null;const b=parts.map(Number);if(!(b[0]===10||(b[0]===172&&b[1]>=16&&b[1]<=31)||(b[0]===192&&b[1]===168)||(b[0]===169&&b[1]===254)))return null;return b.join('.')}
 function getIp(){const ip=privateIp();if(!ip)setStatus('ipStatus','Oppgi en lokal IPv4-adresse, for eksempel 192.168.1.50.','warn');return ip}
-function mm(id){const max=id==='width'?104:300;const val=Number(el(id).value);return Math.max(10,Math.min(max,Number.isFinite(val)&&val>0?val:id==='width'?100:60))}
-
-function photoArea(w,h,text,fontSize,pad){const reserved=text?Math.min(h*.37,fontSize*2.5):0;const available=Math.max(10,h-2*pad-reserved);return {x:pad,y:pad,w:Math.max(10,w-2*pad),h:available,reserved};}
-function normalizedPan(id){return Number(el(id).value)/100}
-function clamp(num,min,max){return Math.min(max,Math.max(min,num))}
+function mm(id){const max=id==='width'?104:300;const val=Number(el(id).value);return Math.max(10,Math.min(max,Number.isFinite(val)&&val>0?val:(id==='width'?100:60)))}
+function clamp(v,min,max){return Math.min(max,Math.max(min,v))}
 function setEditorReadout(name,val){const node=el(name);if(node)node.textContent=String(val)}
-function pickOrientation(sw,sh,areaW,areaH,mode){const containMetric=(w,h)=>Math.min(areaW/w,areaH/h)**2*w*h;const fillMetric=(w,h)=>{const scale=Math.max(areaW/w,areaH/h);return (areaW*areaH)/(w*h*scale*scale)};const a=mode==='fill'?fillMetric(sw,sh):containMetric(sw,sh),b=mode==='fill'?fillMetric(sh,sw):containMetric(sh,sw);return b>a?90:0;}
 function getImageLayout(zoomPct=Number(el('zoom').value)){
   if(!photo)return null;
   const dpi=Number(el('dpi').value),w=Math.round(mm('width')*dpi/25.4),h=Math.round(mm('height')*dpi/25.4);
   const text=el('labelText').value.trim(),pad=Math.round(Number(el('margin').value)*dpi/25.4);
-  const fontSize=Number(el('font').value)*dpi/203,area=photoArea(w,h,text,fontSize,pad);
-  const mode=el('fitMode').value,sw=photo.naturalWidth,sh=photo.naturalHeight;
-  const selected=el('orientation').value,degrees=selected==='auto'?pickOrientation(sw,sh,area.w,area.h,mode):Number(selected);
+  const fontSize=Number(el('font').value)*dpi/203;
+  const reserved=text?Math.min(h*.37,fontSize*2.5):0;
+  const area={x:pad,y:pad,w:Math.max(10,w-2*pad),h:Math.max(10,h-2*pad-reserved)};
+  const mode=el('fitMode').value,choice=el('orientation').value;
+  const sw=photo.naturalWidth,sh=photo.naturalHeight;
+  const choose=(rw,rh)=>mode==='fill'?Math.max(area.w/rw,area.h/rh):Math.min(area.w/rw,area.h/rh);
+  const autoDeg=choose(sw,sh)>=choose(sh,sw)?0:90;
+  const degrees=choice==='auto'?autoDeg:Number(choice);
   const rotated=degrees%180!==0,bw=rotated?sh:sw,bh=rotated?sw:sh;
-  const baseScale=mode==='fill'?Math.max(area.w/bw,area.h/bh):Math.min(area.w/bw,area.h/bh);
-  const scale=baseScale*(zoomPct/100),dw=bw*scale,dh=bh*scale;
-  const rangeX=Math.abs(dw-area.w)/2,rangeY=Math.abs(dh-area.h)/2;
-  return {area,sw,sh,dw,dh,scale,degrees,mode,rangeX,rangeY};
+  const baseScale=choose(bw,bh),scale=baseScale*(zoomPct/100),dw=bw*scale,dh=bh*scale;
+  const rangeX=Math.max(0,(dw-area.w)/2),rangeY=Math.max(0,(dh-area.h)/2);
+  return {w,h,area,degrees,scale,dw,dh,rangeX,rangeY,sw,sh,mode};
 }
+function normalizedPan(id){return Number(el(id).value)/100}
 function drawPhoto(){
-  const layout=getImageLayout();if(!layout)return;
-  const {area,sw,sh,scale,degrees,mode,rangeX,rangeY}=layout;
-  const offsetX=normalizedPan('panX')*rangeX,offsetY=normalizedPan('panY')*rangeY;
-  ctx.save();ctx.beginPath();ctx.rect(area.x,area.y,area.w,area.h);ctx.clip();
-  ctx.translate(area.x+area.w/2+offsetX,area.y+area.h/2+offsetY);
-  ctx.rotate(degrees*Math.PI/180);
-  ctx.drawImage(photo,-sw*scale/2,-sh*scale/2,sw*scale,sh*scale);
+  const layout=getImageLayout(); if(!layout||!photo) return null;
+  const offsetX=normalizedPan('panX')*layout.rangeX, offsetY=normalizedPan('panY')*layout.rangeY;
+  ctx.save(); ctx.beginPath(); ctx.rect(layout.area.x,layout.area.y,layout.area.w,layout.area.h); ctx.clip();
+  ctx.translate(layout.area.x+layout.area.w/2+offsetX, layout.area.y+layout.area.h/2+offsetY);
+  ctx.rotate(layout.degrees*Math.PI/180);
+  ctx.drawImage(photo,-layout.sw*layout.scale/2,-layout.sh*layout.scale/2,layout.sw*layout.scale,layout.sh*layout.scale);
   ctx.restore();
-  setEditorReadout('zoomValue',el('zoom').value);
-  setEditorReadout('panXValue',el('panX').value);
-  setEditorReadout('panYValue',el('panY').value);
-  el('orientationInfo').textContent='Bildet: '+(mode==='fill'?'fyll etiketten':'vis hele bildet')+' · '+degrees+'°'+(el('orientation').value==='auto'?' (auto)':'')+' · '+el('zoom').value+' % zoom.';
+  setEditorReadout('zoomValue',el('zoom').value); setEditorReadout('panXValue',el('panX').value); setEditorReadout('panYValue',el('panY').value); setEditorReadout('marginValue',el('margin').value);
+  el('orientationInfo').textContent='Bildet: '+(layout.mode==='fill'?'fyll etiketten':'vis hele bildet')+' · '+layout.degrees+'°'+(el('orientation').value==='auto'?' (auto)':'')+' · '+el('zoom').value+' % zoom.';
+  return layout;
 }
-function render(){const dpi=Number(el('dpi').value),w=Math.round(mm('width')*dpi/25.4),h=Math.round(mm('height')*dpi/25.4);canvas.width=w;canvas.height=h;ctx.fillStyle='#fff';ctx.fillRect(0,0,w,h);
-const text=el('labelText').value.trim(),pad=Math.round(Number(el('margin').value)*dpi/25.4),fontSize=Number(el('font').value)*dpi/203;
-if(photo)drawPhoto();else {el('orientationInfo').textContent='Velg et bilde for å bruke zoom, crop og flytting.';setEditorReadout('zoomValue',el('zoom').value);setEditorReadout('panXValue',el('panX').value);setEditorReadout('panYValue',el('panY').value);}
-if(text){ctx.fillStyle='#000';ctx.font='bold '+fontSize+'px Arial,sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';const maxWidth=w*.90,lineHeight=fontSize*1.22,lines=[];for(const p of text.split('\n')){let line='';for(const word of p.split(/\s+/)){if(!word)continue;const candidate=line?line+' '+word:word;if(ctx.measureText(candidate).width>maxWidth&&line){lines.push(line);line=word}else line=candidate}lines.push(line)}const maxLines=Math.max(1,Math.floor(h*.55/lineHeight)),shown=lines.slice(0,maxLines),start=h-Math.max(6,h*.04)-lineHeight*(shown.length-.5);shown.forEach((line,i)=>ctx.fillText(line,w/2,start+i*lineHeight,maxWidth));if(lines.length>shown.length)setStatus('renderStatus','Teksten er for lang for etiketten og blir avkortet. Gjør skriften mindre eller etiketten høyere.','warn');else setStatus('renderStatus','')}
-else setStatus('renderStatus','');
-const pixels=ctx.getImageData(0,0,w,h),data=pixels.data,th=Number(el('threshold').value),invert=el('invert').checked;for(let i=0;i<data.length;i+=4){let value=(.2126*data[i]+.7152*data[i+1]+.0722*data[i+2])<th?0:255;if(invert)value=255-value;data[i]=data[i+1]=data[i+2]=value;data[i+3]=255}ctx.putImageData(pixels,0,0);el('thValue').textContent=String(th);el('marginValue').textContent=el('margin').value;el('sizeBadge').textContent=mm('width')+' × '+mm('height')+' mm';document.documentElement.style.setProperty('--paperwidth',mm('width')+'mm');document.documentElement.style.setProperty('--paperheight',mm('height')+'mm')}
-function makeZpl(){render();const w=canvas.width,h=canvas.height,data=ctx.getImageData(0,0,w,h).data,bytes=Math.ceil(w/8),chunks=[];for(let y=0;y<h;y++){let line='';for(let x=0;x<bytes*8;x+=8){let val=0;for(let i=0;i<8;i++){const xx=x+i;if(xx<w&&data[(y*w+xx)*4]<128)val|=1<<(7-i)}line+=val.toString(16).padStart(2,'0').toUpperCase()}chunks.push(line)}let copies=1;return '^XA\n^PW'+w+'\n^LL'+h+'\n^LH0,0\n^FO0,0^GFA,'+(bytes*h)+','+(bytes*h)+','+bytes+','+chunks.join('')+'^FS\n^PQ'+copies+'\n^XZ\n'}
-function testZpl(){const dpi=Number(el('dpi').value),w=Math.round(mm('width')*dpi/25.4),h=Math.round(mm('height')*dpi/25.4);return '^XA\n^PW'+w+'\n^LL'+h+'\n^LH0,0\n^FO22,22^A0N,32,32^FDZEBRA TEST^FS\n^FO22,67^A0N,25,25^FDHTTP POST OK^FS\n^PQ1\n^XZ\n'}
-function saveBlob(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob);a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),12000)}
-function getZplBlob(){return new Blob([makeZpl()],{type:'text/plain;charset=utf-8'})}
-async function shareFile(blob,name,mime){const file=new File([blob],name,{type:mime});try{if(navigator.canShare?.({files:[file]})){await navigator.share({files:[file],title:'Zebra Etikettstudio'})}else{saveBlob(blob,name);setStatus('saveStatus','Deling er ikke tilgjengelig her. Filen ble lagret i stedet.','warn')}}catch(e){if(e.name!=='AbortError')setStatus('saveStatus','Kunne ikke dele filen: '+e.message,'warn')}}
+function render(){
+  const dpi=Number(el('dpi').value),w=Math.round(mm('width')*dpi/25.4),h=Math.round(mm('height')*dpi/25.4);
+  canvas.width=w; canvas.height=h; ctx.fillStyle='#fff'; ctx.fillRect(0,0,w,h);
+  const text=el('labelText').value.trim(),pad=Math.round(Number(el('margin').value)*dpi/25.4),fontSize=Number(el('font').value)*dpi/203;
+  if(photo) drawPhoto(); else {el('orientationInfo').textContent='Velg et bilde for å bruke zoom, crop og flytting.'; setEditorReadout('zoomValue',el('zoom').value); setEditorReadout('panXValue',el('panX').value); setEditorReadout('panYValue',el('panY').value); setEditorReadout('marginValue',el('margin').value)}
+  if(text){
+    ctx.fillStyle='#000'; ctx.font='bold '+fontSize+'px Arial,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    const maxWidth=w*.90, lineHeight=fontSize*1.22, lines=[];
+    for(const p of text.split('\n')){let line=''; for(const word of p.split(/\s+/)){if(!word)continue; const candidate=line?line+' '+word:word; if(ctx.measureText(candidate).width>maxWidth&&line){lines.push(line); line=word}else line=candidate} lines.push(line)}
+    const maxLines=Math.max(1,Math.floor(h*.55/lineHeight)), shown=lines.slice(0,maxLines), start=h-Math.max(6,pad)-lineHeight*(shown.length-.5);
+    shown.forEach((line,i)=>ctx.fillText(line,w/2,start+i*lineHeight,maxWidth));
+    if(lines.length>shown.length)setStatus('renderStatus','Teksten er for lang for etiketten og blir avkortet. Gjør skriften mindre eller etiketten høyere.','warn'); else setStatus('renderStatus','');
+  } else setStatus('renderStatus','');
+  const pixels=ctx.getImageData(0,0,w,h),data=pixels.data,th=Number(el('threshold').value),invert=el('invert').checked;
+  for(let i=0;i<data.length;i+=4){let value=(.2126*data[i]+.7152*data[i+1]+.0722*data[i+2])<th?0:255; if(invert)value=255-value; data[i]=data[i+1]=data[i+2]=value; data[i+3]=255}
+  ctx.putImageData(pixels,0,0);
+  el('thValue').textContent=String(th); el('sizeBadge').textContent=mm('width')+' × '+mm('height')+' mm'; document.documentElement.style.setProperty('--paperwidth',mm('width')+'mm'); document.documentElement.style.setProperty('--paperheight',mm('height')+'mm');
+}
+function makeZpl(){render(); const w=canvas.width,h=canvas.height,data=ctx.getImageData(0,0,w,h).data,bytes=Math.ceil(w/8),chunks=[]; for(let y=0;y<h;y++){let line=''; for(let x=0;x<bytes*8;x+=8){let val=0; for(let i=0;i<8;i++){const xx=x+i;if(xx<w&&data[(y*w+xx)*4]<128)val|=1<<(7-i)} line+=val.toString(16).padStart(2,'0').toUpperCase()} chunks.push(line)} return `^XA\n^PW${w}\n^LL${h}\n^LH0,0\n^FO0,0^GFA,${bytes*h},${bytes*h},${bytes},${chunks.join('')}^FS\n^PQ1\n^XZ\n`;}
+function testZpl(){const dpi=Number(el('dpi').value),w=Math.round(mm('width')*dpi/25.4),h=Math.round(mm('height')*dpi/25.4); return `^XA\n^PW${w}\n^LL${h}\n^LH0,0\n^FO22,22^A0N,32,32^FDZEBRA TEST^FS\n^FO22,67^A0N,25,25^FDFORM POST OK^FS\n^PQ1\n^XZ\n`;}
+function saveBlob(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),12000)}
 function imageBlob(){return new Promise(resolve=>canvas.toBlob(resolve,'image/png'))}
 ['labelText','width','height','dpi','font','threshold','invert','orientation','fitMode','zoom','panX','panY','margin'].forEach(id=>el(id).addEventListener('input',render));
-el('upload').addEventListener('change',ev=>{const f=ev.target.files&&ev.target.files[0];if(!f)return;const url=URL.createObjectURL(f),img=new Image();img.onload=()=>{photo=img;resetImageControls();URL.revokeObjectURL(url);render()};img.onerror=()=>{URL.revokeObjectURL(url);setStatus('renderStatus','Kunne ikke åpne bildet.','warn')};img.src=url});
-function resetImageControls(){el('fitMode').value='fill';el('orientation').value='auto';el('zoom').value='100';el('panX').value='0';el('panY').value='0'}
-el('clearImage').addEventListener('click',()=>{photo=null;el('upload').value='';resetImageControls();render()});
-el('centerImage').addEventListener('click',()=>{el('panX').value='0';el('panY').value='0';render()});
-el('resetImage').addEventListener('click',()=>{resetImageControls();render()});
-
-const activePointers=new Map();let gesture=null,renderPending=false;
-function requestPreviewRender(){if(renderPending)return;renderPending=true;requestAnimationFrame(()=>{renderPending=false;render()})}
+function resetImageControls(){el('fitMode').value='fill'; el('orientation').value='auto'; el('zoom').value='100'; el('panX').value='0'; el('panY').value='0'; el('margin').value='1'}
+el('upload').addEventListener('change',ev=>{const f=ev.target.files&&ev.target.files[0]; if(!f)return; const url=URL.createObjectURL(f),img=new Image(); img.onload=()=>{photo=img; resetImageControls(); URL.revokeObjectURL(url); render()}; img.onerror=()=>{URL.revokeObjectURL(url); setStatus('renderStatus','Kunne ikke åpne bildet.','warn')}; img.src=url});
+el('clearImage').addEventListener('click',()=>{photo=null; el('upload').value=''; resetImageControls(); render()});
+el('centerImage').addEventListener('click',()=>{el('panX').value='0'; el('panY').value='0'; render()});
+el('resetImage').addEventListener('click',()=>{resetImageControls(); render()});
+const activePointers=new Map(); let gesture=null,renderPending=false;
+function requestPreviewRender(){if(renderPending)return; renderPending=true; requestAnimationFrame(()=>{renderPending=false; render()})}
 function pointerPoint(ev){return {x:ev.clientX,y:ev.clientY}}
-function pointerCentroid(){const points=[...activePointers.values()];return {x:points.reduce((s,p)=>s+p.x,0)/points.length,y:points.reduce((s,p)=>s+p.y,0)/points.length}}
-function pointerDistance(){const p=[...activePointers.values()];return p.length<2?0:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y)}
-function startGesture(){
-  if(!photo||activePointers.size===0){gesture=null;return}
-  const layout=getImageLayout();if(!layout)return;
-  gesture={centroid:pointerCentroid(),distance:pointerDistance(),zoom:Number(el('zoom').value),
-    panPixelX:normalizedPan('panX')*layout.rangeX,panPixelY:normalizedPan('panY')*layout.rangeY,area:layout.area};
-}
-canvas.addEventListener('pointerdown',ev=>{
-  if(!photo||!ev.isPrimary&&activePointers.size>=2)return;
-  ev.preventDefault();try{canvas.setPointerCapture(ev.pointerId)}catch(e){}
-  activePointers.set(ev.pointerId,pointerPoint(ev));startGesture();
-});
-canvas.addEventListener('pointermove',ev=>{
-  if(!activePointers.has(ev.pointerId)||!gesture||!photo)return;
-  ev.preventDefault();activePointers.set(ev.pointerId,pointerPoint(ev));
-  const current=pointerCentroid(),rect=canvas.getBoundingClientRect();
-  if(!rect.width||!rect.height)return;
-  const scaleX=canvas.width/rect.width,scaleY=canvas.height/rect.height;
-  const ratio=(activePointers.size>=2&&gesture.distance>0)?pointerDistance()/gesture.distance:1;
-  const zoom=clamp(Math.round(gesture.zoom*ratio),50,400);el('zoom').value=String(zoom);
-  const layout=getImageLayout(zoom);
-  if(!layout)return;
-  const r=zoom/gesture.zoom;
-  const areaX=layout.area.x+layout.area.w/2,areaY=layout.area.y+layout.area.h/2;
-  const anchorX=(gesture.centroid.x-rect.left)*scaleX;
-  const anchorY=(gesture.centroid.y-rect.top)*scaleY;
-  const movedX=(current.x-rect.left)*scaleX;
-  const movedY=(current.y-rect.top)*scaleY;
-  const x=movedX-areaX-r*(anchorX-areaX-gesture.panPixelX);
-  const y=movedY-areaY-r*(anchorY-areaY-gesture.panPixelY);
-  el('panX').value=String(layout.rangeX>0.5?Math.round(clamp(x/layout.rangeX*100,-100,100)):0);
-  el('panY').value=String(layout.rangeY>0.5?Math.round(clamp(y/layout.rangeY*100,-100,100)):0);
-  requestPreviewRender();
-});
-function endGesture(ev){
-  if(!activePointers.has(ev.pointerId))return;
-  activePointers.delete(ev.pointerId);
-  try{if(canvas.hasPointerCapture(ev.pointerId))canvas.releasePointerCapture(ev.pointerId)}catch(e){}
-  startGesture();
-}
-canvas.addEventListener('pointerup',endGesture);
-canvas.addEventListener('pointercancel',endGesture);
-canvas.addEventListener('lostpointercapture',endGesture);
-el('rememberIp').addEventListener('click',()=>{const ip=getIp();if(!ip)return;try{localStorage.setItem(localKey,ip);setStatus('ipStatus','IP-adressen er lagret på denne telefonen.','success')}catch(e){setStatus('ipStatus','Kunne ikke lagre IP; den virker fortsatt for denne økten.','warn')}});
-el('openPrinter').addEventListener('click',()=>{const ip=getIp();if(ip)window.open('http://'+ip+'/','_blank','noopener')});
-// These methods are intentionally user-triggered, and do not pretend that a request is a confirmed print.
-async function sendHttp(zpl,buttonId){const ip=getIp();if(!ip)return;const btn=el(buttonId);btn.disabled=true;setStatus('printStatus','Prøver HTTP POST til '+ip+'/pstprnt …');try{const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),8500);try{await fetch('http://'+ip+'/pstprnt',{method:'POST',mode:'no-cors',body:zpl,headers:{'Content-Type':'text/plain'},cache:'no-store',targetAddressSpace:'local',signal:controller.signal});setStatus('printStatus','Nettleseren fullførte forespørselen, men fikk ingen utskriftskvittering. Se om én etikett ble skrevet ut før du prøver noe annet.','warn')}finally{clearTimeout(timer)}}catch(e){setStatus('printStatus','Kunne ikke fullføre HTTP-forsøket ('+(e&&e.name==='AbortError'?'tidsavbrudd':'blokkert eller utilgjengelig')+'). Det kan fortsatt være sendt – kontroller skriveren før du prøver på nytt.','warn')}finally{btn.disabled=false}}
-function sendFormZpl(zpl){const ip=getIp();if(!ip)return;const form=document.createElement('form');form.method='POST';form.enctype='text/plain';form.action='http://'+ip+'/pstprnt';form.target='_blank';form.style.display='none';
-// text/plain serializes name=value; the final "=" comes after ^XZ, as in the tested working method.
-const field=document.createElement('input');field.type='hidden';field.name=zpl;field.value='';form.appendChild(field);document.body.appendChild(form);
-setStatus('printStatus','Sender utskrift med fungerende skjema-POST til '+ip+'. Kontroller skriveren før du sender flere etiketter. Dette er ikke en utskriftskvittering.','warn');
-form.submit();setTimeout(()=>form.remove(),5000)}
-el('directPrint').addEventListener('click',()=>sendFormZpl(makeZpl()));
-el('testPrint').addEventListener('click',()=>sendFormZpl(testZpl()));
-el('formPrint').addEventListener('click',()=>sendHttp(makeZpl(),'formPrint'));
-el('airPrint').addEventListener('click',()=>{render();window.print()});
-el('printerIp').addEventListener('input',()=>{const ip=privateIp();el('shortcutUrl').textContent='http://'+(ip||'SKRIVER-IP')+'/pstprnt'});
-async function copyZpl(){try{const zpl=makeZpl();await navigator.clipboard.writeText(zpl);setStatus('shortcutStatus','ZPL kopiert! Trykk «2. Åpne ZebraPrint» for å sende etiketten gjennom Snarveier.','success')}catch(e){setStatus('shortcutStatus','Chrome fikk ikke tilgang til utklippstavlen. Bruk «Del ZPL-fil» under i stedet.','warn')}}
-el('copyZpl').addEventListener('click',copyZpl);
-el('runShortcut').addEventListener('click',()=>{setStatus('shortcutStatus','Åpner snarveien ZebraPrint. Husk å kopiere etiketten først. Ingen utskrift er bekreftet.','warn');location.href='shortcuts://run-shortcut?name=ZebraPrint&input=clipboard'});
-el('saveZpl').addEventListener('click',()=>{saveBlob(getZplBlob(),'etikett.zpl');setStatus('saveStatus','ZPL-filen er laget.','success')});
-el('savePng').addEventListener('click',async()=>{render();const blob=await imageBlob();if(blob){saveBlob(blob,'etikett.png');setStatus('saveStatus','Bildet er laget.','success')}});
-el('shareZpl').addEventListener('click',()=>shareFile(getZplBlob(),'etikett.zpl','text/plain'));
-el('sharePng').addEventListener('click',async()=>{render();const blob=await imageBlob();if(blob)await shareFile(blob,'etikett.png','image/png')});
-el('shortcutUrl').textContent='http://'+(privateIp()||'SKRIVER-IP')+'/pstprnt';
+function pointerCentroid(){const points=[...activePointers.values()]; return {x:points.reduce((s,p)=>s+p.x,0)/points.length,y:points.reduce((s,p)=>s+p.y,0)/points.length}}
+function pointerDistance(){const p=[...activePointers.values()]; return p.length<2?0:Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y)}
+function startGesture(){if(!photo||activePointers.size===0){gesture=null; return} const layout=getImageLayout(); if(!layout)return; gesture={centroid:pointerCentroid(),distance:pointerDistance(),zoom:Number(el('zoom').value),panPixelX:normalizedPan('panX')*layout.rangeX,panPixelY:normalizedPan('panY')*layout.rangeY,area:layout.area};}
+canvas.addEventListener('pointerdown',ev=>{if(!photo||(!ev.isPrimary&&activePointers.size>=2))return; ev.preventDefault(); try{canvas.setPointerCapture(ev.pointerId)}catch(e){} activePointers.set(ev.pointerId,pointerPoint(ev)); startGesture()});
+canvas.addEventListener('pointermove',ev=>{if(!activePointers.has(ev.pointerId)||!gesture||!photo)return; ev.preventDefault(); activePointers.set(ev.pointerId,pointerPoint(ev)); const current=pointerCentroid(),rect=canvas.getBoundingClientRect(); if(!rect.width||!rect.height)return; const scaleX=canvas.width/rect.width,scaleY=canvas.height/rect.height; const ratio=(activePointers.size>=2&&gesture.distance>0)?pointerDistance()/gesture.distance:1; const zoom=clamp(Math.round(gesture.zoom*ratio),50,400); el('zoom').value=String(zoom); const layout=getImageLayout(zoom); if(!layout)return; const r=zoom/gesture.zoom; const areaX=layout.area.x+layout.area.w/2,areaY=layout.area.y+layout.area.h/2; const anchorX=(gesture.centroid.x-rect.left)*scaleX,anchorY=(gesture.centroid.y-rect.top)*scaleY, movedX=(current.x-rect.left)*scaleX, movedY=(current.y-rect.top)*scaleY; const x=movedX-areaX-r*(anchorX-areaX-gesture.panPixelX), y=movedY-areaY-r*(anchorY-areaY-gesture.panPixelY); el('panX').value=String(layout.rangeX>0.5?Math.round(clamp(x/layout.rangeX*100,-100,100)):0); el('panY').value=String(layout.rangeY>0.5?Math.round(clamp(y/layout.rangeY*100,-100,100)):0); requestPreviewRender()});
+function endGesture(ev){if(!activePointers.has(ev.pointerId))return; activePointers.delete(ev.pointerId); try{if(canvas.hasPointerCapture(ev.pointerId))canvas.releasePointerCapture(ev.pointerId)}catch(e){} startGesture()}
+canvas.addEventListener('pointerup',endGesture); canvas.addEventListener('pointercancel',endGesture); canvas.addEventListener('lostpointercapture',endGesture);
+canvas.addEventListener('wheel',ev=>{if(!photo)return; ev.preventDefault(); const current=Number(el('zoom').value),step=(ev.deltaY<0?8:-8); el('zoom').value=String(clamp(current+step,50,400)); render()},{passive:false});
+el('rememberIp').addEventListener('click',()=>{const ip=getIp(); if(!ip)return; try{localStorage.setItem(localKey,ip); setStatus('ipStatus','IP-adressen er lagret på denne enheten.','success')}catch(e){setStatus('ipStatus','Kunne ikke lagre IP; den virker fortsatt for denne økten.','warn')}});
+el('openPrinter').addEventListener('click',()=>{const ip=getIp(); if(ip)window.open('http://'+ip+'/','_blank','noopener')});
+function sendFormZpl(zpl,statusText){const ip=getIp(); if(!ip)return; const form=document.createElement('form'); form.method='POST'; form.enctype='text/plain'; form.action='http://'+ip+'/pstprnt'; form.target='_blank'; form.style.display='none'; const field=document.createElement('input'); field.type='hidden'; field.name=zpl; field.value=''; form.appendChild(field); document.body.appendChild(form); setStatus('printStatus',statusText||('Sender etikett til '+ip+' med skjema-POST. Kontroller skriveren før du sender flere etiketter.'),'warn'); form.submit(); setTimeout(()=>form.remove(),5000)}
+el('directPrint').addEventListener('click',()=>sendFormZpl(makeZpl(),'Sender etikett til skriveren. Kontroller utskriften før du prøver igjen.'));
+el('testPrint').addEventListener('click',()=>sendFormZpl(testZpl(),'Sender testetikett til skriveren.'));
+el('savePng').addEventListener('click',async()=>{render(); const blob=await imageBlob(); if(blob){saveBlob(blob,'etikett.png'); setStatus('printStatus','PNG-forhåndsvisningen er lagret.','success')}});
 render();
 })();
 </script>
