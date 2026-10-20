@@ -398,6 +398,21 @@ el('importScan').addEventListener('click',()=>{
   if(added)scanMessage('Importert '+readDetails+' skriver(e) med infokolonner fra '+added+' IP-adresse(r). Resultatene vises under skriverlisten. Verdiene for bredde/lengde er skriverinnstillinger, ikke sikker fysisk papirstørrelse.','success');
   else scanMessage('Ingen gyldige IP-adresser eller skriverinfo ble funnet i innlimt tekst.','warn');
 });
+function importFromPrivateLink(){
+  const marker='#zebra-list=';
+  if(!location.hash.startsWith(marker))return;
+  const encoded=location.hash.slice(marker.length);
+  history.replaceState(null,'',location.pathname+location.search);
+  if(encoded.length>10000)return;
+  try{
+    const bytes=Uint8Array.from(atob(encoded.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+    const input=new TextDecoder().decode(bytes);
+    el('scanImport').value=input;
+    el('importScan').click();
+    el('scanImport').value='';
+    setStatus('ipStatus','Skriverlisten ble importert. Velg en skriver i menyen for automatisk IP, DPI og etikettmål.','success');
+  }catch(e){setStatus('ipStatus','Kunne ikke lese importlenken.','warn')}
+}
 el('rememberIp').addEventListener('click',()=>{const ip=getIp(); if(!ip)return; try{localStorage.setItem(localKey,ip); setStatus('ipStatus','IP-adressen er lagret på denne enheten.','success')}catch(e){setStatus('ipStatus','Kunne ikke lagre IP; den virker fortsatt for denne økten.','warn')}});
 el('openPrinter').addEventListener('click',()=>{const ip=getIp(); if(ip)window.open('http://'+ip+'/','_blank','noopener')});
 function sendFormZpl(zpl,statusText){const ip=getIp(); if(!ip)return; const form=document.createElement('form'); form.method='POST'; form.enctype='text/plain'; form.action='http://'+ip+'/pstprnt'; form.target='_blank'; form.style.display='none'; const field=document.createElement('input'); field.type='hidden'; field.name=zpl; field.value=''; form.appendChild(field); document.body.appendChild(form); setStatus('printStatus',statusText||('Sender etikett til '+ip+' med skjema-POST. Kontroller skriveren før du sender flere etiketter.'),'warn'); form.submit(); setTimeout(()=>form.remove(),5000)}
@@ -408,6 +423,7 @@ loadPrinterList();
 updateFoundPrinters();
 renderPrinterInfo();
 updateSavedPrinterMenu();
+importFromPrivateLink();
 render();
 })();
 </script>
