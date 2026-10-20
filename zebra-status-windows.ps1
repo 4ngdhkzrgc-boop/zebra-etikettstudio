@@ -169,7 +169,7 @@ function Receive-Http($stream){
   return @{method=$first[0];path=$first[1];headers=$headers;body=$data}
 }
 function Respond($stream,[int]$status,$obj,[bool]$allow){
-  $response=[Text.Encoding]::UTF8.GetBytes((ConvertTo-Json -InputObject $obj -Compress))
+  $response=[Text.Encoding]::UTF8.GetBytes((ConvertTo-Json -InputObject $obj -Compress -Depth 8))
   $label=if($status -eq 200){'OK'}elseif($status -eq 403){'Forbidden'}else{'Bad Request'}
   $fields=@("HTTP/1.1 $status $label","Content-Type: application/json; charset=utf-8","Content-Length: $($response.Length)",'Connection: close')
   if($allow){
