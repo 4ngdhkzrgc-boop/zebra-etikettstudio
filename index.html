@@ -17,7 +17,7 @@
 <section class="card" aria-labelledby="connectHeading">
   <div class="row-head"><h2 id="connectHeading">1. Skriver</h2><span class="pill">ZD421 / ZPL</span></div>
   <div class="saved-printer-picker">
-    <label class="label" for="savedPrinters" style="margin-top:0">Velg fra skriverlisten</label>
+    <label class="label" for="savedPrinters" style="margin-top:0">Velg skriver – tilpass etikett automatisk</label>
     <select id="savedPrinters" class="control"><option value="">Ingen lagrede skrivere – importer skriverinfo nedenfor</option></select>
     <div id="selectedPrinterDetails" class="selected-printer-details" role="status" aria-live="polite">Når skriverinformasjon er importert, kan du velge skriveren her.</div>
     <div class="buttons" style="margin-top:10px"><button id="usePrinterDimensions" type="button" class="btn white" disabled>Bruk rapporterte etikettmål</button><button id="openPrinterImport" type="button" class="btn ghost">Importer / oppdater skrivere</button></div>
@@ -61,7 +61,7 @@
   <button id="clearImage" type="button" class="btn ghost full" style="margin-top:8px">Fjern bilde</button>
   <label class="label" for="labelText">Tekst</label>
   <textarea class="control" id="labelText" placeholder="Skriv tekst som skal skrives ut …"></textarea>
-  <div class="two"><div><label class="label" for="width">Bredde (mm)</label><input class="control" id="width" type="number" value="100" min="10" max="104" step="1"></div><div><label class="label" for="height">Høyde (mm)</label><input class="control" id="height" type="number" value="60" min="10" max="300" step="1"></div></div>
+  <div class="two"><div><label class="label" for="width">Bredde (mm)</label><input class="control" id="width" type="number" value="100" min="10" max="104" step="1"></div><div><label class="label" for="height">Høyde (mm)</label><input class="control" id="height" type="number" value="60" min="5" max="300" step="1"></div></div>
   <div class="two"><div><label class="label" for="dpi">Skriveroppløsning</label><select id="dpi" class="control"><option value="203">203 dpi</option><option value="300">300 dpi</option></select></div><div><label class="label" for="font">Tekststørrelse</label><select id="font" class="control"><option value="20">Liten</option><option value="28" selected>Middels</option><option value="38">Stor</option><option value="54">Ekstra stor</option></select></div></div>
   <label class="label" for="threshold">Bildekontrast: <span id="thValue">145</span></label>
   <input id="threshold" type="range" min="40" max="230" value="145">
@@ -104,7 +104,7 @@ try{el('printerIp').value=localStorage.getItem(localKey)||''}catch(e){}
 function setStatus(id,message,kind=''){const target=el(id);target.textContent=message;target.className='status'+(kind?' '+kind:'')}
 function privateIp(){const ip=el('printerIp').value.trim();const parts=ip.split('.');if(parts.length!==4||parts.some(x=>!/^[0-9]{1,3}$/.test(x)||Number(x)>255))return null;const b=parts.map(Number);if(!(b[0]===10||(b[0]===172&&b[1]>=16&&b[1]<=31)||(b[0]===192&&b[1]===168)||(b[0]===169&&b[1]===254)))return null;return b.join('.')}
 function getIp(){const ip=privateIp();if(!ip)setStatus('ipStatus','Oppgi en lokal IPv4-adresse, for eksempel 192.168.1.50.','warn');return ip}
-function mm(id){const max=id==='width'?104:300;const val=Number(el(id).value);return Math.max(10,Math.min(max,Number.isFinite(val)&&val>0?val:(id==='width'?100:60)))}
+function mm(id){const max=id==='width'?104:300;const val=Number(el(id).value);return Math.max(id==='width'?10:5,Math.min(max,Number.isFinite(val)&&val>0?val:(id==='width'?100:60)))}
 function clamp(v,min,max){return Math.min(max,Math.max(min,v))}
 function setEditorReadout(name,val){const node=el(name);if(node)node.textContent=String(val)}
 function getImageLayout(zoomPct=Number(el('zoom').value)){
@@ -211,7 +211,7 @@ function loadPrinterList(){
   }catch(e){}
 }
 function formatPrinterName(info){
-  return [info.name||info.model||'Skriver',info.name&&info.model&&info.model!==info.name?info.model:'',info.ip].filter(Boolean).join(' · ');
+  return [info.name||'Zebra-skriver',info.ip].join(' · ');
 }
 function updateSavedPrinterMenu(){
   const menu=el('savedPrinters'),oldValue=menu.value,active=el('printerIp').value.trim();
@@ -230,19 +230,35 @@ function showSelectedPrinterDetails(){
   const button=el('usePrinterDimensions');button.disabled=true;
   if(!info){target.textContent=printerInfoByIp.size?'Velg en skriver for å se modell, oppløsning og etikettmål.':'Ingen skriverinfo lagret. Bruk «Importer / oppdater skrivere» og lim inn PowerShell-resultatet.';return}
   const width=getPrintMm(info.widthDots,info.dpi),height=getPrintMm(info.lengthDots,info.dpi);
-  const rows=[['IP-adresse',ip],['Skrivernavn',info.name||'Ikke oppgitt'],['Modell',info.model||'Ikke oppgitt'],
+  const rows=[['IP-adresse',ip],['Skrivernavn',info.name||'Ikke oppgitt'],['Firmware',info.model||'Ikke oppgitt'],
     ['Plassering',info.location||'Ikke oppgitt'],['Oppløsning',info.dpi?info.dpi+' dpi':'Ikke oppgitt'],
     ['Bredde (innstilt)',width!==null?width.toLocaleString('nb-NO')+' mm':'Ikke oppgitt'],
     ['Lengde (innstilt)',height!==null?height.toLocaleString('nb-NO')+' mm':'Ikke oppgitt']];
   for(const [label,value] of rows){const row=document.createElement('div');row.className='printer-detail-row';const left=document.createElement('span');left.textContent=label;const right=document.createElement('strong');right.textContent=value;row.append(left,right);target.appendChild(row)}
-  button.disabled=!(width!==null&&height!==null&&width>=10&&width<=104&&height>=10&&height<=300&&['200','203','300'].includes(info.dpi));
+  button.disabled=!(width!==null&&height!==null&&width>=10&&width<=104&&height>=5&&height<=300&&['200','203','300'].includes(info.dpi));
+}
+function preferredLabelSize(info){
+  const parsed=String(info.name||'').match(/(?:^|_)(\d{1,3})X(\d{1,3})(?:_|$)/i);
+  const w=parsed?Number(parsed[1]):getPrintMm(info.widthDots,info.dpi);
+  const h=parsed?Number(parsed[2]):getPrintMm(info.lengthDots,info.dpi);
+  const source=parsed?'skrivernavn':'skriverinnstillinger';
+  const valid=w!==null&&h!==null&&w>=10&&w<=104&&h>=5&&h<=300;
+  const configuredH=getPrintMm(info.lengthDots,info.dpi);
+  const mismatch=!!parsed&&configuredH!==null&&Math.abs(configuredH-h)>Math.max(12,h*.6);
+  return {w,h,source,valid,needsCheck:mismatch};
 }
 function selectSavedPrinter(ip){
-  if(!printerInfoByIp.has(ip))return;
+  const info=printerInfoByIp.get(ip);if(!info)return;
   el('printerIp').value=ip;
   try{localStorage.setItem(localKey,ip)}catch(e){}
+  const dpi=String(info.dpi)==='200'?'203':String(info.dpi);
+  if(['203','300'].includes(dpi))el('dpi').value=dpi;
+  const format=preferredLabelSize(info);
+  if(format.valid&&!format.needsCheck){el('width').value=String(format.w);el('height').value=String(format.h)}
+  render();
   showSelectedPrinterDetails();
-  setStatus('ipStatus','Valgt '+formatPrinterName(printerInfoByIp.get(ip))+'. IP-adressen brukes ved utskrift.','success');
+  const message='Valgt '+formatPrinterName(info)+'. '+dpi+' dpi. '+(format.valid&&!format.needsCheck?'Etikettformat '+format.w+' × '+format.h+' mm ('+format.source+').':'Kontroller etikettmål manuelt – rapportert etikettlengde avviker fra skrivernavnet.');
+  setStatus('ipStatus',message,format.valid&&!format.needsCheck?'success':'warn');
 }
 el('savedPrinters').addEventListener('change',()=>{
   const ip=el('savedPrinters').value;
@@ -260,7 +276,7 @@ el('usePrinterDimensions').addEventListener('click',()=>{
   const info=printerInfoByIp.get(el('savedPrinters').value);if(!info)return;
   const width=getPrintMm(info.widthDots,info.dpi),height=getPrintMm(info.lengthDots,info.dpi);
   const dpi=info.dpi==='200'?'203':info.dpi;
-  if(!(width>=10&&width<=104&&height>=10&&height<=300&&['203','300'].includes(dpi)))return;
+  if(!(width>=10&&width<=104&&height>=5&&height<=300&&['203','300'].includes(dpi)))return;
   el('width').value=String(width);el('height').value=String(height);el('dpi').value=dpi;
   render();setStatus('ipStatus','Rapporterte etikettmål er satt til '+width+' × '+height+' mm ('+dpi+' dpi). Kontroller at dette samsvarer med papiret.','warn');
 });
@@ -302,7 +318,7 @@ function renderPrinterInfo(){
     const box=document.createElement('div');box.className='printer-info-card';
     const title=document.createElement('strong');title.textContent=(info.name||info.model||'Zebra-skriver')+' — '+info.ip;box.appendChild(title);
     const rows=[
-      ['Modell',info.model],['Oppløsning',info.dpi?info.dpi+' dpi':''],['Bredde (innstilt)',infoDotsMm(info.widthDots,info.dpi)],
+      ['Firmware',info.model],['Oppløsning',info.dpi?info.dpi+' dpi':''],['Bredde (innstilt)',infoDotsMm(info.widthDots,info.dpi)],
       ['Lengde (innstilt)',infoDotsMm(info.lengthDots,info.dpi)],['Plassering',info.location]
     ];
     for(const [key,val] of rows){const row=document.createElement('div');row.className='printer-info-row';const l=document.createElement('span');l.textContent=key;const v=document.createElement('span');v.textContent=infoText(val);row.append(l,v);box.appendChild(row)}
