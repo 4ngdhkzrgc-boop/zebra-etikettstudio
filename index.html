@@ -7,7 +7,7 @@
 <title>Zebra Etikettstudio</title>
 <style>
 :root{color-scheme:light;--bg:#edf2f7;--card:#fff;--ink:#152439;--muted:#64758b;--border:#dbe4ee;--blue:#145be3;--navy:#111c2d;--good:#16734a;--amber:#8a5910}
-*{box-sizing:border-box}html{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}body{background:var(--bg);color:var(--ink);margin:0}.wrap{max-width:780px;margin:0 auto;padding:0 14px max(42px,env(safe-area-inset-bottom))}.hero{background:linear-gradient(140deg,#0f1d33,#203c65);color:#fff;padding:25px 20px 26px;margin:0 -14px 18px;border-radius:0 0 24px 24px}.hero h1{font-size:26px;letter-spacing:-.8px;margin:7px 0 4px}.hero p{opacity:.88;line-height:1.45;margin:0;font-size:14px}.eyebrow{text-transform:uppercase;font-weight:800;letter-spacing:2px;font-size:10px;color:#a4c8ff}.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:17px;margin:14px 0;box-shadow:0 4px 20px #18375609}.row-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}h2{font-size:17px;margin:0;letter-spacing:-.3px}.pill{font-size:11px;border-radius:50px;padding:5px 9px;background:#e8f0ff;color:#144caa;font-weight:750}.label{font-size:13px;font-weight:730;margin:13px 0 6px;display:block}.control{border:1px solid #c9d7e7;border-radius:11px;background:#fff;color:var(--ink);padding:12px;width:100%;font:inherit;font-size:16px;outline-offset:2px}.control:focus-visible{outline:2px solid #226df0}textarea.control{min-height:100px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:11px}.btn{border:0;background:#e9f0fb;border-radius:12px;color:#1e406b;font:inherit;font-size:14px;line-height:1.3;font-weight:750;padding:13px 12px;cursor:pointer;min-height:46px;text-align:center}.btn:active{transform:translateY(1px)}.btn.main{background:var(--blue);color:#fff}.btn.white{background:#fff;border:1px solid var(--border)}.btn.ghost{background:transparent;border:1px solid var(--border)}.btn:disabled{opacity:.5;cursor:wait}.full{width:100%;display:block}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}.upload{display:block;border:1.5px dashed #a9c2e3;background:#f0f6ff;border-radius:13px;text-align:center;font-size:14px;font-weight:750;padding:17px 12px;color:#174a9d;cursor:pointer}.upload input{display:none}.checkline{display:flex;gap:8px;align-items:center;margin-top:13px;font-size:13px}.checkline input{width:18px;height:18px}.preview-zone{background:#e9eef4;min-height:155px;border-radius:14px;display:grid;place-items:center;padding:18px;overflow:auto}.preview-zone canvas{max-width:100%;height:auto;background:#fff;box-shadow:0 6px 22px #15223926;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}.preview-zone canvas:active{cursor:grabbing}.hint{font-size:12px;color:var(--muted);line-height:1.55;margin:11px 0 0}.status{margin-top:10px;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;background:#eef4fb;color:#264d78}.status:empty{display:none}.status.success{background:#e9f7ef;color:#145d3b}.status.warn{background:#fff5e3;color:#76500c}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-.2px}.info{background:#fff8eb;color:#74541d;border-radius:12px;padding:12px;font-size:12px;line-height:1.6;margin-top:12px}.printer-info-card{border:1px solid var(--border);border-radius:12px;padding:12px;margin:10px 0;background:#f8fbff;font-size:13px}.printer-info-row{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--border);padding:7px 0}.printer-info-row>span:first-child{color:var(--muted)}.printer-info-row>span:last-child{text-align:right;font-variant-numeric:tabular-nums}.saved-printer-picker{padding:14px;border:1px solid #c9d7e7;border-radius:14px;background:#f2f7ff;margin:0 0 14px}.selected-printer-details{margin-top:10px;border-radius:10px;background:#fff;padding:12px;color:var(--muted);font-size:13px;line-height:1.5}.printer-detail-row{display:flex;justify-content:space-between;gap:14px;padding:6px 0;border-bottom:1px solid var(--border);color:var(--ink)}.printer-detail-row:last-child{border-bottom:0}.printer-detail-row span{color:var(--muted)}.printer-detail-row strong{text-align:right;font-weight:650}.editor-box{margin-top:14px;padding:14px;border:1px solid var(--border);border-radius:14px;background:#f8fbff}.scanner{margin-top:12px}.scanner #printerScanner{padding:13px;margin-top:9px;background:#f8fbff;border:1px solid var(--border);border-radius:12px}.scanner #printerScanner[hidden]{display:none}.scan-fallback{margin-top:15px;padding-top:12px;border-top:1px solid var(--border)}.scan-fallback summary{cursor:pointer;font-weight:750;color:#20508f;font-size:13px}.scan-fallback textarea{min-height:74px}input[type="range"]{width:100%;accent-color:var(--blue)}footer{text-align:center;font-size:11px;color:#78879b;margin:20px 0}@media(min-width:540px){.hero{margin:0 -14px 18px}}@media print{body{background:#fff}.hero,.card:not(#previewCard),#previewCard .row-head,#previewCard .hint,#previewCard .status,footer{display:none!important}#previewCard{border:0;box-shadow:none;margin:0;padding:0}.wrap{padding:0;max-width:none}.preview-zone{padding:0;background:#fff;display:block;min-height:0;overflow:visible}.preview-zone canvas{box-shadow:none;max-width:none!important;width:var(--paperwidth)!important;height:var(--paperheight)!important}@page{margin:0}}
+*{box-sizing:border-box}html{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}body{background:var(--bg);color:var(--ink);margin:0}.wrap{max-width:780px;margin:0 auto;padding:0 14px max(42px,env(safe-area-inset-bottom))}.hero{background:linear-gradient(140deg,#0f1d33,#203c65);color:#fff;padding:25px 20px 26px;margin:0 -14px 18px;border-radius:0 0 24px 24px}.hero h1{font-size:26px;letter-spacing:-.8px;margin:7px 0 4px}.hero p{opacity:.88;line-height:1.45;margin:0;font-size:14px}.eyebrow{text-transform:uppercase;font-weight:800;letter-spacing:2px;font-size:10px;color:#a4c8ff}.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:17px;margin:14px 0;box-shadow:0 4px 20px #18375609}.row-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}h2{font-size:17px;margin:0;letter-spacing:-.3px}.pill{font-size:11px;border-radius:50px;padding:5px 9px;background:#e8f0ff;color:#144caa;font-weight:750}.label{font-size:13px;font-weight:730;margin:13px 0 6px;display:block}.control{border:1px solid #c9d7e7;border-radius:11px;background:#fff;color:var(--ink);padding:12px;width:100%;font:inherit;font-size:16px;outline-offset:2px}.control:focus-visible{outline:2px solid #226df0}textarea.control{min-height:100px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:11px}.btn{border:0;background:#e9f0fb;border-radius:12px;color:#1e406b;font:inherit;font-size:14px;line-height:1.3;font-weight:750;padding:13px 12px;cursor:pointer;min-height:46px;text-align:center}.btn:active{transform:translateY(1px)}.btn.main{background:var(--blue);color:#fff}.btn.white{background:#fff;border:1px solid var(--border)}.btn.ghost{background:transparent;border:1px solid var(--border)}.btn:disabled{opacity:.5;cursor:wait}.full{width:100%;display:block}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}.upload{display:block;border:1.5px dashed #a9c2e3;background:#f0f6ff;border-radius:13px;text-align:center;font-size:14px;font-weight:750;padding:17px 12px;color:#174a9d;cursor:pointer}.upload input{display:none}.checkline{display:flex;gap:8px;align-items:center;margin-top:13px;font-size:13px}.checkline input{width:18px;height:18px}.preview-zone{background:#e9eef4;min-height:155px;border-radius:14px;display:grid;place-items:center;padding:18px;overflow:auto}.preview-zone canvas{max-width:100%;height:auto;background:#fff;box-shadow:0 6px 22px #15223926;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}.preview-zone canvas:active{cursor:grabbing}.hint{font-size:12px;color:var(--muted);line-height:1.55;margin:11px 0 0}.status{margin-top:10px;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;background:#eef4fb;color:#264d78}.status:empty{display:none}.status.success{background:#e9f7ef;color:#145d3b}.status.warn{background:#fff5e3;color:#76500c}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-.2px}.info{background:#fff8eb;color:#74541d;border-radius:12px;padding:12px;font-size:12px;line-height:1.6;margin-top:12px}.printer-info-card{border:1px solid var(--border);border-radius:12px;padding:12px;margin:10px 0;background:#f8fbff;font-size:13px}.printer-info-row{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--border);padding:7px 0}.printer-info-row>span:first-child{color:var(--muted)}.printer-info-row>span:last-child{text-align:right;font-variant-numeric:tabular-nums}.saved-printer-picker{padding:14px;border:1px solid #c9d7e7;border-radius:14px;background:#f2f7ff;margin:0 0 14px}.selected-printer-details{margin-top:10px;border-radius:10px;background:#fff;padding:12px;color:var(--muted);font-size:13px;line-height:1.5}.printer-detail-row{display:flex;justify-content:space-between;gap:14px;padding:6px 0;border-bottom:1px solid var(--border);color:var(--ink)}.printer-detail-row:last-child{border-bottom:0}.printer-detail-row span{color:var(--muted)}.printer-detail-row strong{text-align:right;font-weight:650}.print-confirm-help{margin:10px 0;padding:12px;background:#f8fbff;border:1px solid var(--border);border-radius:12px}.print-confirm-help summary{cursor:pointer;color:#244e88;font-size:13px;font-weight:750}.quick-toast[hidden]{display:none!important}.quick-toast{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);max-width:min(520px,calc(100% - 26px));width:max-content;min-width:min(300px,calc(100% - 26px));z-index:50;background:#fff8e9;border:1px solid #e1c177;color:#664611;padding:14px 17px;border-radius:13px;box-shadow:0 8px 35px #14223930;font-size:14px;font-weight:650;line-height:1.45}.quick-toast.success{background:#e8f8ef;border-color:#a0d3b7;color:#136443}.quick-toast.error{background:#fff0ee;border-color:#e4aba5;color:#912f2b}.editor-box{margin-top:14px;padding:14px;border:1px solid var(--border);border-radius:14px;background:#f8fbff}.scanner{margin-top:12px}.scanner #printerScanner{padding:13px;margin-top:9px;background:#f8fbff;border:1px solid var(--border);border-radius:12px}.scanner #printerScanner[hidden]{display:none}.scan-fallback{margin-top:15px;padding-top:12px;border-top:1px solid var(--border)}.scan-fallback summary{cursor:pointer;font-weight:750;color:#20508f;font-size:13px}.scan-fallback textarea{min-height:74px}input[type="range"]{width:100%;accent-color:var(--blue)}footer{text-align:center;font-size:11px;color:#78879b;margin:20px 0}@media(min-width:540px){.hero{margin:0 -14px 18px}}@media print{body{background:#fff}.hero,.card:not(#previewCard),#previewCard .row-head,#previewCard .hint,#previewCard .status,footer{display:none!important}#previewCard{border:0;box-shadow:none;margin:0;padding:0}.wrap{padding:0;max-width:none}.preview-zone{padding:0;background:#fff;display:block;min-height:0;overflow:visible}.preview-zone canvas{box-shadow:none;max-width:none!important;width:var(--paperwidth)!important;height:var(--paperheight)!important}@page{margin:0}}
 </style>
 </head>
 <body>
@@ -88,13 +88,23 @@
 <section class="card">
   <div class="row-head"><h2>4. Skriv ut</h2><span class="pill">Direkte til skriver</span></div>
   <button class="btn main full" id="directPrint" type="button">Skriv ut etikett</button>
+  <label class="checkline" for="confirmedPrint"><input id="confirmedPrint" type="checkbox"> Bruk Zebra-status ved utskrift (Windows)</label>
+  <p class="hint">Vanlig utskrift fortsetter å fungere uten dette. Med en lokal Windows-hjelper kan appen sjekke Zebra-skriverens feilmeldinger og om etikettelleren øker etter jobben.</p>
+  <details class="print-confirm-help"><summary>Sett opp Zebra-status på Windows</summary>
+    <p class="hint">Dette er valgfritt. Last ned og kjør den lokale PowerShell-hjelperen på PC-en du skriver ut fra. Hold PowerShell-vinduet åpent mens du bruker appen. Hjelperen lytter kun på 127.0.0.1 på PC-en og kommuniserer med skriverne på 172.30.99.x via port 9100.</p>
+    <a class="btn white full" href="./zebra-status-windows.ps1" download="zebra-status-windows.ps1" style="text-decoration:none;display:block;margin-top:10px">Last ned Windows-hjelper (.ps1)</a>
+    <p class="hint">Kjør filen fra PowerShell dersom bedriftens sikkerhetspolicy tillater det. Dette er ikke en løsning for telefoner. Hvis den ikke er i bruk, slå av «Bruk Zebra-status» for å bruke vanlig utskrift.</p>
+    <button type="button" id="testHelper" class="btn ghost full" style="margin-top:10px">Test forbindelsen til Windows-hjelperen</button>
+    <div id="helperStatus" class="status" role="status" aria-live="polite"></div>
+  </details>
   <div class="buttons" style="margin-top:9px"><button class="btn white" id="testPrint" type="button">Skriv testetikett</button><button class="btn ghost" id="savePng" type="button">Lagre forhåndsvisning som PNG</button></div>
   <div id="printStatus" class="status" role="status" aria-live="polite"></div>
-  <div class="info"><strong>Viktig:</strong> Utskrift skjer ved å sende ZPL direkte til <span class="mono">http://SKRIVER-IP/pstprnt</span>. Appen får ikke en sikker kvittering fra skriveren, så send én etikett om gangen og kontroller resultatet før du skriver ut flere.</div>
+  <div class="info"><strong>Utskriftsstatus:</strong> Uten Windows-hjelperen kan nettleseren bare bekrefte at utskriftsforespørselen ble startet, ikke at Zebra skrev ut etiketten. Med hjelperen leses skriverstatus og etikettelleren etter sending. En økt teller er en sterk indikasjon, men kan ikke knytte etiketten sikkert til jobben hvis flere skriver ut samtidig.</div>
 </section>
 
 <footer>Alt innhold behandles lokalt i nettleseren. Ingen eksterne skript, kontoer eller mellomservere.</footer>
 </main>
+<div id="quickPrintToast" class="quick-toast" role="status" aria-live="polite" hidden></div>
 <script>
 (()=>{'use strict';
 const el=id=>document.getElementById(id),canvas=el('preview'),ctx=canvas.getContext('2d',{willReadFrequently:true});
@@ -415,9 +425,84 @@ function importFromPrivateLink(){
 }
 el('rememberIp').addEventListener('click',()=>{const ip=getIp(); if(!ip)return; try{localStorage.setItem(localKey,ip); setStatus('ipStatus','IP-adressen er lagret på denne enheten.','success')}catch(e){setStatus('ipStatus','Kunne ikke lagre IP; den virker fortsatt for denne økten.','warn')}});
 el('openPrinter').addEventListener('click',()=>{const ip=getIp(); if(ip)window.open('http://'+ip+'/','_blank','noopener')});
-function sendFormZpl(zpl,statusText){const ip=getIp(); if(!ip)return; const form=document.createElement('form'); form.method='POST'; form.enctype='text/plain'; form.action='http://'+ip+'/pstprnt'; form.target='_blank'; form.style.display='none'; const field=document.createElement('input'); field.type='hidden'; field.name=zpl; field.value=''; form.appendChild(field); document.body.appendChild(form); setStatus('printStatus',statusText||('Sender etikett til '+ip+' med skjema-POST. Kontroller skriveren før du sender flere etiketter.'),'warn'); form.submit(); setTimeout(()=>form.remove(),5000)}
-el('directPrint').addEventListener('click',()=>sendFormZpl(makeZpl(),'Sender etikett til skriveren. Kontroller utskriften før du prøver igjen.'));
-el('testPrint').addEventListener('click',()=>sendFormZpl(testZpl(),'Sender testetikett til skriveren.'));
+let toastTimer=null,printLocked=false;
+function showPrintStatus(message,type='warn'){
+  setStatus('printStatus',message,type==='error'?'warn':type);
+  const toast=el('quickPrintToast');
+  toast.textContent=message;
+  toast.className='quick-toast'+(type==='warn'?'':' '+type);
+  toast.hidden=false;
+  if(toastTimer)clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>{toast.hidden=true},type==='success'?7000:10000);
+}
+function sendFormZpl(zpl,statusText){
+  const ip=getIp();if(!ip)return;
+  const form=document.createElement('form');
+  form.method='POST';form.enctype='text/plain';form.action='http://'+ip+'/pstprnt';
+  form.target='_blank';form.style.display='none';
+  const field=document.createElement('input');field.type='hidden';field.name=zpl;field.value='';
+  form.appendChild(field);document.body.appendChild(form);
+  showPrintStatus(statusText||'Forespørsel om utskrift startet. Utskriften er ikke bekreftet.', 'warn');
+  try{form.submit()}catch(e){showPrintStatus('Nettleseren kunne ikke starte utskriften: '+e.message,'error')}
+  finally{setTimeout(()=>form.remove(),5000)}
+}
+const statusBase='http://127.0.0.1:37371';
+async function helperFetch(path,options,timeout=2500){
+  const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),timeout);
+  try{
+    const response=await fetch(statusBase+path,{...options,mode:'cors',cache:'no-store',targetAddressSpace:'local',signal:ac.signal});
+    if(!response.ok)throw Error('Status-hjelper svarte HTTP '+response.status);
+    return await response.json();
+  }finally{clearTimeout(timer)}
+}
+async function testStatusHelper(){
+  try{
+    const data=await helperFetch('/health',{method:'GET'},2000);
+    if(!data.ok)throw Error('Uventet svar');
+    setStatus('helperStatus','Windows-hjelperen er tilkoblet og klar.','success');
+    return true;
+  }catch(e){
+    setStatus('helperStatus','Fant ikke Windows-hjelperen på denne enheten. Last den ned og kjør den i PowerShell, eller bruk vanlig utskrift.','warn');
+    return false;
+  }
+}
+el('testHelper').addEventListener('click',testStatusHelper);
+async function printRequest(isTest){
+  if(printLocked)return;
+  const ip=getIp();if(!ip)return;
+  printLocked=true;
+  const buttons=[el('directPrint'),el('testPrint')];buttons.forEach(b=>b.disabled=true);
+  try{
+    const useStatus=el('confirmedPrint').checked;
+    if(!useStatus){
+      const zpl=isTest?testZpl():makeZpl();
+      sendFormZpl(zpl,'Utskriftsforespørsel startet på '+ip+'. Zebra har ikke bekreftet utskriften.');
+      return;
+    }
+    if(!/^172\.30\.99\.(?:[1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-4])$/.test(ip)){
+      showPrintStatus('Status-hjelperen støtter foreløpig bare skrivere på 172.30.99.x. Slå av Zebra-status for vanlig utskrift.','error');return;
+    }
+    showPrintStatus('Kontakter lokal Windows-hjelper …','warn');
+    if(!await testStatusHelper()){
+      showPrintStatus('Ingen utskrift sendt. Windows-hjelperen er ikke tilgjengelig. Start den, eller slå av Zebra-status og prøv igjen.','error');
+      return;
+    }
+    const zpl=isTest?testZpl():makeZpl();
+    showPrintStatus('Sender etikett og leser Zebra-status …','warn');
+    try{
+      const answer=await helperFetch('/print?ip='+encodeURIComponent(ip),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:zpl},22000);
+      if(answer.state==='confirmed')showPrintStatus(answer.message||'Zebra-telleren økte etter jobben. Utskrift sannsynlig.', 'success');
+      else if(answer.state==='error')showPrintStatus(answer.message||'Zebra rapporterte et problem.','error');
+      else showPrintStatus(answer.message||'Jobben ble sendt, men utskriften er ikke bekreftet.','warn');
+    }catch(e){
+      showPrintStatus('Kunne ikke lese svar fra Windows-hjelperen. Jobben kan ha blitt sendt – kontroller skriveren før du prøver igjen.','error');
+    }
+  }catch(e){
+    showPrintStatus('Utskriftsforsøket kunne ikke startes: '+e.message,'error');
+  }finally{printLocked=false;buttons.forEach(b=>b.disabled=false)}
+}
+el('directPrint').addEventListener('click',()=>printRequest(false));
+el('testPrint').addEventListener('click',()=>printRequest(true));
 el('savePng').addEventListener('click',async()=>{render(); const blob=await imageBlob(); if(blob){saveBlob(blob,'etikett.png'); setStatus('printStatus','PNG-forhåndsvisningen er lagret.','success')}});
 loadPrinterList();
 updateFoundPrinters();
