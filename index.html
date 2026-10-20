@@ -523,6 +523,136 @@ updateFoundPrinters();
 renderPrinterInfo();
 updateSavedPrinterMenu();
 importFromPrivateLink();
+
+  // Ny utskriftsflyt: ingen popup eller ekstra fane fra hovedknappen.
+  const checkedMulti=new Set();
+  function copyQuantity(){
+    const raw=el('printCopies').value.trim(),value=Number(raw);
+    if(!/^\d+$/.test(raw)||!Number.isInteger(value)||value<1||value>100)throw Error('Velg 1–100 etiketter per skriver.');
+    return value;
+  }
+  function updateQuantitySummary(){
+    const n=Number(el('printCopies').value),k=el('multiPrint').checked?checkedMulti.size:1;
+    el('printCountSummary').textContent=n>=1&&n<=100&&Number.isInteger(n)?n+' × '+k+' skriver(e) = '+(n*k)+' etiketter totalt.':'Velg 1–100 etiketter per skriver.';
+    el('directPrint').textContent=el('multiPrint').checked?'Skriv ut på '+k+' skrivere':'Skriv ut etikett';
+  }
+  function refreshMultiList(){
+    const target=el('multiPrinterList');target.replaceChildren();
+    for(const ip of [...checkedMulti])if(!printerInfoByIp.has(ip))checkedMulti.delete(ip);
+    if(!checkedMulti.size&&printerInfoByIp.has(el('printerIp').value.trim()))checkedMulti.add(el('printerIp').value.trim());
+    if(!printerInfoByIp.size)target.textContent='Ingen lagrede skrivere. Importer skriverinformasjon først.';
+    for(const ip of [...printerInfoByIp.keys()].sort((a,b)=>Number(a.split('.')[3])-Number(b.split('.')[3]))){
+      const info=printerInfoByIp.get(ip),format=preferredLabelSize(info);
+      const label=document.createElement('label');label.className='multi-printer-option';
+      const input=document.createElement('input');input.type='checkbox';input.checked=checkedMulti.has(ip);
+      input.addEventListener('change',()=>{if(input.checked)checkedMulti.add(ip);else checkedMulti.delete(ip);updateQuantitySummary()});
+      const name=document.createElement('span');name.textContent=(info.name||ip)+' · '+ip+' · '+(format.valid?format.w+' × '+format.h+' mm':'format ukjent')+(format.needsCheck?' (krever kontroll)':'');
+      label.append(input,name);target.appendChild(label);
+    }
+    updateQuantitySummary();
+  }
+  el('printCopies').addEventListener('input',updateQuantitySummary);
+  el('multiPrint').addEventListener('change',()=>{
+    el('multiPrinterPanel').hidden=!el('multiPrint').checked;
+    if(el('multiPrint').checked)refreshMultiList();
+    updateQuantitySummary();
+  });
+  function makeJobs(ips,isTest,n){
+    const before=[el('width').value,el('height').value,el('dpi').value],cache=new Map(),jobs=[];
+    try{
+      for(const ip of ips){
+        if(el('multiPrint').checked){
+          const info=printerInfoByIp.get(ip);
+          if(!info)throw Error('Mangler skriverdata for '+ip);
+          const format=preferredLabelSize(info),dpi=info.dpi==='200'?'203':info.dpi;
+          if(!format.valid||format.needsCheck||!['203','300'].includes(dpi))throw Error('Etikettmål må kontrolleres for '+(info.name||ip)+'.');
+          el('width').value=String(format.w);el('height').value=String(format.h);el('dpi').value=dpi;
+        }
+        const key=[el('width').value,el('height').value,el('dpi').value,isTest,n].join('|');
+        let zpl=cache.get(key);
+        if(!zpl){zpl=(isTest?testZpl():makeZpl()).replace(/\^PQ\d+/,'^PQ'+n);cache.set(key,zpl)}
+        jobs.push({ip,zpl});
+      }
+    }finally{
+      el('width').value=before[0];el('height').value=before[1];el('dpi').value=before[2];render();
+    }
+    return jobs;
+  }
+  function addPrinterResult(ip,message,state){
+    const line=document.createElement('div');line.className='print-result-line';
+    const left=document.createElement('strong');left.textContent=(printerInfoByIp.get(ip)?.name||ip)+' —';
+    const right=document.createElement('span');right.textContent=message||'Ikke bekreftet';
+    line.append(left,right);
+    if(state==='error')line.style.color='#912f2b';
+    if(state==='confirmed')line.style.color='#136443';
+    el('printResults').appendChild(line);
+  }
+  printRequest=async function(isTest){
+    if(printLocked)return;
+    let n,ips,jobs;
+    try{
+      n=copyQuantity();
+      ips=el('multiPrint').checked?[...checkedMulti]:[getIp()].filter(Boolean);
+      if(!ips.length)throw Error('Velg minst én skriver.');
+      jobs=makeJobs(ips,isTest,n);
+    }catch(e){showPrintStatus(e.message,'error');return}
+    printLocked=true;
+    el('directPrint').disabled=true;el('testPrint').disabled=true;el('printResults').replaceChildren();
+    try{
+      showPrintStatus('Forbereder '+n+' etikett(er) til '+ips.length+' skriver(e) …','warn');
+      let helper=null;
+      try{helper=await helperFetch('/health',{method:'GET'},1600)}catch(e){}
+      if(ips.length>1){
+        if(!helper?.batch||Number(helper.version)<2){
+          showPrintStatus('Ingen utskrift sendt. Flere skrivere krever oppdatert Windows-hjelper (versjon 2). Start den på denne PC-en.','error');return;
+        }
+        showPrintStatus('Sender utskrifter til '+ips.length+' skrivere …','warn');
+        const reply=await helperFetch('/batch',{method:'POST',headers:{'Content-Type':'application/json;charset=utf-8'},body:JSON.stringify({jobs})},120000);
+        if(!Array.isArray(reply?.results)||reply.results.length!==jobs.length)throw Error('Hjelperen returnerte ikke status for alle skrivere.');
+        let ok=0,error=0,unknown=0;
+        for(const result of reply.results){
+          addPrinterResult(result.ip,result.message,result.state);
+          if(result.state==='confirmed')ok++;else if(result.state==='error')error++;else unknown++;
+        }
+        showPrintStatus(ok+' bekreftet via etiketteller, '+unknown+' sendt uten bekreftelse, '+error+' feil. '+n+' per skriver.',error?'error':unknown?'warn':'success');
+        return;
+      }
+      const {ip,zpl}=jobs[0];
+      if(helper&&/^172\.30\.99\.(?:[1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-4])$/.test(ip)){
+        showPrintStatus('Sender via Windows-hjelperen og sjekker status …','warn');
+        const result=await helperFetch('/print?ip='+encodeURIComponent(ip),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:zpl},26000);
+        addPrinterResult(ip,result.message,result.state);
+        showPrintStatus(result.message||'Utskrift sendt.',result.state==='confirmed'?'success':result.state==='error'?'error':'warn');
+      }else{
+        // Fetch åpner verken en ny fane eller en usikker HTML-skjemadialog.
+        showPrintStatus('Prøver direkte HTTP uten ekstra fane …','warn');
+        const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),7500);
+        try{
+          await fetch('http://'+ip+'/pstprnt',{method:'POST',mode:'no-cors',
+            headers:{'Content-Type':'text/plain'},body:zpl,targetAddressSpace:'local',cache:'no-store',signal:ac.signal});
+          addPrinterResult(ip,'HTTP-forsøk fullført, men ingen kvittering fra Zebra.','sent');
+          showPrintStatus('Utskriftsforsøk fullført. Kontroller om etiketten kom ut; dette er ikke en bekreftelse.','warn');
+        }catch(e){
+          showPrintStatus('Direkte HTTP ble blokkert. Ingen reserveutskrift ble forsøkt automatisk. Bruk Windows-hjelperen eller kompatibilitetsmetoden manuelt.','error');
+        }finally{clearTimeout(timer)}
+      }
+    }catch(e){
+      showPrintStatus('Mangler sikker kvittering: '+e.message+'. Jobben kan være sendt – kontroller skriverne før du prøver igjen.','error');
+    }finally{
+      printLocked=false;el('directPrint').disabled=false;el('testPrint').disabled=false;
+    }
+  };
+  el('compatPrint').addEventListener('click',()=>{
+    if(printLocked)return;
+    if(el('multiPrint').checked){showPrintStatus('Kompatibilitetsutskrift støtter én skriver om gangen.','error');return}
+    try{
+      const ip=getIp();if(!ip)return;
+      sendFormZpl(makeJobs([ip],false,copyQuantity())[0].zpl,'Kompatibilitetsutskrift startet. Faner og sikkerhetsadvarsel kan forekomme.');
+    }catch(e){showPrintStatus(e.message,'error')}
+  });
+  refreshMultiList();
+  updateQuantitySummary();
+
 render();
 })();
 </script>
