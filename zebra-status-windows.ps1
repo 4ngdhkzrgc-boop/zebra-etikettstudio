@@ -80,6 +80,66 @@ function Print-Checked([string]$ip,[byte[]]$zpl){
   }
   return @{state='sent';message='Jobb sendt, men etikettelleren okte ikke innen 11 sekunder. Ikke bekreftet.'}
 }
+# Batch-utskrift: kontroller og send til flere skrivere i samme operasjon.
+# Hver skriver faar sin egen ZPL med riktig DPI/storrelse og ^PQ.
+function Print-Batch($jobs){
+  $items=New-Object System.Collections.ArrayList
+  $seen=@{}
+  $list=@($jobs)
+  if($list.Count -lt 1 -or $list.Count -gt 31){throw 'Velg mellom 1 og 31 skrivere'}
+  foreach($job in $list){
+    $ip=[string]$job.ip
+    if($ip -notmatch '^172[.]30[.]99[.](\d{1,3})$'){throw 'IP utenfor godkjent nettverk'}
+    $last=[int]$Matches[1]
+    if($last -lt 1 -or $last -gt 254){throw 'Ugyldig IP'}
+    if($seen.ContainsKey($ip)){throw 'Duplikat IP i jobb'}
+    $seen[$ip]=$true
+    $zpl=[string]$job.zpl
+    if(-not $zpl.StartsWith('^XA') -or -not $zpl.Contains('^XZ')){throw 'Ugyldig ZPL'}
+    $bytes=[Text.Encoding]::UTF8.GetBytes($zpl)
+    if($bytes.Length -gt 5000000){throw 'En etikett er for stor'}
+    $errorText=Printer-Error $ip
+    $before=if($errorText){$null}else{Counter $ip}
+    [void]$items.Add(@{ip=$ip;zpl=$bytes;before=$before;error=$errorText;state='waiting';message='Venter'})
+  }
+  # Alle jobber sendes foer vi venter paa status, for aa unngaa serielle status-ventetider.
+  foreach($item in $items){
+    if($item.error){$item.state='error';$item.message=$item.error;continue}
+    $c=$null
+    try{
+      $c=Printer-Connect $item.ip
+      $st=$c.GetStream()
+      $st.Write($item.zpl,0,$item.zpl.Length)
+      $st.Flush()
+      $item.state='sent';$item.message='ZPL sendt; avventer Zebra-status'
+    }catch{
+      $item.state='error';$item.message='Kunne ikke sende: '+$_.Exception.Message
+    }finally{if($c){$c.Close()}}
+  }
+  $deadline=[DateTime]::UtcNow.AddSeconds(13)
+  while([DateTime]::UtcNow -lt $deadline){
+    $pending=@($items|Where-Object {$_.state -eq 'sent' -and $null -ne $_.before})
+    if($pending.Count -eq 0){break}
+    foreach($item in $pending){
+      $after=Counter $item.ip
+      if($null -ne $after -and $after -gt $item.before){
+        $item.state='confirmed'
+        $item.message='Etiketttelleren oekte etter utskrift (sannsynlig gjennomfoert)'
+      }else{
+        $errorText=Printer-Error $item.ip
+        if($errorText){$item.state='error';$item.message=$errorText}
+      }
+      if([DateTime]::UtcNow -ge $deadline){break}
+    }
+    Start-Sleep -Milliseconds 150
+  }
+  $out=@()
+  foreach($item in $items){
+    if($item.state -eq 'sent'){$item.message='ZPL sendt, men ikke bekreftet av etikettelleren'}
+    $out+=@{ip=$item.ip;state=$item.state;message=$item.message}
+  }
+  return @{results=$out}
+}
 function Receive-Http($stream){
   $head=New-Object 'System.Collections.Generic.List[byte]'
   $b=New-Object byte[] 1
@@ -98,7 +158,7 @@ function Receive-Http($stream){
   if($headers.ContainsKey('content-length')){
     if(-not [int]::TryParse($headers['content-length'],[ref]$len)){throw 'Ugyldig lengde'}
   }
-  if($len -lt 0 -or $len -gt 8000000){throw 'ZPL er for stor'}
+  if($len -lt 0 -or $len -gt 48000000){throw 'Utskriftsdata er for stor'}
   $data=New-Object byte[] $len
   $pos=0
   while($pos -lt $len){
@@ -131,14 +191,40 @@ try{
     $client=$null
     try{
       $client=$listener.AcceptTcpClient()
-      $client.ReceiveTimeout=16000;$client.SendTimeout=16000
+      $client.ReceiveTimeout=120000;$client.SendTimeout=120000
       $stream=$client.GetStream()
       $req=Receive-Http $stream
       $allowed=([string]$req.headers['origin'] -ceq $origin)
       if(-not $allowed){Respond $stream 403 @{state='error';message='Ikke tillatt nettside'} $false;continue}
       if($req.method -eq 'OPTIONS'){Respond $stream 200 @{ok=$true} $true;continue}
-      if($req.method -eq 'GET' -and $req.path -eq '/health'){Respond $stream 200 @{ok=$true;version=1} $true;continue}
-      if($req.method -eq 'POST' -and $req.path -match '^/print\?ip=(172\.30\.99\.(\d{1,3}))$'){
+      if($req.method -eq 'GET' -and $req.path -eq '/health'){Respond $stream 200 @{ok=$true;version=2;batch=$true} $true;continue}
+      if($req.method -eq 'POST' -and $req.path -eq '/batch'){
+        try{
+          $json=[Text.Encoding]::UTF8.GetString($req.body)
+          $payload=ConvertFrom-Json -InputObject $json
+          if(-not $payload.jobs){throw 'Ingen skriverjobber mottatt'}
+          $result=Print-Batch $payload.jobs
+          Respond $stream 200 $result $true
+        }catch{
+          Respond $stream 400 @{state='error';message=('Batch-feil: '+$_.Exception.Message)} $true
+        }
+        continue
+      }
+      if($req.method -eq 'POST' -and $req.path -match '^/print\?ip=(172\.30\.99\.(\d{1,3}))
+        $ip=$matches[1];$last=[int]$matches[2]
+        if($last -lt 1 -or $last -gt 254){Respond $stream 400 @{state='error';message='Ugyldig IP'} $true;continue}
+        if($req.body.Length -lt 1){Respond $stream 400 @{state='error';message='Tom ZPL'} $true;continue}
+        Write-Host ('Sender til '+$ip)
+        $result=Print-Checked $ip $req.body
+        Write-Host $result.message
+        Respond $stream 200 $result $true
+        continue
+      }
+      Respond $stream 400 @{state='error';message='Ukjent foresporsel'} $true
+    }catch{Write-Host ('Feil: '+$_.Exception.Message) -ForegroundColor Yellow}
+    finally{if($client){$client.Close()}}
+  }
+}finally{$listener.Stop()}){
         $ip=$matches[1];$last=[int]$matches[2]
         if($last -lt 1 -or $last -gt 254){Respond $stream 400 @{state='error';message='Ugyldig IP'} $true;continue}
         if($req.body.Length -lt 1){Respond $stream 400 @{state='error';message='Tom ZPL'} $true;continue}
