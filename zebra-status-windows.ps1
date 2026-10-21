@@ -210,10 +210,17 @@ try{
         }
         continue
       }
-      if($req.method -eq 'POST' -and $req.path -match '^/print\?ip=(172\.30\.99\.(\d{1,3}))
-        $ip=$matches[1];$last=[int]$matches[2]
-        if($last -lt 1 -or $last -gt 254){Respond $stream 400 @{state='error';message='Ugyldig IP'} $true;continue}
-        if($req.body.Length -lt 1){Respond $stream 400 @{state='error';message='Tom ZPL'} $true;continue}
+      if($req.method -eq 'POST' -and $req.path -match '^/print\?ip=(172\.30\.99\.(\d{1,3}))$'){
+        $ip=$Matches[1]
+        $last=[int]$Matches[2]
+        if($last -lt 1 -or $last -gt 254){
+          Respond $stream 400 @{state='error';message='Ugyldig IP'} $true
+          continue
+        }
+        if($req.body.Length -lt 1){
+          Respond $stream 400 @{state='error';message='Tom ZPL'} $true
+          continue
+        }
         Write-Host ('Sender til '+$ip)
         $result=Print-Checked $ip $req.body
         Write-Host $result.message
@@ -221,21 +228,12 @@ try{
         continue
       }
       Respond $stream 400 @{state='error';message='Ukjent foresporsel'} $true
-    }catch{Write-Host ('Feil: '+$_.Exception.Message) -ForegroundColor Yellow}
-    finally{if($client){$client.Close()}}
+    }catch{
+      Write-Host ('Feil: '+$_.Exception.Message) -ForegroundColor Yellow
+    }finally{
+      if($client){$client.Close()}
+    }
   }
-}finally{$listener.Stop()}){
-        $ip=$matches[1];$last=[int]$matches[2]
-        if($last -lt 1 -or $last -gt 254){Respond $stream 400 @{state='error';message='Ugyldig IP'} $true;continue}
-        if($req.body.Length -lt 1){Respond $stream 400 @{state='error';message='Tom ZPL'} $true;continue}
-        Write-Host ('Sender til '+$ip)
-        $result=Print-Checked $ip $req.body
-        Write-Host $result.message
-        Respond $stream 200 $result $true
-        continue
-      }
-      Respond $stream 400 @{state='error';message='Ukjent foresporsel'} $true
-    }catch{Write-Host ('Feil: '+$_.Exception.Message) -ForegroundColor Yellow}
-    finally{if($client){$client.Close()}}
-  }
-}finally{$listener.Stop()}
+}finally{
+  $listener.Stop()
+}
