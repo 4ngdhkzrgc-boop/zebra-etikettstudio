@@ -183,7 +183,13 @@ function Respond($stream,[int]$status,$obj,[bool]$allow){
 try{
   $listener=[Net.Sockets.TcpListener]::new([Net.IPAddress]::Loopback,37371)
   $listener.Start()
-}catch{Write-Host ('Kan ikke starte status-hjelper: '+$_.Exception.Message) -ForegroundColor Red;exit 1}
+}catch{
+  Write-Host ('Kan ikke starte Zebra-hjelperen: '+$_.Exception.Message) -ForegroundColor Red
+  Write-Host 'Sjekk at ingen annen Zebra-hjelper bruker 127.0.0.1:37371.' -ForegroundColor Yellow
+  Write-Host 'Hvis bedriften blokkerer PowerShell, kontakt IT. Ikke overstyr sikkerhetspolicy.' -ForegroundColor Yellow
+  try{[void](Read-Host 'Trykk Enter for a avslutte')}catch{}
+  return
+}
 Write-Host 'Zebra-status er klar. Apne Etikettstudio i Chrome pa denne PC-en.' -ForegroundColor Green
 Write-Host 'Bare 127.0.0.1:37371 er apen. Trykk Ctrl+C for a stoppe.'
 try{
@@ -234,6 +240,10 @@ try{
       if($client){$client.Close()}
     }
   }
+}catch{
+  Write-Host ('Zebra-hjelperen stoppet uventet: '+$_.Exception.Message) -ForegroundColor Red
 }finally{
   $listener.Stop()
+  Write-Host 'Zebra-hjelperen er stoppet.' -ForegroundColor Yellow
+  try{[void](Read-Host 'Trykk Enter for a avslutte')}catch{}
 }
