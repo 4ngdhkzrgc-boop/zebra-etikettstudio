@@ -101,8 +101,8 @@
   <p class="hint">Windows-hjelperen brukes automatisk når den kjører. Utskriften skjer da uten nye faner eller ekstra nettleserbekreftelser. Uten hjelper prøves direkte HTTP, som enkelte nettlesere blokkerer.</p>
   <details class="print-confirm-help"><summary>Sett opp Zebra-status på Windows</summary>
     <p class="hint">Dette er valgfritt. Last ned og kjør den lokale PowerShell-hjelperen på PC-en du skriver ut fra. Hold PowerShell-vinduet åpent mens du bruker appen. Hjelperen lytter kun på 127.0.0.1 på PC-en og kommuniserer med skriverne på 172.30.99.x via port 9100.</p>
-    <a class="btn white full" href="./zebra-status-windows.ps1" download="zebra-status-windows.ps1" style="text-decoration:none;display:block;margin-top:10px">Last ned Windows-hjelper (.ps1)</a>
-    <p class="hint">Kjør filen fra PowerShell dersom bedriftens sikkerhetspolicy tillater det. Dette er ikke en løsning for telefoner. Stopp og start den oppdaterte hjelpen på nytt dersom den allerede kjører. Denne brukes automatisk når den er tilgjengelig.</p>
+    <a class="btn white full" href="./zebra-status-windows.ps1?v=3-20261021" download="zebra-status-windows.ps1" style="text-decoration:none;display:block;margin-top:10px">Last ned Windows-hjelper (.ps1)</a>
+    <p class="hint">Last ned den korrigerte versjonen (v3). Stopp en gammel hjelper med Ctrl+C og kjør .ps1-filen fra PowerShell dersom bedriftens sikkerhetspolicy tillater det. Ikke lim inn hele koden linje for linje. Test forbindelsen og kontroller at versjon 3 vises.</p>
     <button type="button" id="testHelper" class="btn ghost full" style="margin-top:10px">Test forbindelsen til Windows-hjelperen</button>
     <div id="helperStatus" class="status" role="status" aria-live="polite"></div>
   </details>
