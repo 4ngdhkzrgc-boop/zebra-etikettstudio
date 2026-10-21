@@ -106,8 +106,10 @@
   <button class="btn main full" id="directPrint" type="button">Skriv ut etikett</button>
   <details class="print-confirm-help"><summary>Valgfritt: Sett opp PowerShell-hjelperen på Windows</summary>
     <p class="hint">PowerShell er ikke nødvendig for vanlig utskrift. Velg «Windows-hjelper» i menyen over hvis du vil bruke denne metoden til å kontrollere status eller skrive til flere skrivere. Hjelperen lytter kun på 127.0.0.1 og bruker port 9100 mot skriverne.</p>
-    <a class="btn white full" href="./zebra-status-windows.ps1?v=3-20261021" download="zebra-status-windows.ps1" style="text-decoration:none;display:block;margin-top:10px">Last ned Windows-hjelper (.ps1)</a>
-    <p class="hint">Last ned den korrigerte versjonen (v3). Stopp en gammel hjelper med Ctrl+C og kjør .ps1-filen fra PowerShell dersom bedriftens sikkerhetspolicy tillater det. Ikke lim inn hele koden linje for linje. Test forbindelsen og kontroller at versjon 3 vises.</p>
+    <p class="hint"><strong>Oppstart uten at vinduet forsvinner:</strong> Last ned begge filene til samme mappe, for eksempel Nedlastinger. Start <span class="mono">start-zebra-status.cmd</span> med dobbeltklikk, ikke .ps1-filen. PowerShell-vinduet blir stående også hvis oppstarten feiler, slik at du kan lese feilmeldingen.</p>
+    <a class="btn white full" href="./zebra-status-windows.ps1?v=4-20261021" download="zebra-status-windows.ps1" style="text-decoration:none;display:block;margin-top:10px">1. Last ned Zebra-hjelperen (.ps1)</a>
+    <a class="btn white full" href="./start-zebra-status.cmd?v=1-20261021" download="start-zebra-status.cmd" style="text-decoration:none;display:block;margin-top:9px">2. Last ned Windows-startfilen (.cmd)</a>
+    <p class="hint">3. Dobbeltklikk <span class="mono">start-zebra-status.cmd</span>, dersom bedriftens IT-policy tillater det. 4. Trykk «Test forbindelsen» under. Ved feil: les feilmeldingen i PowerShell-vinduet. Startfilen endrer ikke PowerShells sikkerhetspolicy.</p>
     <button type="button" id="testHelper" class="btn ghost full" style="margin-top:10px">Test forbindelsen til Windows-hjelperen</button>
     <div id="helperStatus" class="status" role="status" aria-live="polite"></div>
   </details>
@@ -475,10 +477,10 @@ async function testStatusHelper(){
   try{
     const data=await helperFetch('/health',{method:'GET'},2000);
     if(!data.ok)throw Error('Uventet svar');
-    setStatus('helperStatus','Windows-hjelperen er tilkoblet og klar.','success');
+    setStatus('helperStatus','Windows-hjelperen er tilkoblet og klar (versjon '+(data.version||'ukjent')+').','success');
     return true;
   }catch(e){
-    setStatus('helperStatus','Fant ikke Windows-hjelperen på denne enheten. Last den ned og kjør den i PowerShell, eller bruk vanlig utskrift.','warn');
+    setStatus('helperStatus','Fant ikke Windows-hjelperen. Start .cmd-filen og les feilmeldingen i PowerShell-vinduet, eller fortsett med standard HTML-POST.','warn');
     return false;
   }
 }
