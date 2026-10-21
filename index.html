@@ -93,15 +93,16 @@
   </div>
   <div id="multiPrinterPanel" class="multi-printer-panel" hidden>
     <strong>Velg hvilke skrivere som skal få etiketten</strong>
-    <p class="hint">Hver skriver bruker riktig oppløsning og etikettstørrelse. For flere skrivere må du velge «Windows-hjelper» under Utskriftsmetode.</p>
+    <p class="hint">Hver skriver får riktig DPI og etikettformat. Prøv nettleserutskrift uten PowerShell, eller velg Windows-hjelperen. Ved utskrift fra nettleseren må resultatet kontrolleres fysisk.</p>
     <div id="multiPrinterList" class="multi-printer-list"></div>
   </div>
   <label class="label" for="printMethod">Utskriftsmetode</label>
   <select id="printMethod" class="control">
-    <option value="form" selected>Standard – HTML-POST (tidligere fungerende metode)</option>
+    <option value="form" selected>Standard – HTML-POST til én skriver</option>
+    <option value="browserMulti">Nettleser – flere skrivere uten PowerShell (test)</option>
     <option value="helper">Windows-hjelper – valgfri status og flere skrivere</option>
   </select>
-  <p class="hint" id="printMethodInfo">Standardmetoden sender ZPL direkte til skriverens /pstprnt-adresse. Ingen programinstallasjon kreves. Nettleseren kan likevel åpne en fane eller be om sikkerhetsbekreftelse.</p>
+  <p class="hint" id="printMethodInfo">Standardmetoden sender ZPL direkte til skriverens /pstprnt-adresse, akkurat som før. Nettleseren kan åpne en fane eller be om sikkerhetsbekreftelse.</p>
   <p class="hint" id="printCountSummary">1 etikett til én skriver.</p>
   <button class="btn main full" id="directPrint" type="button">Skriv ut etikett</button>
   <details class="print-confirm-help"><summary>Valgfritt: Sett opp PowerShell-hjelperen på Windows</summary>
@@ -116,7 +117,8 @@
   <div class="buttons" style="margin-top:9px"><button class="btn white" id="testPrint" type="button">Skriv testetikett</button><button class="btn ghost" id="savePng" type="button">Lagre forhåndsvisning som PNG</button></div>
   <div id="printStatus" class="status" role="status" aria-live="polite"></div>
   <div id="printResults" class="print-result-list" role="status" aria-live="polite"></div>
-  <div class="info"><strong>Om utskrift:</strong> Standardmetoden er den samme HTML-skjema-POST-metoden som tidligere fungerte. Den gir ingen sikker utskriftskvittering. Windows-hjelperen er et eget, frivillig alternativ for mer statusinformasjon og utskrift til flere skrivere. Kontroller den fysiske etiketten ved første forsøk.</div>
+  <p id="browserMultiWarning" class="hint" hidden>**Viktig:** Nettleseren kan blokkere lokal HTTP i skjulte rammer. «Forsøkt sendt» betyr ikke at skriveren mottok jobben. Sjekk etiketten før du prøver reserveknappen, ellers kan du få duplikater.</p>
+  <div class="info"><strong>Om utskrift:</strong> Standardmetoden for én skriver er uendret. Nettleserutskrift til flere skrivere prøver samme HTML-POST gjennom skjulte rammer, men kan blokkeres av nettleserens sikkerhetsregler. Da kan du sende manuelt til én og én skriver med den gamle metoden. PowerShell er fortsatt valgfritt for utskriftsstatus.</div>
 </section>
 
 <footer>Alt innhold behandles lokalt i nettleseren. Ingen eksterne skript, kontoer eller mellomservere.</footer>
@@ -558,13 +560,89 @@ importFromPrivateLink();
     el('printResults').appendChild(line);
   }
 
-  el('printMethod').addEventListener('change',()=>{
-    const helper=el('printMethod').value==='helper';
-    el('printMethodInfo').textContent=helper?
-      'PowerShell-hjelperen må kjøre lokalt på Windows-PC-en. Den kan gi skriverstatus og sende til flere skrivere. Ingen automatisk overgang til standardutskrift ved feil.':
-      'HTML-POST sender ZPL til /pstprnt uten ekstra program. Den kan åpne en fane eller utløse nettleserens sikkerhetsdialog. Denne metoden ble tidligere bekreftet å fungere.';
+
+  function refreshPrintMethodText(){
+    const method=el('printMethod').value;
+    const notes={
+      form:'Den tidligere fungerende HTML-POST-metoden til én skriver. Chrome kan åpne en fane eller vise sikkerhetsbekreftelse.',
+      browserMulti:'Prøver HTML-POST til alle valgte skrivere i skjulte rammer. Ingen PowerShell, men Chrome kan blokkere forespørslene. Du får separate knapper for manuell utskrift dersom det trengs.',
+      helper:'Valgfri PowerShell-hjelper: sender direkte på port 9100 og forsøker å lese Zebra-status. Krever at hjelpeprogrammet kjører lokalt.'
+    };
+    el('printMethodInfo').textContent=notes[method]||notes.form;
+    el('browserMultiWarning').hidden=!(method==='browserMulti'&&el('multiPrint').checked);
     updateQuantitySummary();
+  }
+  el('printMethod').addEventListener('change',()=>{
+    if(el('printMethod').value==='browserMulti'&&!el('multiPrint').checked){
+      el('multiPrint').checked=true;
+      el('multiPrinterPanel').hidden=false;
+      refreshMultiList();
+    }
+    refreshPrintMethodText();
   });
+  // Med standardutskrift til én skriver som startvalg: når flerskriver aktiveres,
+  // velges nettleseralternativet, ikke PowerShell.
+  el('multiPrint').addEventListener('change',()=>{
+    if(el('multiPrint').checked&&el('printMethod').value==='form')el('printMethod').value='browserMulti';
+    else if(!el('multiPrint').checked&&el('printMethod').value==='browserMulti')el('printMethod').value='form';
+    refreshPrintMethodText();
+  });
+  // Skjulte iframes gjør et forsøk per skriver uten å åpne en egen fane.
+  // Dette er ikke en nettverkskvittering: HTTPS -> HTTP kan blokkeres av Chrome.
+  function tryBrowserMultiForm(job,runId,index){
+    const frame=document.createElement('iframe');
+    frame.name='zebra_print_'+runId+'_'+index;
+    frame.title='Utskriftsforsøk til '+job.ip;
+    frame.setAttribute('aria-hidden','true');
+    frame.tabIndex=-1;
+    frame.style.cssText='position:absolute;width:0;height:0;border:0;opacity:0;pointer-events:none;left:-9999px';
+    document.body.appendChild(frame);
+    const form=document.createElement('form');
+    form.method='POST';form.enctype='text/plain';
+    form.action='http://'+job.ip+'/pstprnt';form.target=frame.name;form.style.display='none';
+    const field=document.createElement('input');
+    field.type='hidden';field.name=job.zpl;field.value='';
+    form.appendChild(field);document.body.appendChild(form);
+    try{form.submit()}
+    catch(error){frame.remove();throw error}
+    finally{form.remove()}
+    setTimeout(()=>frame.remove(),45000);
+  }
+  // Manuell reserve utføres bare ved et eget klikk, aldri som automatisk
+  // gjentakelse etter et uverifiserbart forsøk.
+  function manualFormPost(ip,zpl){
+    const form=document.createElement('form');
+    form.method='POST';form.enctype='text/plain';
+    form.action='http://'+ip+'/pstprnt';form.target='_blank';form.style.display='none';
+    const field=document.createElement('input');
+    field.type='hidden';field.name=zpl;field.value='';
+    form.appendChild(field);document.body.appendChild(form);
+    try{form.submit()}
+    finally{setTimeout(()=>form.remove(),5000)}
+  }
+  function showBrowserMultiResult(job,attempted,errorMessage){
+    const row=document.createElement('div');row.className='print-result-line';
+    const title=document.createElement('strong');
+    title.textContent=(printerInfoByIp.get(job.ip)?.name||job.ip)+' ('+job.ip+') —';
+    const detail=document.createElement('span');
+    detail.textContent=attempted?
+      'HTML-POST forsøkt sendt (ikke bekreftet). Kontroller den fysiske etiketten.':
+      'Nettleseren kunne ikke starte forsøket: '+errorMessage;
+    row.append(title,detail);
+    const retry=document.createElement('button');
+    retry.type='button';retry.className='btn ghost';retry.style.cssText='display:block;margin-top:8px;max-width:100%;font-size:12px';
+    retry.textContent='Ved behov: skriv ut denne skriveren med gammel metode';
+    retry.addEventListener('click',()=>{
+      try{
+        manualFormPost(job.ip,job.zpl);
+        retry.disabled=true;
+        detail.textContent='Manuell HTML-POST startet. Kontroller utskriften før du gjør et nytt forsøk.';
+        showPrintStatus('Manuell utskrift forsøkt til '+job.ip+'. Denne kan åpne en fane eller be om bekreftelse.','warn');
+      }catch(e){showPrintStatus('Kunne ikke starte manuell utskrift til '+job.ip+': '+e.message,'error')}
+    });
+    row.appendChild(retry);
+    el('printResults').appendChild(row);
+  }
   async function printRequest(isTest){
     if(printLocked)return;
     let n,ips,jobs;
@@ -575,23 +653,42 @@ importFromPrivateLink();
       if(el('multiPrint').checked&&ips.length>31)throw Error('Maks 31 skrivere per utskrift.');
       jobs=makeJobs(ips,isTest,n);
     }catch(e){showPrintStatus(e.message,'error');return}
-    const useHelper=el('printMethod').value==='helper';
-    if(!useHelper&&el('multiPrint').checked){
-      showPrintStatus('Flere skrivere krever Windows-hjelperen. Velg «Windows-hjelper» under Utskriftsmetode, eller slå av «Flere skrivere». Ingen utskrift ble sendt.','error');
+    const method=el('printMethod').value, useHelper=method==='helper';
+    if(method==='form'&&el('multiPrint').checked){
+      showPrintStatus('Velg «Nettleser – flere skrivere» eller «Windows-hjelper» for flerskriverutskrift. Ingen utskrift ble sendt.','error');
       return;
     }
     printLocked=true;
     el('directPrint').disabled=true;el('testPrint').disabled=true;
     el('printResults').replaceChildren();
     try{
-      if(!useHelper){
-        // Viktig: ingen await før form.submit(). Dette bevarer brukerhandlingen
-        // og den nøyaktige HTML form POST-metoden som virket i Chrome på iPhone.
+      if(method==='form'){
+        // Den opprinnelige fungerende metoden for én skriver er uendret.
         const job=jobs[0];
         sendFormZpl(job.zpl,'HTML-POST startet: '+n+' etikett(er) til '+job.ip+'. Kontroller skriveren; utskriften kan ikke bekreftes i nettleseren.');
         addPrinterResult(job.ip,'HTML-POST startet. Utskriften må bekreftes på skriveren.','sent');
         return;
       }
+      if(method==='browserMulti'){
+        if(!el('multiPrint').checked)throw Error('Aktiver «Flere skrivere» først.');
+        // Samtlige skjemaer submit() kalles synkront i den opprinnelige
+        // brukerhandlingen, uten await og uten PowerShell.
+        const runId=Date.now().toString(36);
+        let attempted=0,failed=0;
+        jobs.forEach((job,index)=>{
+          try{
+            tryBrowserMultiForm(job,runId,index);
+            attempted++;
+            showBrowserMultiResult(job,true,'');
+          }catch(e){
+            failed++;
+            showBrowserMultiResult(job,false,e.message);
+          }
+        });
+        showPrintStatus('HTML-POST forsøkt til '+attempted+' av '+jobs.length+' skriver(e). '+failed+' kunne ikke startes. Kontroller fysisk utskrift: nettleseren bekrefter ikke mottak.','warn');
+        return;
+      }
+      if(!useHelper)throw Error('Ukjent utskriftsmetode.');
       // Hjelperen benyttes KUN når brukeren eksplisitt velger dette alternativet.
       showPrintStatus('Kontakter lokal Windows-hjelper …','warn');
       let helper;
@@ -637,6 +734,7 @@ importFromPrivateLink();
     }
   }
   refreshMultiList();
+  refreshPrintMethodText();
   updateQuantitySummary();
 
 render();
