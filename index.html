@@ -93,14 +93,19 @@
   </div>
   <div id="multiPrinterPanel" class="multi-printer-panel" hidden>
     <strong>Velg hvilke skrivere som skal få etiketten</strong>
-    <p class="hint">Hver skriver bruker egen oppløsning og etikettstørrelse. Flere skrivere krever Windows-hjelperen.</p>
+    <p class="hint">Hver skriver bruker riktig oppløsning og etikettstørrelse. For flere skrivere må du velge «Windows-hjelper» under Utskriftsmetode.</p>
     <div id="multiPrinterList" class="multi-printer-list"></div>
   </div>
+  <label class="label" for="printMethod">Utskriftsmetode</label>
+  <select id="printMethod" class="control">
+    <option value="form" selected>Standard – HTML-POST (tidligere fungerende metode)</option>
+    <option value="helper">Windows-hjelper – valgfri status og flere skrivere</option>
+  </select>
+  <p class="hint" id="printMethodInfo">Standardmetoden sender ZPL direkte til skriverens /pstprnt-adresse. Ingen programinstallasjon kreves. Nettleseren kan likevel åpne en fane eller be om sikkerhetsbekreftelse.</p>
   <p class="hint" id="printCountSummary">1 etikett til én skriver.</p>
   <button class="btn main full" id="directPrint" type="button">Skriv ut etikett</button>
-  <p class="hint">Windows-hjelperen brukes automatisk når den kjører. Utskriften skjer da uten nye faner eller ekstra nettleserbekreftelser. Uten hjelper prøves direkte HTTP, som enkelte nettlesere blokkerer.</p>
-  <details class="print-confirm-help"><summary>Sett opp Zebra-status på Windows</summary>
-    <p class="hint">Dette er valgfritt. Last ned og kjør den lokale PowerShell-hjelperen på PC-en du skriver ut fra. Hold PowerShell-vinduet åpent mens du bruker appen. Hjelperen lytter kun på 127.0.0.1 på PC-en og kommuniserer med skriverne på 172.30.99.x via port 9100.</p>
+  <details class="print-confirm-help"><summary>Valgfritt: Sett opp PowerShell-hjelperen på Windows</summary>
+    <p class="hint">PowerShell er ikke nødvendig for vanlig utskrift. Velg «Windows-hjelper» i menyen over hvis du vil bruke denne metoden til å kontrollere status eller skrive til flere skrivere. Hjelperen lytter kun på 127.0.0.1 og bruker port 9100 mot skriverne.</p>
     <a class="btn white full" href="./zebra-status-windows.ps1?v=3-20261021" download="zebra-status-windows.ps1" style="text-decoration:none;display:block;margin-top:10px">Last ned Windows-hjelper (.ps1)</a>
     <p class="hint">Last ned den korrigerte versjonen (v3). Stopp en gammel hjelper med Ctrl+C og kjør .ps1-filen fra PowerShell dersom bedriftens sikkerhetspolicy tillater det. Ikke lim inn hele koden linje for linje. Test forbindelsen og kontroller at versjon 3 vises.</p>
     <button type="button" id="testHelper" class="btn ghost full" style="margin-top:10px">Test forbindelsen til Windows-hjelperen</button>
@@ -109,11 +114,7 @@
   <div class="buttons" style="margin-top:9px"><button class="btn white" id="testPrint" type="button">Skriv testetikett</button><button class="btn ghost" id="savePng" type="button">Lagre forhåndsvisning som PNG</button></div>
   <div id="printStatus" class="status" role="status" aria-live="polite"></div>
   <div id="printResults" class="print-result-list" role="status" aria-live="polite"></div>
-  <details class="compat-print"><summary>Reserveutskrift hvis direkte HTTP blir blokkert</summary>
-    <p class="hint">Kompatibilitetsmetoden fungerer som tidligere, men kan åpne en fane og vise Chromes sikkerhetsadvarsel. Den brukes aldri automatisk.</p>
-    <button id="compatPrint" class="btn ghost full" type="button">Prøv kompatibilitetsutskrift</button>
-  </details>
-  <div class="info"><strong>Status:</strong> Windows-hjelperen kan sjekke Zebra-status. Uten den kan ikke nettleseren bekrefte utskrift. Kontroller etiketten før større opplag. En økt etiketteller er ingen jobbspesifikk bekreftelse hvis andre bruker samme skriver.</div>
+  <div class="info"><strong>Om utskrift:</strong> Standardmetoden er den samme HTML-skjema-POST-metoden som tidligere fungerte. Den gir ingen sikker utskriftskvittering. Windows-hjelperen er et eget, frivillig alternativ for mer statusinformasjon og utskrift til flere skrivere. Kontroller den fysiske etiketten ved første forsøk.</div>
 </section>
 
 <footer>Alt innhold behandles lokalt i nettleseren. Ingen eksterne skript, kontoer eller mellomservere.</footer>
@@ -482,40 +483,6 @@ async function testStatusHelper(){
   }
 }
 el('testHelper').addEventListener('click',testStatusHelper);
-async function printRequest(isTest){
-  if(printLocked)return;
-  const ip=getIp();if(!ip)return;
-  printLocked=true;
-  const buttons=[el('directPrint'),el('testPrint')];buttons.forEach(b=>b.disabled=true);
-  try{
-    const useStatus=el('confirmedPrint').checked;
-    if(!useStatus){
-      const zpl=isTest?testZpl():makeZpl();
-      sendFormZpl(zpl,'Utskriftsforespørsel startet på '+ip+'. Zebra har ikke bekreftet utskriften.');
-      return;
-    }
-    if(!/^172\.30\.99\.(?:[1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-4])$/.test(ip)){
-      showPrintStatus('Status-hjelperen støtter foreløpig bare skrivere på 172.30.99.x. Slå av Zebra-status for vanlig utskrift.','error');return;
-    }
-    showPrintStatus('Kontakter lokal Windows-hjelper …','warn');
-    if(!await testStatusHelper()){
-      showPrintStatus('Ingen utskrift sendt. Windows-hjelperen er ikke tilgjengelig. Start den, eller slå av Zebra-status og prøv igjen.','error');
-      return;
-    }
-    const zpl=isTest?testZpl():makeZpl();
-    showPrintStatus('Sender etikett og leser Zebra-status …','warn');
-    try{
-      const answer=await helperFetch('/print?ip='+encodeURIComponent(ip),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:zpl},22000);
-      if(answer.state==='confirmed')showPrintStatus(answer.message||'Zebra-telleren økte etter jobben. Utskrift sannsynlig.', 'success');
-      else if(answer.state==='error')showPrintStatus(answer.message||'Zebra rapporterte et problem.','error');
-      else showPrintStatus(answer.message||'Jobben ble sendt, men utskriften er ikke bekreftet.','warn');
-    }catch(e){
-      showPrintStatus('Kunne ikke lese svar fra Windows-hjelperen. Jobben kan ha blitt sendt – kontroller skriveren før du prøver igjen.','error');
-    }
-  }catch(e){
-    showPrintStatus('Utskriftsforsøket kunne ikke startes: '+e.message,'error');
-  }finally{printLocked=false;buttons.forEach(b=>b.disabled=false)}
-}
 el('directPrint').addEventListener('click',()=>printRequest(false));
 el('testPrint').addEventListener('click',()=>printRequest(true));
 el('savePng').addEventListener('click',async()=>{render(); const blob=await imageBlob(); if(blob){saveBlob(blob,'etikett.png'); setStatus('printStatus','PNG-forhåndsvisningen er lagret.','success')}});
@@ -588,69 +555,85 @@ importFromPrivateLink();
     if(state==='confirmed')line.style.color='#136443';
     el('printResults').appendChild(line);
   }
-  printRequest=async function(isTest){
+
+  el('printMethod').addEventListener('change',()=>{
+    const helper=el('printMethod').value==='helper';
+    el('printMethodInfo').textContent=helper?
+      'PowerShell-hjelperen må kjøre lokalt på Windows-PC-en. Den kan gi skriverstatus og sende til flere skrivere. Ingen automatisk overgang til standardutskrift ved feil.':
+      'HTML-POST sender ZPL til /pstprnt uten ekstra program. Den kan åpne en fane eller utløse nettleserens sikkerhetsdialog. Denne metoden ble tidligere bekreftet å fungere.';
+    updateQuantitySummary();
+  });
+  async function printRequest(isTest){
     if(printLocked)return;
     let n,ips,jobs;
     try{
       n=copyQuantity();
       ips=el('multiPrint').checked?[...checkedMulti]:[getIp()].filter(Boolean);
       if(!ips.length)throw Error('Velg minst én skriver.');
+      if(el('multiPrint').checked&&ips.length>31)throw Error('Maks 31 skrivere per utskrift.');
       jobs=makeJobs(ips,isTest,n);
     }catch(e){showPrintStatus(e.message,'error');return}
+    const useHelper=el('printMethod').value==='helper';
+    if(!useHelper&&el('multiPrint').checked){
+      showPrintStatus('Flere skrivere krever Windows-hjelperen. Velg «Windows-hjelper» under Utskriftsmetode, eller slå av «Flere skrivere». Ingen utskrift ble sendt.','error');
+      return;
+    }
     printLocked=true;
-    el('directPrint').disabled=true;el('testPrint').disabled=true;el('printResults').replaceChildren();
+    el('directPrint').disabled=true;el('testPrint').disabled=true;
+    el('printResults').replaceChildren();
     try{
-      showPrintStatus('Forbereder '+n+' etikett(er) til '+ips.length+' skriver(e) …','warn');
-      let helper=null;
-      try{helper=await helperFetch('/health',{method:'GET'},1600)}catch(e){}
-      if(ips.length>1){
-        if(!helper?.batch||Number(helper.version)<2){
-          showPrintStatus('Ingen utskrift sendt. Flere skrivere krever oppdatert Windows-hjelper (versjon 2). Start den på denne PC-en.','error');return;
-        }
-        showPrintStatus('Sender utskrifter til '+ips.length+' skrivere …','warn');
-        const reply=await helperFetch('/batch',{method:'POST',headers:{'Content-Type':'application/json;charset=utf-8'},body:JSON.stringify({jobs})},120000);
-        if(!Array.isArray(reply?.results)||reply.results.length!==jobs.length)throw Error('Hjelperen returnerte ikke status for alle skrivere.');
-        let ok=0,error=0,unknown=0;
-        for(const result of reply.results){
-          addPrinterResult(result.ip,result.message,result.state);
-          if(result.state==='confirmed')ok++;else if(result.state==='error')error++;else unknown++;
-        }
-        showPrintStatus(ok+' bekreftet via etiketteller, '+unknown+' sendt uten bekreftelse, '+error+' feil. '+n+' per skriver.',error?'error':unknown?'warn':'success');
+      if(!useHelper){
+        // Viktig: ingen await før form.submit(). Dette bevarer brukerhandlingen
+        // og den nøyaktige HTML form POST-metoden som virket i Chrome på iPhone.
+        const job=jobs[0];
+        sendFormZpl(job.zpl,'HTML-POST startet: '+n+' etikett(er) til '+job.ip+'. Kontroller skriveren; utskriften kan ikke bekreftes i nettleseren.');
+        addPrinterResult(job.ip,'HTML-POST startet. Utskriften må bekreftes på skriveren.','sent');
         return;
       }
-      const {ip,zpl}=jobs[0];
-      if(helper&&/^172\.30\.99\.(?:[1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-4])$/.test(ip)){
-        showPrintStatus('Sender via Windows-hjelperen og sjekker status …','warn');
-        const result=await helperFetch('/print?ip='+encodeURIComponent(ip),{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:zpl},26000);
-        addPrinterResult(ip,result.message,result.state);
-        showPrintStatus(result.message||'Utskrift sendt.',result.state==='confirmed'?'success':result.state==='error'?'error':'warn');
-      }else{
-        // Fetch åpner verken en ny fane eller en usikker HTML-skjemadialog.
-        showPrintStatus('Prøver direkte HTTP uten ekstra fane …','warn');
-        const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),7500);
-        try{
-          await fetch('http://'+ip+'/pstprnt',{method:'POST',mode:'no-cors',
-            headers:{'Content-Type':'text/plain'},body:zpl,targetAddressSpace:'local',cache:'no-store',signal:ac.signal});
-          addPrinterResult(ip,'HTTP-forsøk fullført, men ingen kvittering fra Zebra.','sent');
-          showPrintStatus('Utskriftsforsøk fullført. Kontroller om etiketten kom ut; dette er ikke en bekreftelse.','warn');
-        }catch(e){
-          showPrintStatus('Direkte HTTP ble blokkert. Ingen reserveutskrift ble forsøkt automatisk. Bruk Windows-hjelperen eller kompatibilitetsmetoden manuelt.','error');
-        }finally{clearTimeout(timer)}
+      // Hjelperen benyttes KUN når brukeren eksplisitt velger dette alternativet.
+      showPrintStatus('Kontakter lokal Windows-hjelper …','warn');
+      let helper;
+      try{helper=await helperFetch('/health',{method:'GET'},2000)}
+      catch(e){
+        showPrintStatus('Ingen utskrift sendt: Windows-hjelperen svarer ikke. Velg Standard HTML-POST for vanlig utskrift, eller start PowerShell-hjelperen.','error');
+        return;
       }
+      if(ips.length>1){
+        if(!helper?.batch||Number(helper.version)<2){
+          showPrintStatus('Ingen utskrift sendt. Flere skrivere krever oppdatert PowerShell-hjelper med batch-støtte.','error');return;
+        }
+        showPrintStatus('Sender '+n+' etiketter per skriver til '+ips.length+' skrivere …','warn');
+        const report=await helperFetch('/batch',{
+          method:'POST',headers:{'Content-Type':'application/json;charset=utf-8'},
+          body:JSON.stringify({jobs})
+        },120000);
+        if(!Array.isArray(report?.results)||report.results.length!==jobs.length)
+          throw Error('Ufullstendig status fra PowerShell-hjelperen');
+        let confirmed=0,failed=0,pending=0;
+        for(const item of report.results){
+          addPrinterResult(item.ip,item.message,item.state);
+          if(item.state==='confirmed')confirmed++;else if(item.state==='error')failed++;else pending++;
+        }
+        showPrintStatus(confirmed+' skriver(e) med tellerbekreftelse, '+pending+' sendt uten bekreftelse, '+failed+' feil.',failed?'error':pending?'warn':'success');
+        return;
+      }
+      const job=jobs[0];
+      if(!/^172\.30\.99\.(?:[1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-4])$/.test(job.ip)){
+        showPrintStatus('Ingen utskrift sendt: PowerShell-hjelperen støtter bare 172.30.99.x. Bruk Standard HTML-POST i stedet.','error');
+        return;
+      }
+      showPrintStatus('Sender via Windows-hjelperen og sjekker skriverstatus …','warn');
+      const answer=await helperFetch('/print?ip='+encodeURIComponent(job.ip),{
+        method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:job.zpl
+      },26000);
+      addPrinterResult(job.ip,answer.message,answer.state);
+      showPrintStatus(answer.message||'Utskrift forsøkt.',answer.state==='confirmed'?'success':answer.state==='error'?'error':'warn');
     }catch(e){
-      showPrintStatus('Mangler sikker kvittering: '+e.message+'. Jobben kan være sendt – kontroller skriverne før du prøver igjen.','error');
+      showPrintStatus('Feil med valgt utskriftsmetode: '+e.message+'. Jobben kan ha blitt sendt. Kontroller skriveren før du prøver igjen.','error');
     }finally{
       printLocked=false;el('directPrint').disabled=false;el('testPrint').disabled=false;
     }
-  };
-  el('compatPrint').addEventListener('click',()=>{
-    if(printLocked)return;
-    if(el('multiPrint').checked){showPrintStatus('Kompatibilitetsutskrift støtter én skriver om gangen.','error');return}
-    try{
-      const ip=getIp();if(!ip)return;
-      sendFormZpl(makeJobs([ip],false,copyQuantity())[0].zpl,'Kompatibilitetsutskrift startet. Faner og sikkerhetsadvarsel kan forekomme.');
-    }catch(e){showPrintStatus(e.message,'error')}
-  });
+  }
   refreshMultiList();
   updateQuantitySummary();
 
