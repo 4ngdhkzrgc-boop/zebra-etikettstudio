@@ -197,7 +197,7 @@ try{
       $allowed=([string]$req.headers['origin'] -ceq $origin)
       if(-not $allowed){Respond $stream 403 @{state='error';message='Ikke tillatt nettside'} $false;continue}
       if($req.method -eq 'OPTIONS'){Respond $stream 200 @{ok=$true} $true;continue}
-      if($req.method -eq 'GET' -and $req.path -eq '/health'){Respond $stream 200 @{ok=$true;version=2;batch=$true} $true;continue}
+      if($req.method -eq 'GET' -and $req.path -eq '/health'){Respond $stream 200 @{ok=$true;version=3;batch=$true} $true;continue}
       if($req.method -eq 'POST' -and $req.path -eq '/batch'){
         try{
           $json=[Text.Encoding]::UTF8.GetString($req.body)
