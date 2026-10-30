@@ -61,8 +61,11 @@ button:focus-visible,summary:focus-visible,select:focus-visible{outline:3px soli
     <label class="label" for="savedPrinters" style="margin-top:0">Velg skriver – tilpass etikett automatisk</label>
     <select id="savedPrinters" class="control"><option value="">Ingen lagrede skrivere – importer skriverinfo nedenfor</option></select>
     <details class="printer-details"><summary>Se skriverinformasjon</summary><div id="selectedPrinterDetails" class="selected-printer-details" role="status" aria-live="polite">Når skriverinformasjon er importert, kan du velge skriveren her.</div></details>
-    <div class="buttons" style="margin-top:10px"><button id="usePrinterDimensions" type="button" class="btn white" disabled>Bruk rapporterte etikettmål</button><button id="openPrinterImport" type="button" class="btn ghost">Importer / oppdater skrivere</button></div>
-    <p class="hint">Skriverlisten lagres bare i denne nettleseren. Rapporterte etikettmål er skriverinnstillinger og kan avvike fra papiret som er satt inn.</p>
+    <input id="printerJsonFile" type="file" accept=".json,application/json" hidden>
+    <button id="importPrintersJson" type="button" class="btn main full" style="margin-top:10px">Importer skriverliste (.json)</button>
+    <div id="printerJsonStatus" class="status" role="status" aria-live="polite"></div>
+    <div class="buttons" style="margin-top:10px"><button id="usePrinterDimensions" type="button" class="btn white" disabled>Bruk rapporterte etikettmål</button><button id="openPrinterImport" type="button" class="btn ghost">Manuell import / skriversøk</button></div>
+    <p class="hint">Importer JSON-filen én gang på hver enhet. Skriverne lagres lokalt og blir tilgjengelige i menyen, også etter at du lukker nettleseren. Rapporterte etikettmål kan avvike fra papiret som er satt inn.</p>
   </div>
   <label class="label" for="printerIp">Skriverens IP-adresse</label>
   <input class="control mono" id="printerIp" inputmode="decimal" spellcheck="false" autocorrect="off" autocomplete="off" placeholder="For eksempel 192.168.1.50">
@@ -418,6 +421,68 @@ function loadPrinterList(){
     }
   }catch(e){}
 }
+
+ // JSON-import bruker samme filvelger-mønster som personalbildegalleriet.
+ // IP-ene lagres kun i localStorage på denne enheten, ikke på GitHub.
+ function showPrinterListCount(){
+   const n=printerInfoByIp.size;
+   const node=el('printerJsonStatus');
+   if(!n){node.textContent='Ingen skrivere lagret på denne enheten.';node.className='status';return}
+   node.textContent=n+' skriver(e) lagret på denne enheten. Velg skriver fra listen over.';
+   node.className='status success';
+ }
+ el('importPrintersJson').addEventListener('click',()=>el('printerJsonFile').click());
+ el('printerJsonFile').addEventListener('change',async event=>{
+   const file=event.target.files?.[0];if(!file)return;
+   event.target.value='';
+   if(file.size>256000){
+     setStatus('printerJsonStatus','Skriverfilen er for stor (maks 256 kB).','warn');
+     return;
+   }
+   const button=el('importPrintersJson');button.disabled=true;
+   setStatus('printerJsonStatus','Leser skriverlisten …');
+   try{
+     const data=JSON.parse(await file.text());
+     if(data?.app!=='zebra-etikettstudio'||data.version!==1||data.type!=='printers'||!Array.isArray(data.printers)||data.printers.length<1||data.printers.length>254)
+       throw Error('Ugyldig format. Velg en Zebra Etikettstudio-skriverliste (.json).');
+     if(data.count!==undefined&&data.count!==data.printers.length)
+       throw Error('Antallet oppgitt i filen stemmer ikke med skriverlisten.');
+     const normalized=[],seen=new Set();
+     for(let i=0;i<data.printers.length;i++){
+       const raw=data.printers[i];
+       const info=safePrinterInfo(raw);
+       if(!info||typeof raw.ip!=='string'||!info.name||!['200','203','300'].includes(info.dpi)||
+          !/^\d+$/.test(info.widthDots)||!/^\d+$/.test(info.lengthDots)||
+          Number(info.widthDots)<1||Number(info.widthDots)>5000||
+          Number(info.lengthDots)<1||Number(info.lengthDots)>10000)
+         throw Error('Ugyldig skriverdata i post '+(i+1)+'. Kontroller IP, navn, DPI og etikettmål.');
+       if(seen.has(info.ip))throw Error('Duplisert IP-adresse i filen: '+info.ip);
+       seen.add(info.ip);
+       normalized.push(info);
+     }
+     // Oppdater eksisterende skrivere basert på IP, og bevar øvrige manuelt lagrede skrivere.
+     const backup=new Map(printerInfoByIp);
+     const detectionBackup=new Map(detectedIps);
+     for(const info of normalized){
+       printerInfoByIp.set(info.ip,info);
+       detectedIps.set(info.ip,[info.name,info.model].filter(Boolean).join(' / ')||'Importert fra JSON');
+     }
+     if(!savePrinterList()){
+       printerInfoByIp.clear();for(const [ip,info] of backup)printerInfoByIp.set(ip,info);
+       detectedIps.clear();for(const [ip,detail] of detectionBackup)detectedIps.set(ip,detail);
+       throw Error('Nettleseren kunne ikke lagre skriverlisten lokalt. Kontroller at lagring er tillatt.');
+     }
+     updateSavedPrinterMenu();
+     updateFoundPrinters();
+     renderPrinterInfo();
+     if(el('multiPrint').checked)refreshMultiList();
+     setStatus('printerJsonStatus','Importert '+normalized.length+' skrivere. Totalt '+printerInfoByIp.size+' lagret på denne enheten. Velg en skriver fra menyen over.','success');
+   }catch(error){
+     setStatus('printerJsonStatus','Kunne ikke importere skriverlisten: '+error.message,'warn');
+   }finally{
+     button.disabled=false;
+   }
+ });
 function formatPrinterName(info){
   return [info.name||'Zebra-skriver',info.ip].join(' · ');
 }
@@ -436,7 +501,7 @@ function showSelectedPrinterDetails(){
   const ip=el('savedPrinters').value,info=printerInfoByIp.get(ip),target=el('selectedPrinterDetails');
   target.replaceChildren();
   const button=el('usePrinterDimensions');button.disabled=true;
-  if(!info){target.textContent=printerInfoByIp.size?'Velg en skriver for å se modell, oppløsning og etikettmål.':'Ingen skriverinfo lagret. Bruk «Importer / oppdater skrivere» og lim inn PowerShell-resultatet.';return}
+  if(!info){target.textContent=printerInfoByIp.size?'Velg en skriver for å se modell, oppløsning og etikettmål.':'Ingen skrivere lagret. Importer en skriverliste (.json), eller bruk manuell import.';return}
   const width=getPrintMm(info.widthDots,info.dpi),height=getPrintMm(info.lengthDots,info.dpi);
   const rows=[['IP-adresse',ip],['Skrivernavn',info.name||'Ikke oppgitt'],['Firmware',info.model||'Ikke oppgitt'],
     ['Plassering',info.location||'Ikke oppgitt'],['Oppløsning',info.dpi?info.dpi+' dpi':'Ikke oppgitt'],
@@ -647,6 +712,7 @@ function sendFormZpl(zpl,statusText){
 }
 el('directPrint').addEventListener('click',()=>printRequest());
 loadPrinterList();
+showPrinterListCount();
 updateFoundPrinters();
 renderPrinterInfo();
 updateSavedPrinterMenu();
