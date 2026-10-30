@@ -667,7 +667,8 @@ el('importScan').addEventListener('click',()=>{
   if(added){
     updateSavedPrinterMenu();
     if(el('multiPrint').checked)refreshMultiList();
-    if(!savePrinterList())scanMessage('Import fullført, men skriverlisten kunne ikke lagres. Nettleserlagring kan være blokkert.','warn');
+    if(savePrinterList())showPrinterListCount();
+    else scanMessage('Import fullført, men skriverlisten kunne ikke lagres. Nettleserlagring kan være blokkert.','warn');
   }
   if(added)scanMessage('Importert '+readDetails+' skriver(e) med infokolonner fra '+added+' IP-adresse(r). Resultatene vises under skriverlisten. Verdiene for bredde/lengde er skriverinnstillinger, ikke sikker fysisk papirstørrelse.','success');
   else scanMessage('Ingen gyldige IP-adresser eller skriverinfo ble funnet i innlimt tekst.','warn');
