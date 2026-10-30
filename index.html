@@ -44,7 +44,7 @@ button:focus-visible,summary:focus-visible,select:focus-visible{outline:3px soli
 .gallery-card{background:#fff;border:2px solid #d9e4ef;border-radius:11px;padding:5px;display:flex;flex-direction:column;gap:5px;cursor:pointer;min-width:0;text-align:center;color:var(--ink)}
 .gallery-card:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
 .gallery-card:hover{border-color:#8dafd8}
-.gallery-card.chosen{border-color:#145be3;background:#e9f0ff}
+.gallery-card.chosen{border-color:#145be3;background:#e9f0ff}.gallery-card.unavailable{opacity:.5;cursor:not-allowed}
 .gallery-card img{height:128px;width:100%;object-fit:contain;background:#eef1f4;border-radius:6px}
 .gallery-card span{font-size:11px;font-weight:650;line-height:1.35;overflow-wrap:anywhere}
 @media(max-width:540px){.hardware-gallery{padding:10px}.gallery-controls{grid-template-columns:1fr;gap:2px}.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;max-height:410px}.gallery-card img{height:108px}.gallery-card span{font-size:10px}}
@@ -289,19 +289,19 @@ function makeZpl(){render(); const w=canvas.width,h=canvas.height,data=ctx.getIm
     for(const url of galleryThumbUrls)URL.revokeObjectURL(url);
     galleryThumbUrls=[];
     grid.replaceChildren();
-    el('galleryCount').textContent=galleryEntries.length+' bilder';
+    const missing=galleryEntries.filter(e=>e.unavailable).length;el('galleryCount').textContent=(galleryEntries.length-missing)+' bilder'+(missing?' · '+missing+' mangler':'');
     const filtered=galleryEntries.filter(x=>x.name.toLocaleLowerCase('nb').includes(search));
     for(const record of filtered){
       const card=document.createElement('button');
       card.type='button';card.className='gallery-card';
       card.setAttribute('role','listitem');
-      if(record.id===galleryChosen)card.classList.add('chosen');
+      if(record.id===galleryChosen)card.classList.add('chosen'); if(record.unavailable){card.classList.add('unavailable');card.disabled=true;card.title='Bildet i originalarkivet er en plassholder, ikke et portrett.'}
       card.setAttribute('aria-label','Velg '+record.name);
       const blob=variant==='contrast'?record.contrast:record.balanced;
       if(!(blob instanceof Blob))continue;
       const url=URL.createObjectURL(blob);galleryThumbUrls.push(url);
       const img=document.createElement('img');img.src=url;img.loading='lazy';img.alt='';
-      const title=document.createElement('span');title.textContent=record.name;
+      const title=document.createElement('span');title.textContent=record.name+(record.unavailable?' · bilde mangler':'');
       card.append(img,title);
       card.addEventListener('click',()=>selectGalleryPerson(record.id));
       grid.appendChild(card);
@@ -314,7 +314,7 @@ function makeZpl(){render(); const w=canvas.width,h=canvas.height,data=ctx.getIm
   }
   function selectGalleryPerson(id){
     const record=galleryEntries.find(x=>x.id===id);
-    if(!record)return;
+    if(!record||record.unavailable)return;
     const variant=el('galleryVariant').value;
     const blob=variant==='contrast'?record.contrast:record.balanced;
     if(!(blob instanceof Blob))return;
@@ -351,7 +351,7 @@ function makeZpl(){render(); const w=canvas.width,h=canvas.height,data=ctx.getIm
       const records=data.people.map((person,index)=>{
         if(typeof person.name!=='string'||typeof person.balanced!=='string'||typeof person.contrast!=='string')
           throw Error('Ugyldig bildepost '+(index+1));
-        return {id:String(person.id),name:person.name.slice(0,120),balanced:base64Blob(person.balanced),contrast:base64Blob(person.contrast)};
+        return {id:String(person.id),name:person.name.slice(0,120),unavailable:!!person.unavailable,balanced:base64Blob(person.balanced),contrast:base64Blob(person.contrast)};
       });
       if(new Set(records.map(x=>x.id)).size!==records.length)throw Error('Dupliserte bilde-ID-er.');
       await saveGallery(records);
