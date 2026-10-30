@@ -8,6 +8,30 @@
 <style>
 :root{color-scheme:light;--bg:#edf2f7;--card:#fff;--ink:#152439;--muted:#64758b;--border:#dbe4ee;--blue:#145be3;--navy:#111c2d;--good:#16734a;--amber:#8a5910}
 *{box-sizing:border-box}html{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;-webkit-text-size-adjust:100%}body{background:var(--bg);color:var(--ink);margin:0}.wrap{max-width:780px;margin:0 auto;padding:0 14px max(42px,env(safe-area-inset-bottom))}.hero{background:linear-gradient(140deg,#0f1d33,#203c65);color:#fff;padding:25px 20px 26px;margin:0 -14px 18px;border-radius:0 0 24px 24px}.hero h1{font-size:26px;letter-spacing:-.8px;margin:7px 0 4px}.hero p{opacity:.88;line-height:1.45;margin:0;font-size:14px}.eyebrow{text-transform:uppercase;font-weight:800;letter-spacing:2px;font-size:10px;color:#a4c8ff}.card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:17px;margin:14px 0;box-shadow:0 4px 20px #18375609}.row-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}h2{font-size:17px;margin:0;letter-spacing:-.3px}.pill{font-size:11px;border-radius:50px;padding:5px 9px;background:#e8f0ff;color:#144caa;font-weight:750}.label{font-size:13px;font-weight:730;margin:13px 0 6px;display:block}.control{border:1px solid #c9d7e7;border-radius:11px;background:#fff;color:var(--ink);padding:12px;width:100%;font:inherit;font-size:16px;outline-offset:2px}.control:focus-visible{outline:2px solid #226df0}textarea.control{min-height:100px;resize:vertical}.two{display:grid;grid-template-columns:1fr 1fr;gap:11px}.btn{border:0;background:#e9f0fb;border-radius:12px;color:#1e406b;font:inherit;font-size:14px;line-height:1.3;font-weight:750;padding:13px 12px;cursor:pointer;min-height:46px;text-align:center}.btn:active{transform:translateY(1px)}.btn.main{background:var(--blue);color:#fff}.btn.white{background:#fff;border:1px solid var(--border)}.btn.ghost{background:transparent;border:1px solid var(--border)}.btn:disabled{opacity:.5;cursor:wait}.full{width:100%;display:block}.buttons{display:grid;grid-template-columns:1fr 1fr;gap:9px}.upload{display:block;border:1.5px dashed #a9c2e3;background:#f0f6ff;border-radius:13px;text-align:center;font-size:14px;font-weight:750;padding:17px 12px;color:#174a9d;cursor:pointer}.upload input{display:none}.checkline{display:flex;gap:8px;align-items:center;margin-top:13px;font-size:13px}.checkline input{width:18px;height:18px}.preview-zone{background:#e9eef4;min-height:155px;border-radius:14px;display:grid;place-items:center;padding:18px;overflow:auto}.preview-zone canvas{max-width:100%;height:auto;background:#fff;box-shadow:0 6px 22px #15223926;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}.preview-zone canvas:active{cursor:grabbing}.hint{font-size:12px;color:var(--muted);line-height:1.55;margin:11px 0 0}.status{margin-top:10px;border-radius:10px;padding:10px 12px;font-size:13px;line-height:1.45;background:#eef4fb;color:#264d78}.status:empty{display:none}.status.success{background:#e9f7ef;color:#145d3b}.status.warn{background:#fff5e3;color:#76500c}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:-.2px}.info{background:#fff8eb;color:#74541d;border-radius:12px;padding:12px;font-size:12px;line-height:1.6;margin-top:12px}.printer-info-card{border:1px solid var(--border);border-radius:12px;padding:12px;margin:10px 0;background:#f8fbff;font-size:13px}.printer-info-row{display:flex;justify-content:space-between;gap:8px;border-top:1px solid var(--border);padding:7px 0}.printer-info-row>span:first-child{color:var(--muted)}.printer-info-row>span:last-child{text-align:right;font-variant-numeric:tabular-nums}.saved-printer-picker{padding:14px;border:1px solid #c9d7e7;border-radius:14px;background:#f2f7ff;margin:0 0 14px}.selected-printer-details{margin-top:10px;border-radius:10px;background:#fff;padding:12px;color:var(--muted);font-size:13px;line-height:1.5}.printer-detail-row{display:flex;justify-content:space-between;gap:14px;padding:6px 0;border-bottom:1px solid var(--border);color:var(--ink)}.printer-detail-row:last-child{border-bottom:0}.printer-detail-row span{color:var(--muted)}.printer-detail-row strong{text-align:right;font-weight:650}.print-confirm-help{margin:10px 0;padding:12px;background:#f8fbff;border:1px solid var(--border);border-radius:12px}.print-confirm-help summary{cursor:pointer;color:#244e88;font-size:13px;font-weight:750}.quick-toast[hidden]{display:none!important}.quick-toast{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);max-width:min(520px,calc(100% - 26px));width:max-content;min-width:min(300px,calc(100% - 26px));z-index:50;background:#fff8e9;border:1px solid #e1c177;color:#664611;padding:14px 17px;border-radius:13px;box-shadow:0 8px 35px #14223930;font-size:14px;font-weight:650;line-height:1.45}.quick-toast.success{background:#e8f8ef;border-color:#a0d3b7;color:#136443}.quick-toast.error{background:#fff0ee;border-color:#e4aba5;color:#912f2b}.multi-printer-panel{border:1px solid var(--border);border-radius:12px;background:#f8fbff;padding:12px;margin-bottom:12px}.multi-printer-list{max-height:230px;overflow:auto;display:grid;gap:6px;margin-top:10px}.multi-printer-option{display:flex;align-items:center;gap:10px;background:#fff;padding:9px;border:1px solid var(--border);border-radius:9px;font-size:13px}.multi-printer-option input{width:18px;height:18px;flex:none}.multi-printer-option span{overflow-wrap:anywhere}.print-result-list{margin-top:10px}.print-result-line{font-size:12px;line-height:1.5;padding:8px 3px;border-bottom:1px solid var(--border)}.print-result-line strong{margin-right:7px}.compat-print{margin-top:15px;padding-top:8px;border-top:1px solid var(--border)}.compat-print summary{font-size:12px;color:var(--muted);cursor:pointer}.editor-box{margin-top:14px;padding:14px;border:1px solid var(--border);border-radius:14px;background:#f8fbff}.scanner{margin-top:12px}.scanner #printerScanner{padding:13px;margin-top:9px;background:#f8fbff;border:1px solid var(--border);border-radius:12px}.scanner #printerScanner[hidden]{display:none}.scan-fallback{margin-top:15px;padding-top:12px;border-top:1px solid var(--border)}.scan-fallback summary{cursor:pointer;font-weight:750;color:#20508f;font-size:13px}.scan-fallback textarea{min-height:74px}input[type="range"]{width:100%;accent-color:var(--blue)}footer{text-align:center;font-size:11px;color:#78879b;margin:20px 0}@media(min-width:540px){.hero{margin:0 -14px 18px}}@media print{body{background:#fff}.hero,.card:not(#previewCard),#previewCard .row-head,#previewCard .hint,#previewCard .status,footer{display:none!important}#previewCard{border:0;box-shadow:none;margin:0;padding:0}.wrap{padding:0;max-width:none}.preview-zone{padding:0;background:#fff;display:block;min-height:0;overflow:visible}.preview-zone canvas{box-shadow:none;max-width:none!important;width:var(--paperwidth)!important;height:var(--paperheight)!important}@page{margin:0}}
+
+.printer-details{margin-top:10px}.printer-details summary{cursor:pointer;padding:10px 2px;color:var(--muted);font-size:13px;font-weight:650}
+.multi-toggle{background:#f2f7ff;border:1px solid #c6d7f3;border-radius:12px;margin:0;padding:12px;min-height:49px;cursor:pointer;font-size:14px;font-weight:700}
+.multi-toggle input{width:21px;height:21px;accent-color:var(--blue)}
+#directPrint{min-height:54px;font-size:16px;margin-top:2px}
+button:focus-visible,summary:focus-visible,select:focus-visible{outline:3px solid #4e86f6;outline-offset:2px}
+[hidden]{display:none!important}
+@media (max-width:560px){
+  .wrap{padding-left:10px;padding-right:10px}
+  .hero{margin-left:-10px;margin-right:-10px;padding:22px 17px 25px}
+  .hero h1{font-size:24px}
+  .card{padding:14px;border-radius:14px;margin:11px 0}
+  .two{grid-template-columns:1fr;gap:2px}
+  .buttons{grid-template-columns:1fr;gap:8px}
+  .preview-zone{padding:7px;min-height:120px}
+  .editor-box{padding:11px}
+  .saved-printer-picker{padding:11px}
+  .row-head{align-items:flex-start}
+  .row-head h2{font-size:16px}
+  .multi-printer-list{max-height:290px}
+  .btn{min-height:48px}
+  .quick-toast{max-width:calc(100% - 22px)}
+}
+@media (min-width:920px){.wrap{max-width:920px;padding-left:24px;padding-right:24px}.hero{margin-left:-24px;margin-right:-24px}}
 </style>
 </head>
 <body>
@@ -19,7 +43,7 @@
   <div class="saved-printer-picker">
     <label class="label" for="savedPrinters" style="margin-top:0">Velg skriver – tilpass etikett automatisk</label>
     <select id="savedPrinters" class="control"><option value="">Ingen lagrede skrivere – importer skriverinfo nedenfor</option></select>
-    <div id="selectedPrinterDetails" class="selected-printer-details" role="status" aria-live="polite">Når skriverinformasjon er importert, kan du velge skriveren her.</div>
+    <details class="printer-details"><summary>Se skriverinformasjon</summary><div id="selectedPrinterDetails" class="selected-printer-details" role="status" aria-live="polite">Når skriverinformasjon er importert, kan du velge skriveren her.</div></details>
     <div class="buttons" style="margin-top:10px"><button id="usePrinterDimensions" type="button" class="btn white" disabled>Bruk rapporterte etikettmål</button><button id="openPrinterImport" type="button" class="btn ghost">Importer / oppdater skrivere</button></div>
     <p class="hint">Skriverlisten lagres bare i denne nettleseren. Rapporterte etikettmål er skriverinnstillinger og kan avvike fra papiret som er satt inn.</p>
   </div>
@@ -37,7 +61,7 @@
       <select id="foundPrinters" class="control" disabled><option value="">Ingen IP-adresser funnet</option></select>
       <button class="btn main full" id="chooseFoundPrinter" type="button" disabled style="margin-top:9px">Bruk valgt IP-adresse</button>
       <div id="printerInfoList" style="margin-top:12px"></div>
-      <details class="scan-fallback" open><summary>Hent skrivernavn og etikettinnstillinger fra Windows (anbefalt)</summary>
+      <details class="scan-fallback"><summary>Hent skrivernavn og etikettinnstillinger fra Windows (anbefalt)</summary>
         <p class="hint">Nettleseren kan vanligvis ikke lese skriverdata direkte. Denne PowerShell-koden søker på 172.30.99.1–254 og spør Zebra-skriverne på port 9100 om navn, modell, DPI, konfigurert utskriftsbredde og etikettlengde. Spørringene er skrivebeskyttet og endrer ikke skriverinnstillinger. Bruk bare på nettverk der du har tillatelse. Skriverporten må være tilgjengelig fra PC-en.</p>
         <button class="btn white full" id="copyWindowsScan" type="button" style="margin-top:9px">Kopier PowerShell – hent skriverinfo</button>
         <p class="hint">1. Åpne PowerShell på en Windows-PC i samme bedriftsnettverk. 2. Lim inn koden og kjør den. 3. Resultatene kopieres automatisk til utklippstavlen. 4. Lim dem inn under og velg «Importer skriverinfo». Noen skrivere kan mangle enkelte verdier.</p>
@@ -77,7 +101,7 @@
     <label class="label" for="zoom">Zoom / skalering: <span id="zoomValue">100</span>%</label><input id="zoom" type="range" min="50" max="400" step="1" value="100">
     <label class="label" for="panX">Flytt sidelengs: <span id="panXValue">0</span></label><input id="panX" type="range" min="-100" max="100" step="1" value="0">
     <label class="label" for="panY">Flytt opp / ned: <span id="panYValue">0</span></label><input id="panY" type="range" min="-100" max="100" step="1" value="0">
-    <label class="label" for="margin">Kantmarg: <span id="marginValue">1</span> mm</label><input id="margin" type="range" min="0" max="10" step="0.5" value="1">
+    <label class="label" for="margin">Kantmarg: <span id="marginValue">0</span> mm</label><input id="margin" type="range" min="0" max="10" step="0.5" value="0">
     <div class="buttons" style="margin-top:10px"><button id="centerImage" type="button" class="btn white">Sentrer bilde</button><button id="resetImage" type="button" class="btn ghost">Nullstill bilde</button></div>
     <p class="hint" id="orientationInfo">Velg et bilde for å bruke zoom, crop og flytting.</p>
   </div>
@@ -89,36 +113,20 @@
   <div class="row-head"><h2>4. Skriv ut</h2><span class="pill">Direkte til skriver</span></div>
   <div class="two" style="align-items:end;margin-bottom:10px">
     <div><label class="label" for="printCopies">Antall etiketter per skriver</label><input id="printCopies" class="control" type="number" value="1" min="1" max="100" step="1" inputmode="numeric"></div>
-    <label class="checkline" for="multiPrint" style="padding-bottom:12px"><input id="multiPrint" type="checkbox"> Flere skrivere</label>
+    <label class="checkline multi-toggle" for="multiPrint"><input id="multiPrint" type="checkbox"> Skriv ut til flere skrivere</label>
   </div>
   <div id="multiPrinterPanel" class="multi-printer-panel" hidden>
     <strong>Velg hvilke skrivere som skal få etiketten</strong>
-    <p class="hint">Hver skriver får riktig DPI og etikettformat. Prøv nettleserutskrift uten PowerShell, eller velg Windows-hjelperen. Ved utskrift fra nettleseren må resultatet kontrolleres fysisk.</p>
+    <p class="hint">Velg alle skriverne som skal få etiketten. Hver skriver får riktig DPI og etikettformat.</p>
     <div id="multiPrinterList" class="multi-printer-list"></div>
   </div>
-  <label class="label" for="printMethod">Utskriftsmetode</label>
-  <select id="printMethod" class="control">
-    <option value="form" selected>Standard – HTML-POST til én skriver</option>
-    <option value="browserMulti">Nettleser – flere skrivere uten PowerShell (test)</option>
-    <option value="helper">Windows-hjelper – valgfri status og flere skrivere</option>
-  </select>
-  <p class="hint" id="printMethodInfo">Standardmetoden sender ZPL direkte til skriverens /pstprnt-adresse, akkurat som før. Nettleseren kan åpne en fane eller be om sikkerhetsbekreftelse.</p>
+  <p class="hint">Vanlig utskrift bruker den tidligere fungerende HTML-POST-metoden. For flere skrivere prøver nettleseren å sende til alle valgte adresser uten PowerShell.</p>
   <p class="hint" id="printCountSummary">1 etikett til én skriver.</p>
   <button class="btn main full" id="directPrint" type="button">Skriv ut etikett</button>
-  <details class="print-confirm-help"><summary>Valgfritt: Sett opp PowerShell-hjelperen på Windows</summary>
-    <p class="hint">PowerShell er ikke nødvendig for vanlig utskrift. Velg «Windows-hjelper» i menyen over hvis du vil bruke denne metoden til å kontrollere status eller skrive til flere skrivere. Hjelperen lytter kun på 127.0.0.1 og bruker port 9100 mot skriverne.</p>
-    <p class="hint"><strong>Oppstart uten at vinduet forsvinner:</strong> Last ned begge filene til samme mappe, for eksempel Nedlastinger. Start <span class="mono">start-zebra-status.cmd</span> med dobbeltklikk, ikke .ps1-filen. PowerShell-vinduet blir stående også hvis oppstarten feiler, slik at du kan lese feilmeldingen.</p>
-    <a class="btn white full" href="./zebra-status-windows.ps1?v=4-20261021" download="zebra-status-windows.ps1" style="text-decoration:none;display:block;margin-top:10px">1. Last ned Zebra-hjelperen (.ps1)</a>
-    <a class="btn white full" href="./start-zebra-status.cmd?v=1-20261021" download="start-zebra-status.cmd" style="text-decoration:none;display:block;margin-top:9px">2. Last ned Windows-startfilen (.cmd)</a>
-    <p class="hint">3. Dobbeltklikk <span class="mono">start-zebra-status.cmd</span>, dersom bedriftens IT-policy tillater det. 4. Trykk «Test forbindelsen» under. Ved feil: les feilmeldingen i PowerShell-vinduet. Startfilen endrer ikke PowerShells sikkerhetspolicy.</p>
-    <button type="button" id="testHelper" class="btn ghost full" style="margin-top:10px">Test forbindelsen til Windows-hjelperen</button>
-    <div id="helperStatus" class="status" role="status" aria-live="polite"></div>
-  </details>
-  <div class="buttons" style="margin-top:9px"><button class="btn white" id="testPrint" type="button">Skriv testetikett</button><button class="btn ghost" id="savePng" type="button">Lagre forhåndsvisning som PNG</button></div>
   <div id="printStatus" class="status" role="status" aria-live="polite"></div>
   <div id="printResults" class="print-result-list" role="status" aria-live="polite"></div>
   <p id="browserMultiWarning" class="hint" hidden><strong>Viktig:</strong> Nettleseren kan blokkere lokal HTTP i skjulte rammer. «Forsøkt sendt» betyr ikke at skriveren mottok jobben. Sjekk etiketten før du prøver reserveknappen, ellers kan du få duplikater.</p>
-  <div class="info"><strong>Om utskrift:</strong> Standardmetoden for én skriver er uendret. Nettleserutskrift til flere skrivere prøver samme HTML-POST gjennom skjulte rammer, men kan blokkeres av nettleserens sikkerhetsregler. Da kan du sende manuelt til én og én skriver med den gamle metoden. PowerShell er fortsatt valgfritt for utskriftsstatus.</div>
+  <div class="info"><strong>Utskrift:</strong> Én skriver bruker den gamle HTML-POST-metoden. Ved flere skrivere sendes separate nettleserforespørsler som kan bli blokkert av sikkerhetsregler. Appen kan ikke bekrefte fysisk utskrift. Kontroller resultatet før et nytt forsøk.</div>
 </section>
 
 <footer>Alt innhold behandles lokalt i nettleseren. Ingen eksterne skript, kontoer eller mellomservere.</footer>
@@ -146,7 +154,13 @@ function getImageLayout(zoomPct=Number(el('zoom').value)){
   const mode=el('fitMode').value,choice=el('orientation').value;
   const sw=photo.naturalWidth,sh=photo.naturalHeight;
   const choose=(rw,rh)=>mode==='fill'?Math.max(area.w/rw,area.h/rh):Math.min(area.w/rw,area.h/rh);
-  const autoDeg=choose(sw,sh)>=choose(sh,sw)?0:90;
+  const coverage=(rw,rh)=>{
+    const fitted=choose(rw,rh),imageArea=rw*rh*fitted*fitted,printArea=area.w*area.h;
+    return mode==='fill'?printArea/imageArea:imageArea/printArea;
+  };
+  // Velg orienteringen som minimerer beskjæring / maksimerer papirdekning.
+  // Ved like gode resultater beholder vi originalretningen.
+  const autoDeg=coverage(sh,sw)>coverage(sw,sh)+0.001?90:0;
   const degrees=choice==='auto'?autoDeg:Number(choice);
   const rotated=degrees%180!==0,bw=rotated?sh:sw,bh=rotated?sw:sh;
   const baseScale=choose(bw,bh),scale=baseScale*(zoomPct/100),dw=bw*scale,dh=bh*scale;
@@ -185,11 +199,8 @@ function render(){
   el('thValue').textContent=String(th); el('sizeBadge').textContent=mm('width')+' × '+mm('height')+' mm'; document.documentElement.style.setProperty('--paperwidth',mm('width')+'mm'); document.documentElement.style.setProperty('--paperheight',mm('height')+'mm');
 }
 function makeZpl(){render(); const w=canvas.width,h=canvas.height,data=ctx.getImageData(0,0,w,h).data,bytes=Math.ceil(w/8),chunks=[]; for(let y=0;y<h;y++){let line=''; for(let x=0;x<bytes*8;x+=8){let val=0; for(let i=0;i<8;i++){const xx=x+i;if(xx<w&&data[(y*w+xx)*4]<128)val|=1<<(7-i)} line+=val.toString(16).padStart(2,'0').toUpperCase()} chunks.push(line)} return `^XA\n^PW${w}\n^LL${h}\n^LH0,0\n^FO0,0^GFA,${bytes*h},${bytes*h},${bytes},${chunks.join('')}^FS\n^PQ1\n^XZ\n`;}
-function testZpl(){const dpi=Number(el('dpi').value),w=Math.round(mm('width')*dpi/25.4),h=Math.round(mm('height')*dpi/25.4); return `^XA\n^PW${w}\n^LL${h}\n^LH0,0\n^FO22,22^A0N,32,32^FDZEBRA TEST^FS\n^FO22,67^A0N,25,25^FDFORM POST OK^FS\n^PQ1\n^XZ\n`;}
-function saveBlob(blob,name){const a=document.createElement('a'),url=URL.createObjectURL(blob); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),12000)}
-function imageBlob(){return new Promise(resolve=>canvas.toBlob(resolve,'image/png'))}
 ['labelText','width','height','dpi','font','threshold','invert','orientation','fitMode','zoom','panX','panY','margin'].forEach(id=>el(id).addEventListener('input',render));
-function resetImageControls(){el('fitMode').value='fill'; el('orientation').value='auto'; el('zoom').value='100'; el('panX').value='0'; el('panY').value='0'; el('margin').value='1'}
+function resetImageControls(){el('fitMode').value='fill'; el('orientation').value='auto'; el('zoom').value='100'; el('panX').value='0'; el('panY').value='0'; el('margin').value='0'}
 el('upload').addEventListener('change',ev=>{const f=ev.target.files&&ev.target.files[0]; if(!f)return; const url=URL.createObjectURL(f),img=new Image(); img.onload=()=>{photo=img; resetImageControls(); URL.revokeObjectURL(url); render()}; img.onerror=()=>{URL.revokeObjectURL(url); setStatus('renderStatus','Kunne ikke åpne bildet.','warn')}; img.src=url});
 el('clearImage').addEventListener('click',()=>{photo=null; el('upload').value=''; resetImageControls(); render()});
 el('centerImage').addEventListener('click',()=>{el('panX').value='0'; el('panY').value='0'; render()});
@@ -466,30 +477,7 @@ function sendFormZpl(zpl,statusText){
   try{form.submit()}catch(e){showPrintStatus('Nettleseren kunne ikke starte utskriften: '+e.message,'error')}
   finally{setTimeout(()=>form.remove(),5000)}
 }
-const statusBase='http://127.0.0.1:37371';
-async function helperFetch(path,options,timeout=2500){
-  const ac=new AbortController(),timer=setTimeout(()=>ac.abort(),timeout);
-  try{
-    const response=await fetch(statusBase+path,{...options,mode:'cors',cache:'no-store',targetAddressSpace:'local',signal:ac.signal});
-    if(!response.ok)throw Error('Status-hjelper svarte HTTP '+response.status);
-    return await response.json();
-  }finally{clearTimeout(timer)}
-}
-async function testStatusHelper(){
-  try{
-    const data=await helperFetch('/health',{method:'GET'},2000);
-    if(!data.ok)throw Error('Uventet svar');
-    setStatus('helperStatus','Windows-hjelperen er tilkoblet og klar (versjon '+(data.version||'ukjent')+').','success');
-    return true;
-  }catch(e){
-    setStatus('helperStatus','Fant ikke Windows-hjelperen. Start .cmd-filen og les feilmeldingen i PowerShell-vinduet, eller fortsett med standard HTML-POST.','warn');
-    return false;
-  }
-}
-el('testHelper').addEventListener('click',testStatusHelper);
-el('directPrint').addEventListener('click',()=>printRequest(false));
-el('testPrint').addEventListener('click',()=>printRequest(true));
-el('savePng').addEventListener('click',async()=>{render(); const blob=await imageBlob(); if(blob){saveBlob(blob,'etikett.png'); setStatus('printStatus','PNG-forhåndsvisningen er lagret.','success')}});
+el('directPrint').addEventListener('click',()=>printRequest());
 loadPrinterList();
 updateFoundPrinters();
 renderPrinterInfo();
@@ -529,7 +517,7 @@ importFromPrivateLink();
     if(el('multiPrint').checked)refreshMultiList();
     updateQuantitySummary();
   });
-  function makeJobs(ips,isTest,n){
+  function makeJobs(ips,n){
     const before=[el('width').value,el('height').value,el('dpi').value],cache=new Map(),jobs=[];
     try{
       for(const ip of ips){
@@ -540,9 +528,9 @@ importFromPrivateLink();
           if(!format.valid||format.needsCheck||!['203','300'].includes(dpi))throw Error('Etikettmål må kontrolleres for '+(info.name||ip)+'.');
           el('width').value=String(format.w);el('height').value=String(format.h);el('dpi').value=dpi;
         }
-        const key=[el('width').value,el('height').value,el('dpi').value,isTest,n].join('|');
+        const key=[el('width').value,el('height').value,el('dpi').value,n].join('|');
         let zpl=cache.get(key);
-        if(!zpl){zpl=(isTest?testZpl():makeZpl()).replace(/\^PQ\d+/,'^PQ'+n);cache.set(key,zpl)}
+        if(!zpl){zpl=makeZpl().replace(/\^PQ\d+/,'^PQ'+n);cache.set(key,zpl)}
         jobs.push({ip,zpl});
       }
     }finally{
@@ -561,31 +549,8 @@ importFromPrivateLink();
   }
 
 
-  function refreshPrintMethodText(){
-    const method=el('printMethod').value;
-    const notes={
-      form:'Den tidligere fungerende HTML-POST-metoden til én skriver. Chrome kan åpne en fane eller vise sikkerhetsbekreftelse.',
-      browserMulti:'Prøver HTML-POST til alle valgte skrivere i skjulte rammer. Ingen PowerShell, men Chrome kan blokkere forespørslene. Du får separate knapper for manuell utskrift dersom det trengs.',
-      helper:'Valgfri PowerShell-hjelper: sender direkte på port 9100 og forsøker å lese Zebra-status. Krever at hjelpeprogrammet kjører lokalt.'
-    };
-    el('printMethodInfo').textContent=notes[method]||notes.form;
-    el('browserMultiWarning').hidden=!(method==='browserMulti'&&el('multiPrint').checked);
-    updateQuantitySummary();
-  }
-  el('printMethod').addEventListener('change',()=>{
-    if(el('printMethod').value==='browserMulti'&&!el('multiPrint').checked){
-      el('multiPrint').checked=true;
-      el('multiPrinterPanel').hidden=false;
-      refreshMultiList();
-    }
-    refreshPrintMethodText();
-  });
-  // Med standardutskrift til én skriver som startvalg: når flerskriver aktiveres,
-  // velges nettleseralternativet, ikke PowerShell.
   el('multiPrint').addEventListener('change',()=>{
-    if(el('multiPrint').checked&&el('printMethod').value==='form')el('printMethod').value='browserMulti';
-    else if(!el('multiPrint').checked&&el('printMethod').value==='browserMulti')el('printMethod').value='form';
-    refreshPrintMethodText();
+    el('browserMultiWarning').hidden=!el('multiPrint').checked;
   });
   // Skjulte iframes gjør et forsøk per skriver uten å åpne en egen fane.
   // Dette er ikke en nettverkskvittering: HTTPS -> HTTP kan blokkeres av Chrome.
@@ -643,98 +608,52 @@ importFromPrivateLink();
     row.appendChild(retry);
     el('printResults').appendChild(row);
   }
-  async function printRequest(isTest){
+
+  function printRequest(){
     if(printLocked)return;
     let n,ips,jobs;
+    const multi=el('multiPrint').checked;
     try{
       n=copyQuantity();
-      ips=el('multiPrint').checked?[...checkedMulti]:[getIp()].filter(Boolean);
+      ips=multi?[...checkedMulti]:[getIp()].filter(Boolean);
       if(!ips.length)throw Error('Velg minst én skriver.');
-      if(el('multiPrint').checked&&ips.length>31)throw Error('Maks 31 skrivere per utskrift.');
-      jobs=makeJobs(ips,isTest,n);
+      if(ips.length>31)throw Error('Maks 31 skrivere per utskrift.');
+      jobs=makeJobs(ips,n);
     }catch(e){showPrintStatus(e.message,'error');return}
-    const method=el('printMethod').value, useHelper=method==='helper';
-    if(method==='form'&&el('multiPrint').checked){
-      showPrintStatus('Velg «Nettleser – flere skrivere» eller «Windows-hjelper» for flerskriverutskrift. Ingen utskrift ble sendt.','error');
-      return;
-    }
     printLocked=true;
-    el('directPrint').disabled=true;el('testPrint').disabled=true;
+    el('directPrint').disabled=true;
     el('printResults').replaceChildren();
     try{
-      if(method==='form'){
-        // Den opprinnelige fungerende metoden for én skriver er uendret.
+      if(!multi){
+        // Gammel, fungerende HTML-POST for enkeltutskrift, uten await.
         const job=jobs[0];
-        sendFormZpl(job.zpl,'HTML-POST startet: '+n+' etikett(er) til '+job.ip+'. Kontroller skriveren; utskriften kan ikke bekreftes i nettleseren.');
-        addPrinterResult(job.ip,'HTML-POST startet. Utskriften må bekreftes på skriveren.','sent');
+        sendFormZpl(job.zpl,'HTML-POST startet: '+n+' etikett(er) til '+job.ip+'. Kontroller utskriften.');
+        addPrinterResult(job.ip,'HTML-POST forsøkt sendt. Kontroller skriveren.','sent');
         return;
       }
-      if(method==='browserMulti'){
-        if(!el('multiPrint').checked)throw Error('Aktiver «Flere skrivere» først.');
-        // Samtlige skjemaer submit() kalles synkront i den opprinnelige
-        // brukerhandlingen, uten await og uten PowerShell.
-        const runId=Date.now().toString(36);
-        let attempted=0,failed=0;
-        jobs.forEach((job,index)=>{
-          try{
-            tryBrowserMultiForm(job,runId,index);
-            attempted++;
-            showBrowserMultiResult(job,true,'');
-          }catch(e){
-            failed++;
-            showBrowserMultiResult(job,false,e.message);
-          }
-        });
-        showPrintStatus('HTML-POST forsøkt til '+attempted+' av '+jobs.length+' skriver(e). '+failed+' kunne ikke startes. Kontroller fysisk utskrift: nettleseren bekrefter ikke mottak.','warn');
-        return;
-      }
-      if(!useHelper)throw Error('Ukjent utskriftsmetode.');
-      // Hjelperen benyttes KUN når brukeren eksplisitt velger dette alternativet.
-      showPrintStatus('Kontakter lokal Windows-hjelper …','warn');
-      let helper;
-      try{helper=await helperFetch('/health',{method:'GET'},2000)}
-      catch(e){
-        showPrintStatus('Ingen utskrift sendt: Windows-hjelperen svarer ikke. Velg Standard HTML-POST for vanlig utskrift, eller start PowerShell-hjelperen.','error');
-        return;
-      }
-      if(ips.length>1){
-        if(!helper?.batch||Number(helper.version)<2){
-          showPrintStatus('Ingen utskrift sendt. Flere skrivere krever oppdatert PowerShell-hjelper med batch-støtte.','error');return;
+      // Hvert skjema er målrettet mot sin egen skjulte iframe.
+      // Dette er et forsøk, ikke en bekreftelse på at etiketten er skrevet ut.
+      const runId=Date.now().toString(36);
+      let attempted=0,failed=0;
+      jobs.forEach((job,index)=>{
+        try{
+          tryBrowserMultiForm(job,runId,index);
+          attempted++;
+          showBrowserMultiResult(job,true,'');
+        }catch(e){
+          failed++;
+          showBrowserMultiResult(job,false,e.message);
         }
-        showPrintStatus('Sender '+n+' etiketter per skriver til '+ips.length+' skrivere …','warn');
-        const report=await helperFetch('/batch',{
-          method:'POST',headers:{'Content-Type':'application/json;charset=utf-8'},
-          body:JSON.stringify({jobs})
-        },120000);
-        if(!Array.isArray(report?.results)||report.results.length!==jobs.length)
-          throw Error('Ufullstendig status fra PowerShell-hjelperen');
-        let confirmed=0,failed=0,pending=0;
-        for(const item of report.results){
-          addPrinterResult(item.ip,item.message,item.state);
-          if(item.state==='confirmed')confirmed++;else if(item.state==='error')failed++;else pending++;
-        }
-        showPrintStatus(confirmed+' skriver(e) med tellerbekreftelse, '+pending+' sendt uten bekreftelse, '+failed+' feil.',failed?'error':pending?'warn':'success');
-        return;
-      }
-      const job=jobs[0];
-      if(!/^172\.30\.99\.(?:[1-9]|[1-9]\d|1\d\d|2[0-4]\d|25[0-4])$/.test(job.ip)){
-        showPrintStatus('Ingen utskrift sendt: PowerShell-hjelperen støtter bare 172.30.99.x. Bruk Standard HTML-POST i stedet.','error');
-        return;
-      }
-      showPrintStatus('Sender via Windows-hjelperen og sjekker skriverstatus …','warn');
-      const answer=await helperFetch('/print?ip='+encodeURIComponent(job.ip),{
-        method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:job.zpl
-      },26000);
-      addPrinterResult(job.ip,answer.message,answer.state);
-      showPrintStatus(answer.message||'Utskrift forsøkt.',answer.state==='confirmed'?'success':answer.state==='error'?'error':'warn');
+      });
+      showPrintStatus('Forsøkt utskrift til '+attempted+' av '+jobs.length+' skriver(e), '+n+' etikett(er) per skriver. '+(failed?failed+' kunne ikke startes. ':'')+'Nettleseren kan ikke bekrefte at jobbene kom fram.','warn');
     }catch(e){
-      showPrintStatus('Feil med valgt utskriftsmetode: '+e.message+'. Jobben kan ha blitt sendt. Kontroller skriveren før du prøver igjen.','error');
+      showPrintStatus('Kunne ikke starte utskriften: '+e.message+'. Kontroller skriverne før du prøver igjen.','error');
     }finally{
-      printLocked=false;el('directPrint').disabled=false;el('testPrint').disabled=false;
+      printLocked=false;
+      el('directPrint').disabled=false;
     }
   }
   refreshMultiList();
-  refreshPrintMethodText();
   updateQuantitySummary();
 
 render();
