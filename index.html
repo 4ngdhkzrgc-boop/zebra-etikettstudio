@@ -32,6 +32,23 @@ button:focus-visible,summary:focus-visible,select:focus-visible{outline:3px soli
   .quick-toast{max-width:calc(100% - 22px)}
 }
 @media (min-width:920px){.wrap{max-width:920px;padding-left:24px;padding-right:24px}.hero{margin-left:-24px;margin-right:-24px}}
+
+.hardware-gallery{background:#f7faff;border:1px solid #cddff6;border-radius:14px;padding:14px;margin-bottom:14px}
+.gallery-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.gallery-head strong{font-size:16px}
+.gallery-controls{display:grid;grid-template-columns:1fr 180px;gap:11px;align-items:end;margin:9px 0 11px}
+.gallery-import{border:1px dashed #b5cbe6;background:#fff;border-radius:11px;margin-top:12px;padding:11px}
+.gallery-import.gallery-imported{background:#f8fbff}
+.gallery-import strong{font-size:13px}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:10px;max-height:490px;overflow-y:auto;overscroll-behavior:contain;padding:3px}
+.gallery-card{background:#fff;border:2px solid #d9e4ef;border-radius:11px;padding:5px;display:flex;flex-direction:column;gap:5px;cursor:pointer;min-width:0;text-align:center;color:var(--ink)}
+.gallery-card:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.gallery-card:hover{border-color:#8dafd8}
+.gallery-card.chosen{border-color:#145be3;background:#e9f0ff}
+.gallery-card img{height:128px;width:100%;object-fit:contain;background:#eef1f4;border-radius:6px}
+.gallery-card span{font-size:11px;font-weight:650;line-height:1.35;overflow-wrap:anywhere}
+@media(max-width:540px){.hardware-gallery{padding:10px}.gallery-controls{grid-template-columns:1fr;gap:2px}.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;max-height:410px}.gallery-card img{height:108px}.gallery-card span{font-size:10px}}
+@media(max-width:360px){.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 </style>
 </head>
 <body>
@@ -81,6 +98,23 @@ button:focus-visible,summary:focus-visible,select:focus-visible{outline:3px soli
 
 <section class="card">
   <div class="row-head"><h2>2. Innhold</h2><span class="pill">Bilde + tekst</span></div>
+  <section class="hardware-gallery" aria-label="Personalbilder for Hardware">
+    <div class="gallery-head"><div><strong>Hardware · Personalbilder</strong><p class="hint" style="margin-top:4px">Finn et navn, velg kontrast og trykk på bildet for å bruke det på etiketten.</p></div><span id="galleryCount" class="pill">0 bilder</span></div>
+    <div class="gallery-import" id="galleryImportBox">
+      <strong>Legg inn de optimaliserte personalbildene</strong>
+      <p class="hint">Importer gallerifilen én gang. Bildene lagres på denne enheten og er tilgjengelige ved senere besøk, uten PowerShell eller server.</p>
+      <input id="galleryImportFile" type="file" accept=".json,application/json" hidden>
+      <button id="galleryImportBtn" type="button" class="btn white full" style="margin-top:10px">Importer ferdigbehandlet bildegalleri (.json)</button>
+    </div>
+    <div class="gallery-controls">
+      <div><label class="label" for="gallerySearch">Søk etter ansatt</label><input id="gallerySearch" class="control" type="search" placeholder="Skriv navn …" autocomplete="off"></div>
+      <div><label class="label" for="galleryVariant">Bildevariant</label>
+      <select id="galleryVariant" class="control"><option value="balanced">Balansert</option><option value="contrast">Høy kontrast</option></select></div>
+    </div>
+    <div id="galleryStatus" class="status" role="status" aria-live="polite">Ingen bilder importert ennå.</div>
+    <div id="galleryGrid" class="gallery-grid" role="list"></div>
+    <p class="hint" id="galleryHint">Bildene blir automatisk behandlet for utskrift på valgt etikettstørrelse og 203/300 dpi. Beskjæring og rotasjon gjøres under forhåndsvisningen.</p>
+  </section>
   <label class="upload" for="upload">Velg et bilde<input id="upload" type="file" accept="image/*"></label>
   <button id="clearImage" type="button" class="btn ghost full" style="margin-top:8px">Fjern bilde</button>
   <label class="label" for="labelText">Tekst</label>
@@ -135,7 +169,7 @@ button:focus-visible,summary:focus-visible,select:focus-visible{outline:3px soli
 <script>
 (()=>{'use strict';
 const el=id=>document.getElementById(id),canvas=el('preview'),ctx=canvas.getContext('2d',{willReadFrequently:true});
-let photo=null;
+let photo=null, galleryPhotoSelected=false;
 const localKey='zebra-etikettstudio-printer-ip';
 try{el('printerIp').value=localStorage.getItem(localKey)||''}catch(e){}
 function setStatus(id,message,kind=''){const target=el(id);target.textContent=message;target.className='status'+(kind?' '+kind:'')}
@@ -194,15 +228,146 @@ function render(){
     if(lines.length>shown.length)setStatus('renderStatus','Teksten er for lang for etiketten og blir avkortet. Gjør skriften mindre eller etiketten høyere.','warn'); else setStatus('renderStatus','');
   } else setStatus('renderStatus','');
   const pixels=ctx.getImageData(0,0,w,h),data=pixels.data,th=Number(el('threshold').value),invert=el('invert').checked;
-  for(let i=0;i<data.length;i+=4){let value=(.2126*data[i]+.7152*data[i+1]+.0722*data[i+2])<th?0:255; if(invert)value=255-value; data[i]=data[i+1]=data[i+2]=value; data[i+3]=255}
+  // Konverter optimaliserte portretter til 1-bit ved faktisk utskrifts-DPI,
+  // med ordnet raster slik at ansiktsdetaljer bevares bedre enn ved hard terskel.
+  const dither=[0,8,2,10,12,4,14,6,3,11,1,9,15,7,13,5];
+  for(let y=0;y<h;y++){
+    for(let x=0;x<w;x++){
+      const i=(y*w+x)*4;
+      const light=.2126*data[i]+.7152*data[i+1]+.0722*data[i+2];
+      const cutoff=galleryPhotoSelected?(th+(dither[(y&3)*4+(x&3)]-7.5)*7.2):th;
+      let value=light<cutoff?0:255;
+      if(invert)value=255-value;
+      data[i]=data[i+1]=data[i+2]=value;data[i+3]=255;
+    }
+  }
   ctx.putImageData(pixels,0,0);
   el('thValue').textContent=String(th); el('sizeBadge').textContent=mm('width')+' × '+mm('height')+' mm'; document.documentElement.style.setProperty('--paperwidth',mm('width')+'mm'); document.documentElement.style.setProperty('--paperheight',mm('height')+'mm');
 }
 function makeZpl(){render(); const w=canvas.width,h=canvas.height,data=ctx.getImageData(0,0,w,h).data,bytes=Math.ceil(w/8),chunks=[]; for(let y=0;y<h;y++){let line=''; for(let x=0;x<bytes*8;x+=8){let val=0; for(let i=0;i<8;i++){const xx=x+i;if(xx<w&&data[(y*w+xx)*4]<128)val|=1<<(7-i)} line+=val.toString(16).padStart(2,'0').toUpperCase()} chunks.push(line)} return `^XA\n^PW${w}\n^LL${h}\n^LH0,0\n^FO0,0^GFA,${bytes*h},${bytes*h},${bytes},${chunks.join('')}^FS\n^PQ1\n^XZ\n`;}
+
+  // Galleriet lagres lokalt i IndexedDB, ikke i det offentlige GitHub-repoet.
+  // Alle kilder er gråtoner; kontrastvarianten er bruker-valgt.
+  const galleryDatabaseName='stingray-zebra-hardware-gallery-v1';
+  let galleryDb=null, galleryEntries=[],galleryThumbUrls=[], galleryChosen=null;
+  function galleryMessage(textValue,kind=''){setStatus('galleryStatus',textValue,kind)}
+  function base64Blob(encoded){
+    const raw=atob(encoded);const bytes=new Uint8Array(raw.length);
+    for(let i=0;i<raw.length;i++)bytes[i]=raw.charCodeAt(i);
+    return new Blob([bytes],{type:'image/jpeg'});
+  }
+  function openGalleryDatabase(){
+    if(galleryDb)return Promise.resolve(galleryDb);
+    if(!('indexedDB' in window))return Promise.reject(Error('Lokal bildelagring støttes ikke av denne nettleseren.'));
+    return new Promise((resolve,reject)=>{
+      const req=indexedDB.open(galleryDatabaseName,1);
+      req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains('people'))req.result.createObjectStore('people',{keyPath:'id'})};
+      req.onerror=()=>reject(req.error||Error('Kunne ikke åpne lokal lagring.'));
+      req.onsuccess=()=>{galleryDb=req.result;resolve(galleryDb)};
+    });
+  }
+  function loadGalleryEntries(){
+    return openGalleryDatabase().then(db=>new Promise((resolve,reject)=>{
+      const req=db.transaction('people','readonly').objectStore('people').getAll();
+      req.onerror=()=>reject(req.error||Error('Kunne ikke lese bilder.'));
+      req.onsuccess=()=>{galleryEntries=req.result.sort((a,b)=>a.name.localeCompare(b.name,'nb'));renderGallery();resolve(galleryEntries)};
+    }));
+  }
+  function saveGallery(records){
+    return openGalleryDatabase().then(db=>new Promise((resolve,reject)=>{
+      const tx=db.transaction('people','readwrite'),store=tx.objectStore('people');
+      store.clear();
+      for(const record of records)store.put(record);
+      tx.oncomplete=()=>resolve();
+      tx.onerror=()=>reject(tx.error||Error('Kunne ikke lagre bildene.'));
+      tx.onabort=()=>reject(tx.error||Error('Lagring ble avbrutt.'));
+    }));
+  }
+  function renderGallery(){
+    const grid=el('galleryGrid'),search=el('gallerySearch').value.trim().toLocaleLowerCase('nb');
+    const variant=el('galleryVariant').value;
+    for(const url of galleryThumbUrls)URL.revokeObjectURL(url);
+    galleryThumbUrls=[];
+    grid.replaceChildren();
+    el('galleryCount').textContent=galleryEntries.length+' bilder';
+    const filtered=galleryEntries.filter(x=>x.name.toLocaleLowerCase('nb').includes(search));
+    for(const record of filtered){
+      const card=document.createElement('button');
+      card.type='button';card.className='gallery-card';
+      card.setAttribute('role','listitem');
+      if(record.id===galleryChosen)card.classList.add('chosen');
+      card.setAttribute('aria-label','Velg '+record.name);
+      const blob=variant==='contrast'?record.contrast:record.balanced;
+      if(!(blob instanceof Blob))continue;
+      const url=URL.createObjectURL(blob);galleryThumbUrls.push(url);
+      const img=document.createElement('img');img.src=url;img.loading='lazy';img.alt='';
+      const title=document.createElement('span');title.textContent=record.name;
+      card.append(img,title);
+      card.addEventListener('click',()=>selectGalleryPerson(record.id));
+      grid.appendChild(card);
+    }
+    el('galleryHint').textContent=galleryEntries.length?
+      'Viser '+filtered.length+' av '+galleryEntries.length+' bilder. Velg et bilde for å fylle forhåndsvisningen. Den endelige svart-hvitt-konverteringen skjer ved valgt utskrifts-DPI.':
+      'Importer bildegalleriet én gang for å få søkbare personalbilder lagret på denne enheten.';
+    el('galleryImportBtn').textContent=galleryEntries.length?'Oppdater bildegalleriet (.json)':'Importer ferdigbehandlet bildegalleri (.json)';
+    el('galleryImportBox').classList.toggle('gallery-imported',galleryEntries.length>0);
+  }
+  function selectGalleryPerson(id){
+    const record=galleryEntries.find(x=>x.id===id);
+    if(!record)return;
+    const variant=el('galleryVariant').value;
+    const blob=variant==='contrast'?record.contrast:record.balanced;
+    if(!(blob instanceof Blob))return;
+    const url=URL.createObjectURL(blob);
+    const img=new Image();
+    img.onload=()=>{
+      photo=img;galleryPhotoSelected=true;galleryChosen=id;
+      el('upload').value='';
+      resetImageControls();render();
+      renderGallery();
+      galleryMessage('Valgt '+record.name+' · '+(variant==='balanced'?'Balansert':'Høy kontrast')+'. Beskjær og skriv ut nedenfor.','success');
+      el('previewCard').scrollIntoView({behavior:'smooth',block:'start'});
+      URL.revokeObjectURL(url);
+    };
+    img.onerror=()=>{galleryMessage('Kunne ikke åpne bildet for '+record.name,'warn');URL.revokeObjectURL(url)};
+    img.src=url;
+  }
+  el('gallerySearch').addEventListener('input',renderGallery);
+  el('galleryVariant').addEventListener('change',()=>{
+    if(galleryChosen!==null)selectGalleryPerson(galleryChosen);
+    else renderGallery();
+  });
+  el('galleryImportBtn').addEventListener('click',()=>el('galleryImportFile').click());
+  el('galleryImportFile').addEventListener('change',async event=>{
+    const file=event.target.files?.[0];if(!file)return;
+    event.target.value='';
+    if(file.size>24000000){galleryMessage('Filen er for stor (maks 24 MB).','warn');return}
+    el('galleryImportBtn').disabled=true;
+    galleryMessage('Leser og lagrer bilder lokalt …');
+    try{
+      const data=JSON.parse(await file.text());
+      if(data.app!=='zebra-etikettstudio'||data.version!==1||!Array.isArray(data.people)||data.people.length<1||data.people.length>500)
+        throw Error('Ugyldig gallerifil. Velg Stingray_Hardware_galleri_97.json.');
+      const records=data.people.map((person,index)=>{
+        if(typeof person.name!=='string'||typeof person.balanced!=='string'||typeof person.contrast!=='string')
+          throw Error('Ugyldig bildepost '+(index+1));
+        return {id:String(person.id),name:person.name.slice(0,120),balanced:base64Blob(person.balanced),contrast:base64Blob(person.contrast)};
+      });
+      if(new Set(records.map(x=>x.id)).size!==records.length)throw Error('Dupliserte bilde-ID-er.');
+      await saveGallery(records);
+      await loadGalleryEntries();
+      galleryMessage('Ferdig! '+records.length+' optimaliserte personalbilder er lagret i denne nettleseren. Velg en ansatt.','success');
+    }catch(error){galleryMessage('Kunne ikke importere bilder: '+error.message,'warn')}
+    finally{el('galleryImportBtn').disabled=false}
+  });
+  loadGalleryEntries().then(entries=>{
+    if(entries.length)galleryMessage(entries.length+' personalbilder er klare. Søk etter en ansatt eller velg et portrett.','success');
+  }).catch(error=>galleryMessage('Bildegalleriet kunne ikke åpnes: '+error.message,'warn'));
+
 ['labelText','width','height','dpi','font','threshold','invert','orientation','fitMode','zoom','panX','panY','margin'].forEach(id=>el(id).addEventListener('input',render));
 function resetImageControls(){el('fitMode').value='fill'; el('orientation').value='auto'; el('zoom').value='100'; el('panX').value='0'; el('panY').value='0'; el('margin').value='0'}
-el('upload').addEventListener('change',ev=>{const f=ev.target.files&&ev.target.files[0]; if(!f)return; const url=URL.createObjectURL(f),img=new Image(); img.onload=()=>{photo=img; resetImageControls(); URL.revokeObjectURL(url); render()}; img.onerror=()=>{URL.revokeObjectURL(url); setStatus('renderStatus','Kunne ikke åpne bildet.','warn')}; img.src=url});
-el('clearImage').addEventListener('click',()=>{photo=null; el('upload').value=''; resetImageControls(); render()});
+el('upload').addEventListener('change',ev=>{const f=ev.target.files&&ev.target.files[0]; if(!f)return; const url=URL.createObjectURL(f),img=new Image(); img.onload=()=>{photo=img; galleryPhotoSelected=false; resetImageControls(); URL.revokeObjectURL(url); render()}; img.onerror=()=>{URL.revokeObjectURL(url); setStatus('renderStatus','Kunne ikke åpne bildet.','warn')}; img.src=url});
+el('clearImage').addEventListener('click',()=>{photo=null;galleryPhotoSelected=false;el('upload').value='';resetImageControls();render()});
 el('centerImage').addEventListener('click',()=>{el('panX').value='0'; el('panY').value='0'; render()});
 el('resetImage').addEventListener('click',()=>{resetImageControls(); render()});
 const activePointers=new Map(); let gesture=null,renderPending=false;
