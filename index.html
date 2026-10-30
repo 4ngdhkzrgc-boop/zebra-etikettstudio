@@ -249,7 +249,7 @@ function makeZpl(){render(); const w=canvas.width,h=canvas.height,data=ctx.getIm
   // Galleriet lagres lokalt i IndexedDB, ikke i det offentlige GitHub-repoet.
   // Alle kilder er gråtoner; kontrastvarianten er bruker-valgt.
   const galleryDatabaseName='stingray-zebra-hardware-gallery-v1';
-  let galleryDb=null, galleryEntries=[],galleryThumbUrls=[], galleryChosen=null;
+  let galleryDb=null, galleryEntries=[],galleryThumbUrls=[], galleryChosen=null, activeGalleryUrl=null, galleryLoadSeq=0;
   function galleryMessage(textValue,kind=''){setStatus('galleryStatus',textValue,kind)}
   function base64Blob(encoded){
     const raw=atob(encoded);const bytes=new Uint8Array(raw.length);
@@ -313,6 +313,7 @@ function makeZpl(){render(); const w=canvas.width,h=canvas.height,data=ctx.getIm
     el('galleryImportBox').classList.toggle('gallery-imported',galleryEntries.length>0);
   }
   function selectGalleryPerson(id){
+    const loadSeq=++galleryLoadSeq;
     const record=galleryEntries.find(x=>x.id===id);
     if(!record||record.unavailable)return;
     const variant=el('galleryVariant').value;
@@ -321,13 +322,15 @@ function makeZpl(){render(); const w=canvas.width,h=canvas.height,data=ctx.getIm
     const url=URL.createObjectURL(blob);
     const img=new Image();
     img.onload=()=>{
+      if(loadSeq!==galleryLoadSeq){URL.revokeObjectURL(url);return}
+      if(activeGalleryUrl)URL.revokeObjectURL(activeGalleryUrl);
+      activeGalleryUrl=url;
       photo=img;galleryPhotoSelected=true;galleryChosen=id;
       el('upload').value='';
       resetImageControls();render();
       renderGallery();
       galleryMessage('Valgt '+record.name+' · '+(variant==='balanced'?'Balansert':'Høy kontrast')+'. Beskjær og skriv ut nedenfor.','success');
       el('previewCard').scrollIntoView({behavior:'smooth',block:'start'});
-      URL.revokeObjectURL(url);
     };
     img.onerror=()=>{galleryMessage('Kunne ikke åpne bildet for '+record.name,'warn');URL.revokeObjectURL(url)};
     img.src=url;
@@ -366,8 +369,8 @@ function makeZpl(){render(); const w=canvas.width,h=canvas.height,data=ctx.getIm
 
 ['labelText','width','height','dpi','font','threshold','invert','orientation','fitMode','zoom','panX','panY','margin'].forEach(id=>el(id).addEventListener('input',render));
 function resetImageControls(){el('fitMode').value='fill'; el('orientation').value='auto'; el('zoom').value='100'; el('panX').value='0'; el('panY').value='0'; el('margin').value='0'}
-el('upload').addEventListener('change',ev=>{const f=ev.target.files&&ev.target.files[0]; if(!f)return; const url=URL.createObjectURL(f),img=new Image(); img.onload=()=>{photo=img; galleryPhotoSelected=false; resetImageControls(); URL.revokeObjectURL(url); render()}; img.onerror=()=>{URL.revokeObjectURL(url); setStatus('renderStatus','Kunne ikke åpne bildet.','warn')}; img.src=url});
-el('clearImage').addEventListener('click',()=>{photo=null;galleryPhotoSelected=false;el('upload').value='';resetImageControls();render()});
+el('upload').addEventListener('change',ev=>{const f=ev.target.files&&ev.target.files[0]; if(!f)return; const url=URL.createObjectURL(f),img=new Image(); img.onload=()=>{++galleryLoadSeq;if(activeGalleryUrl){URL.revokeObjectURL(activeGalleryUrl);activeGalleryUrl=null}photo=img;galleryPhotoSelected=false;galleryChosen=null;resetImageControls();URL.revokeObjectURL(url);render()}; img.onerror=()=>{URL.revokeObjectURL(url); setStatus('renderStatus','Kunne ikke åpne bildet.','warn')}; img.src=url});
+el('clearImage').addEventListener('click',()=>{++galleryLoadSeq;if(activeGalleryUrl){URL.revokeObjectURL(activeGalleryUrl);activeGalleryUrl=null}photo=null;galleryPhotoSelected=false;galleryChosen=null;el('upload').value='';resetImageControls();render()});
 el('centerImage').addEventListener('click',()=>{el('panX').value='0'; el('panY').value='0'; render()});
 el('resetImage').addEventListener('click',()=>{resetImageControls(); render()});
 const activePointers=new Map(); let gesture=null,renderPending=false;
