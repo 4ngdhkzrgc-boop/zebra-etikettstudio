@@ -49,6 +49,22 @@ button:focus-visible,summary:focus-visible,select:focus-visible{outline:3px soli
 .gallery-card span{font-size:11px;font-weight:650;line-height:1.35;overflow-wrap:anywhere}
 @media(max-width:540px){.hardware-gallery{padding:10px}.gallery-controls{grid-template-columns:1fr;gap:2px}.gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;max-height:410px}.gallery-card img{height:108px}.gallery-card span{font-size:10px}}
 @media(max-width:360px){.gallery-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.advanced-tools{padding:0!important;border-color:#dbe4ee;background:#f8fafc;box-shadow:none}
+.advanced-tools>summary{display:flex;align-items:center;gap:5px 13px;flex-wrap:wrap;padding:15px 17px;cursor:pointer;color:#475d78;font-size:13px;list-style:none}
+.advanced-tools>summary::-webkit-details-marker{display:none}
+.advanced-tools>summary::before{content:"⚙";color:#657b96;font-size:15px}
+.advanced-tools>summary::after{content:"▾";margin-left:auto;color:#8494a9}
+.advanced-tools[open]>summary::after{content:"▴"}
+.advanced-heading{font-size:14px;font-weight:700}
+.advanced-subtitle{font-size:12px;color:#78889b}
+.advanced-content{border-top:1px solid var(--border);padding:4px 17px 17px}
+.advanced-group{padding:12px 0 7px}
+.advanced-group+.advanced-group{border-top:1px solid #dce6f1;margin-top:8px;padding-top:19px}
+.advanced-group h3{font-size:15px;margin:0 0 3px}
+.advanced-tools .scanner #showScanner{background:#edf3fa;color:#3a5474;border:1px solid #d8e3f1}
+.advanced-tools .scanner #printerScanner{background:#fff}
+@media (max-width:560px){.advanced-tools>summary{padding:13px}.advanced-content{padding:4px 13px 14px}}
 </style>
 </head>
 <body>
@@ -59,48 +75,18 @@ button:focus-visible,summary:focus-visible,select:focus-visible{outline:3px soli
   <div class="row-head"><h2 id="connectHeading">1. Skriver</h2><span class="pill">ZD421 / ZPL</span></div>
   <div class="saved-printer-picker">
     <label class="label" for="savedPrinters" style="margin-top:0">Velg skriver – tilpass etikett automatisk</label>
-    <select id="savedPrinters" class="control"><option value="">Ingen lagrede skrivere – importer skriverinfo nedenfor</option></select>
+    <select id="savedPrinters" class="control"><option value="">Ingen lagrede skrivere – importer .json-filen</option></select>
     <details class="printer-details"><summary>Se skriverinformasjon</summary><div id="selectedPrinterDetails" class="selected-printer-details" role="status" aria-live="polite">Når skriverinformasjon er importert, kan du velge skriveren her.</div></details>
     <input id="printerJsonFile" type="file" accept=".json,application/json" hidden>
     <button id="importPrintersJson" type="button" class="btn main full" style="margin-top:10px">Importer skriverliste (.json)</button>
     <div id="printerJsonStatus" class="status" role="status" aria-live="polite"></div>
-    <div class="buttons" style="margin-top:10px"><button id="usePrinterDimensions" type="button" class="btn white" disabled>Bruk rapporterte etikettmål</button><button id="openPrinterImport" type="button" class="btn ghost">Manuell import / skriversøk</button></div>
-    <p class="hint">Importer JSON-filen én gang på hver enhet. Skriverne lagres lokalt og blir tilgjengelige i menyen, også etter at du lukker nettleseren. Rapporterte etikettmål kan avvike fra papiret som er satt inn.</p>
-  </div>
-  <label class="label" for="printerIp">Skriverens IP-adresse</label>
-  <input class="control mono" id="printerIp" inputmode="decimal" spellcheck="false" autocorrect="off" autocomplete="off" placeholder="For eksempel 192.168.1.50">
-  <div class="buttons" style="margin-top:10px"><button class="btn white" id="openPrinter" type="button">Åpne skriverens webside</button><button class="btn ghost" id="rememberIp" type="button">Lagre IP på denne enheten</button></div>
-  <p class="hint">Du kan også skrive inn IP-adressen manuelt. Velg en skriver i listen over for å fylle ut IP-adressen automatisk.</p>
-  <div class="scanner">
-    <button class="btn main full" id="showScanner" type="button" aria-expanded="false" aria-controls="printerScanner">🔎 Finn skrivere på 172.30.99.x</button>
-    <div id="printerScanner" hidden>
-      <p class="hint">Søket prøver HTTP på adresser fra 172.30.99.1 til 172.30.99.254. Det er ikke et ICMP-ping, og nettleseren kan blokkere forespørslene. En IP som svarer, er ikke nødvendigvis en skriver. Bruk bare skanning der du har tillatelse.</p>
-      <div class="buttons" style="margin-top:10px"><button class="btn white" id="startBrowserScan" type="button">Start nettlesersøk</button><button class="btn ghost" id="stopBrowserScan" type="button" disabled>Stopp søk</button></div>
-      <div id="scanStatus" class="status" role="status" aria-live="polite">Ingen søk utført.</div>
-      <label class="label" for="foundPrinters">Mulige skrivere / funne IP-adresser</label>
-      <select id="foundPrinters" class="control" disabled><option value="">Ingen IP-adresser funnet</option></select>
-      <button class="btn main full" id="chooseFoundPrinter" type="button" disabled style="margin-top:9px">Bruk valgt IP-adresse</button>
-      <div id="printerInfoList" style="margin-top:12px"></div>
-      <details class="scan-fallback"><summary>Hent skrivernavn og etikettinnstillinger fra Windows (anbefalt)</summary>
-        <p class="hint">Nettleseren kan vanligvis ikke lese skriverdata direkte. Denne PowerShell-koden søker på 172.30.99.1–254 og spør Zebra-skriverne på port 9100 om navn, modell, DPI, konfigurert utskriftsbredde og etikettlengde. Spørringene er skrivebeskyttet og endrer ikke skriverinnstillinger. Bruk bare på nettverk der du har tillatelse. Skriverporten må være tilgjengelig fra PC-en.</p>
-        <button class="btn white full" id="copyWindowsScan" type="button" style="margin-top:9px">Kopier PowerShell – hent skriverinfo</button>
-        <p class="hint">1. Åpne PowerShell på en Windows-PC i samme bedriftsnettverk. 2. Lim inn koden og kjør den. 3. Resultatene kopieres automatisk til utklippstavlen. 4. Lim dem inn under og velg «Importer skriverinfo». Noen skrivere kan mangle enkelte verdier.</p>
-        <details><summary>Vis PowerShell-koden hvis kopiering ikke fungerer</summary>
-          <textarea id="windowsScanCode" class="control mono" readonly spellcheck="false" rows="9" aria-label="PowerShell-kode for skriverinfo"></textarea>
-        </details>
-        <label class="label" for="scanImport">Lim inn skriverinformasjonen fra PowerShell</label>
-        <textarea id="scanImport" class="control mono" rows="3" placeholder="172.30.99.21
-172.30.99.43"></textarea>
-        <button class="btn white full" id="importScan" type="button" style="margin-top:9px">Importer skriverinfo</button>
-        <p class="hint"><strong>Om etikettmål:</strong> Tallene er skriverens innstilte utskriftsbredde og etikettlengde, ikke nødvendigvis størrelsen på etiketten som faktisk er satt inn. Den siste jobben kan ha endret dem.</p>
-      </details>
-    </div>
+    <p class="hint">Velg en skriver for å bruke riktig oppløsning og etikettmål automatisk. Manuell IP og skriversøk finnes under «Flere verktøy» nederst.</p>
   </div>
   <div id="ipStatus" class="status" role="status" aria-live="polite"></div>
 </section>
 
 <section class="card">
-  <div class="row-head"><h2>2. Innhold</h2><span class="pill">Bilde + tekst</span></div>
+  <div class="row-head"><h2>2. Innhold</h2><span class="pill" id="contentModeBadge">Bilder</span></div>
   <section class="hardware-gallery" aria-label="Personalbilder for Hardware">
     <div class="gallery-head"><div><strong>Hardware · Personalbilder</strong><p class="hint" style="margin-top:4px">Finn et navn, velg kontrast og trykk på bildet for å bruke det på etiketten.</p></div><span id="galleryCount" class="pill">0 bilder</span></div>
     <div class="gallery-import" id="galleryImportBox">
@@ -120,10 +106,8 @@ button:focus-visible,summary:focus-visible,select:focus-visible{outline:3px soli
   </section>
   <label class="upload" for="upload">Velg et bilde<input id="upload" type="file" accept="image/*"></label>
   <button id="clearImage" type="button" class="btn ghost full" style="margin-top:8px">Fjern bilde</button>
-  <label class="label" for="labelText">Tekst</label>
-  <textarea class="control" id="labelText" placeholder="Skriv tekst som skal skrives ut …"></textarea>
   <div class="two"><div><label class="label" for="width">Bredde (mm)</label><input class="control" id="width" type="number" value="100" min="10" max="104" step="1"></div><div><label class="label" for="height">Høyde (mm)</label><input class="control" id="height" type="number" value="60" min="5" max="300" step="1"></div></div>
-  <div class="two"><div><label class="label" for="dpi">Skriveroppløsning</label><select id="dpi" class="control"><option value="203">203 dpi</option><option value="300">300 dpi</option></select></div><div><label class="label" for="font">Tekststørrelse</label><select id="font" class="control"><option value="20">Liten</option><option value="28" selected>Middels</option><option value="38">Stor</option><option value="54">Ekstra stor</option></select></div></div>
+  <div><label class="label" for="dpi">Skriveroppløsning</label><select id="dpi" class="control"><option value="203">203 dpi</option><option value="300">300 dpi</option></select></div>
   <label class="label" for="threshold">Bildekontrast: <span id="thValue">145</span></label>
   <input id="threshold" type="range" min="40" max="230" value="145">
   <label class="checkline" for="invert"><input id="invert" type="checkbox"> Inverter svart og hvitt</label>
@@ -166,6 +150,55 @@ button:focus-visible,summary:focus-visible,select:focus-visible{outline:3px soli
   <div class="info"><strong>Utskrift:</strong> Én skriver bruker den gamle HTML-POST-metoden. Ved flere skrivere sendes separate nettleserforespørsler som kan bli blokkert av sikkerhetsregler. Appen kan ikke bekrefte fysisk utskrift. Kontroller resultatet før et nytt forsøk.</div>
 </section>
 
+
+<details class="card advanced-tools" id="advancedTools">
+  <summary><span class="advanced-heading">Flere verktøy</span><span class="advanced-subtitle">Tekst på etiketten · Manuell IP og skriversøk</span></summary>
+  <div class="advanced-content">
+    <section class="advanced-group" aria-labelledby="textExtraHeading">
+      <h3 id="textExtraHeading">Tekst på etiketten</h3>
+      <p class="hint">Valgfritt. Tekst plasseres nederst på etiketten. La feltet stå tomt for kun bilde.</p>
+  <label class="label" for="labelText">Tekst</label>
+  <textarea class="control" id="labelText" placeholder="Skriv tekst som skal skrives ut …"></textarea>
+
+<div><label class="label" for="font">Tekststørrelse</label><select id="font" class="control"><option value="20">Liten</option><option value="28" selected>Middels</option><option value="38">Stor</option><option value="54">Ekstra stor</option></select></div>
+    </section>
+    <section class="advanced-group" aria-labelledby="printerExtraHeading">
+      <h3 id="printerExtraHeading">Manuell skriveradministrasjon</h3>
+      <p class="hint">Trengs normalt ikke når skriverlisten er importert. Her kan du skrive IP-adresse selv, åpne skriverens webside eller søke etter skrivere.</p>
+  <label class="label" for="printerIp">Skriverens IP-adresse</label>
+  <input class="control mono" id="printerIp" inputmode="decimal" spellcheck="false" autocorrect="off" autocomplete="off" placeholder="For eksempel 192.168.1.50">
+  <div class="buttons" style="margin-top:10px"><button class="btn white" id="openPrinter" type="button">Åpne skriverens webside</button><button class="btn ghost" id="rememberIp" type="button">Lagre IP på denne enheten</button></div>
+  <p class="hint">Du kan også skrive inn IP-adressen manuelt. Velg en skriver i listen over for å fylle ut IP-adressen automatisk.</p>
+  <div class="scanner">
+    <button class="btn main full" id="showScanner" type="button" aria-expanded="false" aria-controls="printerScanner">🔎 Finn skrivere på 172.30.99.x</button>
+    <div id="printerScanner" hidden>
+      <p class="hint">Søket prøver HTTP på adresser fra 172.30.99.1 til 172.30.99.254. Det er ikke et ICMP-ping, og nettleseren kan blokkere forespørslene. En IP som svarer, er ikke nødvendigvis en skriver. Bruk bare skanning der du har tillatelse.</p>
+      <div class="buttons" style="margin-top:10px"><button class="btn white" id="startBrowserScan" type="button">Start nettlesersøk</button><button class="btn ghost" id="stopBrowserScan" type="button" disabled>Stopp søk</button></div>
+      <div id="scanStatus" class="status" role="status" aria-live="polite">Ingen søk utført.</div>
+      <label class="label" for="foundPrinters">Mulige skrivere / funne IP-adresser</label>
+      <select id="foundPrinters" class="control" disabled><option value="">Ingen IP-adresser funnet</option></select>
+      <button class="btn main full" id="chooseFoundPrinter" type="button" disabled style="margin-top:9px">Bruk valgt IP-adresse</button>
+      <div id="printerInfoList" style="margin-top:12px"></div>
+      <details class="scan-fallback"><summary>Hent skrivernavn og etikettinnstillinger fra Windows (anbefalt)</summary>
+        <p class="hint">Nettleseren kan vanligvis ikke lese skriverdata direkte. Denne PowerShell-koden søker på 172.30.99.1–254 og spør Zebra-skriverne på port 9100 om navn, modell, DPI, konfigurert utskriftsbredde og etikettlengde. Spørringene er skrivebeskyttet og endrer ikke skriverinnstillinger. Bruk bare på nettverk der du har tillatelse. Skriverporten må være tilgjengelig fra PC-en.</p>
+        <button class="btn white full" id="copyWindowsScan" type="button" style="margin-top:9px">Kopier PowerShell – hent skriverinfo</button>
+        <p class="hint">1. Åpne PowerShell på en Windows-PC i samme bedriftsnettverk. 2. Lim inn koden og kjør den. 3. Resultatene kopieres automatisk til utklippstavlen. 4. Lim dem inn under og velg «Importer skriverinfo». Noen skrivere kan mangle enkelte verdier.</p>
+        <details><summary>Vis PowerShell-koden hvis kopiering ikke fungerer</summary>
+          <textarea id="windowsScanCode" class="control mono" readonly spellcheck="false" rows="9" aria-label="PowerShell-kode for skriverinfo"></textarea>
+        </details>
+        <label class="label" for="scanImport">Lim inn skriverinformasjonen fra PowerShell</label>
+        <textarea id="scanImport" class="control mono" rows="3" placeholder="172.30.99.21
+172.30.99.43"></textarea>
+        <button class="btn white full" id="importScan" type="button" style="margin-top:9px">Importer skriverinfo</button>
+        <p class="hint"><strong>Om etikettmål:</strong> Tallene er skriverens innstilte utskriftsbredde og etikettlengde, ikke nødvendigvis størrelsen på etiketten som faktisk er satt inn. Den siste jobben kan ha endret dem.</p>
+      </details>
+    </div>
+  </div>
+
+    </section>
+  </div>
+</details>
+
 <footer>Alt innhold behandles lokalt i nettleseren. Ingen eksterne skript, kontoer eller mellomservere.</footer>
 </main>
 <div id="quickPrintToast" class="quick-toast" role="status" aria-live="polite" hidden></div>
@@ -177,7 +210,7 @@ const localKey='zebra-etikettstudio-printer-ip';
 try{el('printerIp').value=localStorage.getItem(localKey)||''}catch(e){}
 function setStatus(id,message,kind=''){const target=el(id);target.textContent=message;target.className='status'+(kind?' '+kind:'')}
 function privateIp(){const ip=el('printerIp').value.trim();const parts=ip.split('.');if(parts.length!==4||parts.some(x=>!/^[0-9]{1,3}$/.test(x)||Number(x)>255))return null;const b=parts.map(Number);if(!(b[0]===10||(b[0]===172&&b[1]>=16&&b[1]<=31)||(b[0]===192&&b[1]===168)||(b[0]===169&&b[1]===254)))return null;return b.join('.')}
-function getIp(){const ip=privateIp();if(!ip)setStatus('ipStatus','Oppgi en lokal IPv4-adresse, for eksempel 192.168.1.50.','warn');return ip}
+function getIp(){const ip=privateIp();if(!ip){setStatus('ipStatus','Oppgi en lokal IPv4-adresse, for eksempel 192.168.1.50.','warn');el('advancedTools').open=true;el('printerIp').scrollIntoView({behavior:'smooth',block:'center'});}return ip}
 function mm(id){const max=id==='width'?104:300;const val=Number(el(id).value);return Math.max(id==='width'?10:5,Math.min(max,Number.isFinite(val)&&val>0?val:(id==='width'?100:60)))}
 function clamp(v,min,max){return Math.min(max,Math.max(min,v))}
 function setEditorReadout(name,val){const node=el(name);if(node)node.textContent=String(val)}
@@ -370,7 +403,10 @@ function makeZpl(){render(); const w=canvas.width,h=canvas.height,data=ctx.getIm
     if(entries.length)galleryMessage(entries.length+' personalbilder er klare. Søk etter en ansatt eller velg et portrett.','success');
   }).catch(error=>galleryMessage('Bildegalleriet kunne ikke åpnes: '+error.message,'warn'));
 
-['labelText','width','height','dpi','font','threshold','invert','orientation','fitMode','zoom','panX','panY','margin'].forEach(id=>el(id).addEventListener('input',render));
+function updateContentBadge(){
+  el('contentModeBadge').textContent=el('labelText').value.trim()?'Bilde + tekst':'Bilder';
+}
+['labelText','width','height','dpi','font','threshold','invert','orientation','fitMode','zoom','panX','panY','margin'].forEach(id=>el(id).addEventListener('input',()=>{render();if(id==='labelText')updateContentBadge()}));
 function resetImageControls(){el('fitMode').value='fill'; el('orientation').value='auto'; el('zoom').value='100'; el('panX').value='0'; el('panY').value='0'; el('margin').value='0'}
 el('upload').addEventListener('change',ev=>{const f=ev.target.files&&ev.target.files[0]; if(!f)return; const url=URL.createObjectURL(f),img=new Image(); img.onload=()=>{++galleryLoadSeq;if(activeGalleryUrl){URL.revokeObjectURL(activeGalleryUrl);activeGalleryUrl=null}photo=img;galleryPhotoSelected=false;galleryChosen=null;resetImageControls();URL.revokeObjectURL(url);render()}; img.onerror=()=>{URL.revokeObjectURL(url); setStatus('renderStatus','Kunne ikke åpne bildet.','warn')}; img.src=url});
 el('clearImage').addEventListener('click',()=>{++galleryLoadSeq;if(activeGalleryUrl){URL.revokeObjectURL(activeGalleryUrl);activeGalleryUrl=null}photo=null;galleryPhotoSelected=false;galleryChosen=null;el('upload').value='';resetImageControls();render()});
@@ -500,7 +536,6 @@ function updateSavedPrinterMenu(){
 function showSelectedPrinterDetails(){
   const ip=el('savedPrinters').value,info=printerInfoByIp.get(ip),target=el('selectedPrinterDetails');
   target.replaceChildren();
-  const button=el('usePrinterDimensions');button.disabled=true;
   if(!info){target.textContent=printerInfoByIp.size?'Velg en skriver for å se modell, oppløsning og etikettmål.':'Ingen skrivere lagret. Importer en skriverliste (.json), eller bruk manuell import.';return}
   const width=getPrintMm(info.widthDots,info.dpi),height=getPrintMm(info.lengthDots,info.dpi);
   const rows=[['IP-adresse',ip],['Skrivernavn',info.name||'Ikke oppgitt'],['Firmware',info.model||'Ikke oppgitt'],
@@ -508,7 +543,6 @@ function showSelectedPrinterDetails(){
     ['Bredde (innstilt)',width!==null?width.toLocaleString('nb-NO')+' mm':'Ikke oppgitt'],
     ['Lengde (innstilt)',height!==null?height.toLocaleString('nb-NO')+' mm':'Ikke oppgitt']];
   for(const [label,value] of rows){const row=document.createElement('div');row.className='printer-detail-row';const left=document.createElement('span');left.textContent=label;const right=document.createElement('strong');right.textContent=value;row.append(left,right);target.appendChild(row)}
-  button.disabled=!(width!==null&&height!==null&&width>=10&&width<=104&&height>=5&&height<=300&&['200','203','300'].includes(info.dpi));
 }
 function preferredLabelSize(info){
   const parsed=String(info.name||'').match(/(?:^|_)(\d{1,3})X(\d{1,3})(?:_|$)/i);
@@ -527,31 +561,15 @@ function selectSavedPrinter(ip){
   const dpi=String(info.dpi)==='200'?'203':String(info.dpi);
   if(['203','300'].includes(dpi))el('dpi').value=dpi;
   const format=preferredLabelSize(info);
-  if(format.valid&&!format.needsCheck){el('width').value=String(format.w);el('height').value=String(format.h)}
+  if(format.valid){el('width').value=String(format.w);el('height').value=String(format.h)}
   render();
   showSelectedPrinterDetails();
-  const message='Valgt '+formatPrinterName(info)+'. '+dpi+' dpi. '+(format.valid&&!format.needsCheck?'Etikettformat '+format.w+' × '+format.h+' mm ('+format.source+').':'Kontroller etikettmål manuelt – rapportert etikettlengde avviker fra skrivernavnet.');
+  const message='Valgt '+formatPrinterName(info)+'. '+dpi+' dpi. '+(format.valid?'Etikettformat '+format.w+' × '+format.h+' mm satt automatisk ('+format.source+').':'Etikettmål er ukjent. Kontroller størrelse i innholdsfeltet.')+(format.needsCheck?' De rapporterte målene avviker fra skrivernavnet; kontroller fysisk etikett.':'');
   setStatus('ipStatus',message,format.valid&&!format.needsCheck?'success':'warn');
 }
 el('savedPrinters').addEventListener('change',()=>{
   const ip=el('savedPrinters').value;
   if(ip)selectSavedPrinter(ip);else showSelectedPrinterDetails();
-});
-el('openPrinterImport').addEventListener('click',()=>{
-  const panel=el('printerScanner');if(panel.hidden){
-    panel.hidden=false;
-    el('showScanner').setAttribute('aria-expanded','true');
-    el('showScanner').textContent='Skjul skriversøk';
-  }
-  panel.scrollIntoView({behavior:'smooth',block:'start'});
-});
-el('usePrinterDimensions').addEventListener('click',()=>{
-  const info=printerInfoByIp.get(el('savedPrinters').value);if(!info)return;
-  const width=getPrintMm(info.widthDots,info.dpi),height=getPrintMm(info.lengthDots,info.dpi);
-  const dpi=info.dpi==='200'?'203':info.dpi;
-  if(!(width>=10&&width<=104&&height>=5&&height<=300&&['203','300'].includes(dpi)))return;
-  el('width').value=String(width);el('height').value=String(height);el('dpi').value=dpi;
-  render();setStatus('ipStatus','Rapporterte etikettmål er satt til '+width+' × '+height+' mm ('+dpi+' dpi). Kontroller at dette samsvarer med papiret.','warn');
 });
 el('printerIp').addEventListener('input',()=>{
   const ip=el('printerIp').value.trim();
@@ -717,6 +735,7 @@ showPrinterListCount();
 updateFoundPrinters();
 renderPrinterInfo();
 updateSavedPrinterMenu();
+if(el('savedPrinters').value)selectSavedPrinter(el('savedPrinters').value);
 importFromPrivateLink();
 
   // Ny utskriftsflyt: ingen popup eller ekstra fane fra hovedknappen.
@@ -760,7 +779,7 @@ importFromPrivateLink();
           const info=printerInfoByIp.get(ip);
           if(!info)throw Error('Mangler skriverdata for '+ip);
           const format=preferredLabelSize(info),dpi=info.dpi==='200'?'203':info.dpi;
-          if(!format.valid||format.needsCheck||!['203','300'].includes(dpi))throw Error('Etikettmål må kontrolleres for '+(info.name||ip)+'.');
+          if(!format.valid||!['203','300'].includes(dpi))throw Error('Etikettformat eller DPI er ugyldig for '+(info.name||ip)+'.');
           el('width').value=String(format.w);el('height').value=String(format.h);el('dpi').value=dpi;
         }
         const key=[el('width').value,el('height').value,el('dpi').value,n].join('|');
