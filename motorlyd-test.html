@@ -4,239 +4,228 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#14263d">
-<title>ZD421 – Motorlydtest | Zebra Etikettstudio</title>
+<title>ZD421 – Lydlaboratorium | Zebra Etikettstudio</title>
 <style>
-:root{color-scheme:light;--bg:#edf2f7;--card:#fff;--ink:#16253a;--muted:#637389;--border:#d8e3ef;--blue:#145be3;--warning:#885918}
-*{box-sizing:border-box}
-body{background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;margin:0}
-main{max-width:830px;margin:auto;padding:0 14px 42px}
-header{background:linear-gradient(130deg,#102039,#29446b);color:#fff;margin:0 -14px 16px;padding:23px 20px 27px;border-radius:0 0 21px 21px}
-header h1{font-size:24px;line-height:1.2;margin:9px 0 7px}header p{margin:0;opacity:.9}
-a{color:#1451b1}header a{color:#e8f2ff}header .back{font-size:13px;text-decoration:none}
-.card{background:var(--card);border:1px solid var(--border);border-radius:15px;margin:12px 0;padding:17px;box-shadow:0 3px 18px #18375608}
-.card h2{font-size:17px;margin:0 0 7px}.card h3{font-size:15px;margin:8px 0}
-.hint{color:var(--muted);font-size:13px;margin:5px 0 11px}
+:root{color-scheme:light;--bg:#edf2f7;--card:#fff;--ink:#16253a;--muted:#61728b;--border:#d7e2ef;--blue:#1559d5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.53 system-ui,-apple-system,"Segoe UI",sans-serif}
+main{max-width:840px;margin:auto;padding:0 13px 36px}
+header{background:linear-gradient(140deg,#12223b,#2b4d7b);color:#fff;border-radius:0 0 20px 20px;margin:0 -13px 17px;padding:25px 21px}
+header a{font-size:13px;color:#e5f0ff;text-decoration:none}
+header h1{font-size:26px;line-height:1.25;margin:10px 0 6px}header p{opacity:.92;margin:0}
+section.card{background:var(--card);border:1px solid var(--border);border-radius:15px;margin:12px 0;padding:18px;box-shadow:0 4px 18px #17345609}
+h2{font-size:18px;margin:0 0 8px}h3{font-size:15px;margin:14px 0 5px}
+p{margin:8px 0 11px}
+.hint{font-size:13px;color:var(--muted);line-height:1.55}
+.caption{display:block;font-size:13px;font-weight:700;margin:12px 0 6px}
+select,input,textarea{font:inherit;color:var(--ink);width:100%;background:#fff;border:1px solid #c5d4e5;border-radius:10px;padding:11px 12px}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-label.caption{display:block;font-size:13px;font-weight:700;margin:12px 0 5px}
-input:not([type=checkbox]),select,textarea{width:100%;padding:11px;border:1px solid #c6d6e7;border-radius:10px;background:#fff;color:var(--ink);font:inherit}
-input[type=checkbox]{width:21px;height:21px;flex:none;accent-color:var(--blue)}
-.check{display:flex;gap:11px;align-items:flex-start;border:1px solid #d6e0eb;background:#f8fbff;padding:13px;border-radius:11px;margin:13px 0;cursor:pointer}
-.btn{min-height:45px;padding:11px 14px;border-radius:10px;background:#f1f5fb;border:1px solid #ccd7e4;font:700 14px/1.3 inherit;color:#264469;cursor:pointer}
-.btn.main{background:var(--blue);border-color:var(--blue);color:#fff}
-.btn:disabled{opacity:.5;cursor:not-allowed}
-.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:11px}
-.buttons .btn{flex:1 1 180px}
-.notice{background:#fff8e9;border:1px solid #ebd8ae;border-radius:11px;padding:12px 14px;color:#705017;font-size:13px;margin:12px 0}
-.status{font-size:13px;border-radius:9px;padding:10px 12px;background:#edf4ff;color:#25508a;margin-top:12px}
-.status:empty{display:none}
-.status.warn{background:#fff3e0;color:#78551b}
-.status.good{background:#e7f7ef;color:#176344}
-code,pre{font:12px/1.5 ui-monospace,Consolas,monospace}
-pre{max-height:260px;white-space:pre-wrap;overflow:auto;background:#f1f5f9;border:1px solid #d8e3ee;border-radius:11px;padding:12px;overflow-wrap:anywhere}
-small{font-size:12px;color:var(--muted)}
-ul{margin:6px 0;padding-left:22px}li{margin:5px 0}
-summary{cursor:pointer;font-weight:700}
-footer{text-align:center;font-size:12px;color:var(--muted);padding:17px}
-:focus-visible{outline:3px solid #4a86f6;outline-offset:2px}
-[hidden]{display:none!important}
-@media(max-width:570px){.grid{grid-template-columns:1fr;gap:0}main{padding-left:10px;padding-right:10px}header{margin-left:-10px;margin-right:-10px}.card{padding:14px}.buttons{flex-direction:column}.buttons .btn{width:100%;flex:auto}}
+.btn{min-height:45px;border:1px solid #c5d6ee;background:#edf3fc;border-radius:10px;padding:12px 15px;font:700 14px/1.3 system-ui;cursor:pointer;color:#1d456f}
+.btn.main{background:var(--blue);color:#fff;border-color:var(--blue)}.btn:disabled{opacity:.48;cursor:not-allowed}
+.buttons{display:flex;gap:9px;flex-wrap:wrap;margin:12px 0}.buttons .btn{flex:1 1 150px}
+.notice{padding:12px 13px;border:1px solid #ead7a5;background:#fff9eb;color:#735321;border-radius:10px;font-size:13px;margin:12px 0}
+.status{border-radius:9px;padding:11px 12px;margin-top:12px;font-size:13px;background:#ecf3fe;color:#285281}
+.status:empty{display:none}.status.warn{background:#fff3df;color:#83580f}.status.good{background:#e6f5ed;color:#1c6b47}
+code,pre{font:12px/1.55 ui-monospace,Consolas,monospace}
+pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#f3f7fb;border:1px solid #dbe5f0;border-radius:9px;padding:11px;max-height:240px;overflow:auto}
+label.check{display:flex;gap:10px;align-items:start;padding:12px;border-radius:10px;border:1px solid #d3dfef;background:#f7fbff;margin:12px 0;cursor:pointer}
+label.check input{width:21px;height:21px;accent-color:var(--blue);flex:none}
+.summaryRow{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:space-between}
+.summaryRow strong{font-size:13px}.pill{background:#e7effc;border-radius:90px;padding:4px 9px;font-size:11px;color:#264f90;font-weight:750}
+summary{font-weight:700;cursor:pointer}a{color:#1756ac}ul,ol{padding-left:23px}
+li{margin:6px 0}
+footer{text-align:center;color:#79879c;font-size:12px;padding:15px}
+[hidden]{display:none!important}:focus-visible{outline:3px solid #4c84ed;outline-offset:2px}
+@media(max-width:560px){main{padding:0 10px 26px}header{margin:0 -10px 13px;padding:22px 17px}header h1{font-size:23px}section.card{padding:14px}.grid{grid-template-columns:1fr;gap:0}.buttons{flex-direction:column}.buttons .btn{flex:auto;width:100%}}
 </style>
 </head>
 <body>
 <main>
 <header>
-<a class="back" href="./index.html">← Tilbake til Etikettstudio</a>
-<h1>ZD421 · Motorlyd-laboratorium</h1>
-<p>Undersøk om papirhastigheten påvirker motorlyden. Eksperimentell test med vanlig ZPL – ingen firmwareendringer.</p>
+<a href="./index.html">← Tilbake til Zebra Etikettstudio</a>
+<h1>ZD421 · Lydlaboratorium</h1>
+<p>Tester av summer og lydfunksjoner via nettverk. Ingen USB-tilkobling eller firmwareendringer.</p>
 </header>
+
 <section class="card">
-<h2>Hva kan vi teste?</h2>
-<p>ZD421 har en drivmotor for etikettmating. ZPL-kommandoen <code>^PR</code> kan endre hvor raskt motoren flytter etiketten. Her sammenligner vi lyden fra 2 og 4 tommer per sekund – ikke bestemte musikalske toner.</p>
-<div class="notice"><strong>Viktig:</strong> Dette vil faktisk skrive ut og mate frem 2 eller 3 etiketter. En avsluttende gjenopprettingskommando kan i noen tilfeller mate frem en ekstra tom etikett. Test på en skriver som ikke er i produksjon, med riktige etiketter installert.</div>
-<details><summary>Har ZD421 innebygd summer?</summary>
-<p>Zebras offentlige reservedelsliste for ZD421 Direct Thermal beskriver motor, hovedkort og kontrollpanel, men ikke en egen buzzer eller høyttaler. Brukerveiledningen beskriver varsellys. Det beviser ikke at det ikke finnes en liten summer loddet til kretskortet – bare at vi ikke har dokumentasjon på en tilgjengelig lydfunksjon. Denne siden tester kun motorlyd.</p>
-<p class="hint"><a href="https://www.zebra.com/content/dam/zebra_dam/en/guide/portfolio/zd421-direct-thermal-parts-catalog.pdf" target="_blank" rel="noopener">Zebra: reservedelsliste</a> · <a href="https://docs.zebra.com/us/en/printers/desktop/zd421-and-zd621-desktop-printers-user-guide/c-zd620-420-controls-and-indicators/r-zd421-zd621-ug-standard-interface-controls.html" target="_blank" rel="noopener">Zebra: indikatorer</a></p>
+<h2>Hva tester vi nå?</h2>
+<p>Den forrige testen var vanlig etikettmating med to forskjellige hastigheter. Denne gangen sender vi i stedet dokumenterte <strong>lydkommandoer</strong> som ikke skal mate frem etiketter når de støttes.</p>
+<p class="notice"><strong>Uavklart maskinvare:</strong> Zebra dokumenterer <code>BEEP</code> og <code>BEL</code> for CPCL-kompatible skrivere. ZD421 er ikke bekreftet CPCL-kompatibel, og vi har ikke påvist at modellen har fysisk summer. Ukjente kommandoer kan bli ignorert eller tolket feil. Bruk derfor bare en ledig testskriver.</p>
+<ul>
+<li><strong>BEEP:</strong> et pip på 1 sekund, skrevet som <code>! U1 BEEP 8</code>.</li>
+<li><strong>Alternative BEEP:</strong> samme lydkommando i en komplett CPCL utility-økt.</li>
+<li><strong>ASCII BEL:</strong> kontrolltegn med byteverdi <code>0x07</code>.</li>
+<li><strong>Rytme:</strong> tre korte pip, kun dersom en enkelt BEEP allerede fungerer. Dette lager ikke forskjellige tonehøyder.</li>
+</ul>
+<details><summary>Dokumentasjon</summary>
+<p class="hint">Zebra dokumenterer BEEP i CPCL-programmeringsguiden for Link-OS. Verdien regnes i åttedels sekunder. CPCL og BEL fungerer bare når printerens parser og maskinvare støtter dem.</p>
+<p class="hint"><a href="https://www.zebra.com/content/dam/support-dam/en/documentation/unrestricted/guide/software/cpcl-link-os-pg-en.pdf" target="_blank" rel="noopener">CPCL Programming Guide, kapittel 11.5 og 11.30</a> · <a href="https://support.zebra.com/article/Zebra-Label-Printer-Programming-Language-Support-Information" target="_blank" rel="noopener">Zebra: språkstøtte per skrivermodell</a></p>
 </details>
 </section>
+
 <section class="card">
-<h2>1. Velg en testskriver</h2>
-<label class="caption" for="printer">Skriver fra Etikettstudio</label>
-<select id="printer"><option value="">Velg skriver …</option></select>
-<p id="printerNote" class="hint">Skriverlisten hentes lokalt fra samme nettleser som Etikettstudio.</p>
-<label class="caption" for="manualIp">IP-adresse (kan fylles inn manuelt)</label>
-<input id="manualIp" inputmode="decimal" spellcheck="false" autocomplete="off" placeholder="172.30.99.18">
+<h2>1. Velg testskriver</h2>
+<label class="caption" for="printer">Skriver fra den importerte listen</label>
+<select id="printer"><option value="">Velg skriver, eller bruk IP-feltet …</option></select>
+<p id="printerNote" class="hint">Skriverlisten fra Etikettstudio leses kun fra denne nettleseren.</p>
 <div class="grid">
-<div><label class="caption" for="dpi">Oppløsning</label><select id="dpi"><option value="203">203 dpi</option><option value="300">300 dpi</option></select></div>
-<div><label class="caption" for="originalSpeed">Nåværende utskriftshastighet (for gjenoppretting)</label><select id="originalSpeed"><option value="">Velg etter å ha kontrollert skriveren …</option></select></div>
-<div><label class="caption" for="labelW">Fysisk etikettbredde (mm)</label><input id="labelW" type="number" min="15" max="104" step="0.1" value="50"></div>
-<div><label class="caption" for="labelH">Fysisk etiketthøyde (mm)</label><input id="labelH" type="number" min="6.35" max="100" step="0.1" value="30"></div>
+<div><label class="caption" for="printerIp">Skriverens IP-adresse</label><input id="printerIp" inputmode="decimal" autocomplete="off" spellcheck="false" placeholder="For eksempel 172.30.99.18"></div>
+<div><label class="caption" for="port">Rå nettverksport</label><select id="port"><option value="9100">9100 – vanlig rå skriveport</option><option value="6101">6101 – alternativ rå port (hvis aktivert)</option></select></div>
 </div>
-<p class="hint">Kontroller <strong>PRINT SPEED</strong> på konfigurasjonsetiketten eller i skriverens webgrensesnitt, og velg den faktiske verdien. Vi forsøker å gjenopprette den etter testen. Målene må stemme med papiret som er satt inn.</p>
+<p class="hint">Port 9100 er normalt tilgjengelig på Zebra-nettverksskrivere. Port 6101 er en alternativ råport som kan være deaktivert. Ingen IP-adresser er innebygd i denne offentlige siden.</p>
 </section>
+
 <section class="card">
-<h2>2. Velg motorlydtest</h2>
-<label class="caption" for="pattern">Testprogram</label>
-<select id="pattern">
-<option value="comparison">Sammenligning: sakte → raskt (2 etiketter)</option>
-<option value="rhythm">Kort mønster: sakte → raskt → sakte (3 etiketter)</option>
+<h2>2. Velg en lydtest</h2>
+<label class="caption" for="probeMode">Testtype</label>
+<select id="probeMode">
+<option value="info">Les støtte og innstillinger – ingen endring</option>
+<option value="beep">BEEP – 1 sekund</option>
+<option value="beep_alt">BEEP – alternativ utilities-format, 1 sekund</option>
+<option value="bel">ASCII BEL – én summerforespørsel</option>
+<option value="rhythm">Kort rytme – tre pip (bare etter vellykket BEEP)</option>
 </select>
-<p class="hint">Hastighetene er 2 og 4 tommer/sekund og ligger innenfor Zebras publiserte grenser for både 203 og 300 dpi. Forskjellen kan oppfattes som endring i motorstøy – ikke nødvendigvis en musikalsk tone.</p>
-<label class="check"><input id="confirm" type="checkbox"><span>Jeg har valgt riktig skriver, kontrollert den opprinnelige hastigheten og etikettstørrelsen, og satt inn tilstrekkelig papir. Skriveren er ledig for test.</span></label>
+<p id="testDescription" class="hint"></p>
+<pre id="payload" aria-label="Rå kommando til skriveren"></pre>
+<label class="check"><input id="testConfirm" type="checkbox"><span>Jeg tester en skriver som er ledig, og har kontrollert IP-adresse og nettverkstillatelse. Jeg vet at en sending ikke er det samme som en kvittering.</span></label>
 <div class="buttons">
-<button id="prepare" class="btn" type="button">Forbered og vis ZPL</button>
-<button id="send" class="btn main" type="button" disabled>Send testen til skriveren</button>
+<button class="btn" id="copyRaw" type="button">Kopier råkommando</button>
+<button class="btn main" id="browserSend" type="button">Prøv via nettleseren</button>
 </div>
-<div id="status" class="status" role="status" aria-live="polite"></div>
-<div id="prepared" hidden>
-<h3>Testkommandoen</h3>
-<pre id="zplPreview"></pre>
-<div class="buttons">
-<button id="copyZpl" class="btn" type="button">Kopier ZPL</button>
-<button id="restore" class="btn" type="button" disabled>Send gjenoppretting på nytt</button>
-</div>
-<p class="hint">Utskrift går via samme HTML-POST-metode som Etikettstudio. Chrome kan åpne en fane, vise sikkerhetsadvarsel eller blokkere forespørselen. Utskrift er ikke bekreftet når knappen er trykket.</p>
-</div>
+<div id="browserStatus" class="status" role="status" aria-live="polite"></div>
+<p class="hint">Nettleseren sender en HTTP-forespørsel til <code>/pstprnt</code> uten USB. HTTPS → lokal HTTP kan blokkeres, og responsen bekrefter ikke at skriveren forsto kommandoen. For pålitelig rå TCP-test og tilbakemeldinger fra skriveren, bruk verktøyet nedenfor.</p>
 </section>
+
 <section class="card">
-<h2>3. Lytt og gi tilbakemelding</h2>
-<p>Se etter forskjell i motorlyd mellom etikettene. Lytt etter tonehøyde, summing, rytme og unormale lyder. Stopp testen dersom det oppstår papirstopp eller uvanlig mekanisk belastning.</p>
-<p class="hint">Fortell meg gjerne hvilke hastigheter som hørtes forskjellige ut, hvor mange etiketter som kom ut, og om hastigheten ble gjenopprettet. Da kan vi avgjøre om motoren er egnet for videre lydforsøk.</p>
+<h2>3. Nettverkstest fra Windows eller Linux</h2>
+<p>Dette er den anbefalte metoden. Den bruker <strong>TCP-port 9100 direkte</strong> og kan vise svar på read-only-kommandoer. Du trenger ikke USB, printerdriver eller eksterne Python-pakker.</p>
+<div class="buttons">
+<a class="btn main" href="./zebra-lydprobe.py" download="zebra-lydprobe.py" style="text-align:center;text-decoration:none">Last ned nettverksverktøyet (.py)</a>
+<button class="btn" id="copyPython" type="button">Kopier Python-kommando</button>
+<button class="btn" id="copyPowerShell" type="button">Kopier PowerShell-test</button>
+</div>
+<label class="caption" for="cmdPreview">Kommando fra samme mappe som den nedlastede filen</label>
+<pre id="cmdPreview" aria-label="Kommando til datamaskinen"></pre>
+<details><summary>Fremgangsmåte på Windows</summary>
+<ol>
+<li>Last ned <code>zebra-lydprobe.py</code> og legg den i Nedlastinger.</li>
+<li>Åpne PowerShell i denne mappen.</li>
+<li>Kjør kommandoen som vises ovenfor. Har du ikke Python, velg «Kopier PowerShell-test» for en interaktiv variant uten <code>.ps1</code>-fil.</li>
+<li>Begynn med <strong>Les støtte og innstillinger</strong>. En verdi som <code>?</code> betyr at innstillingen ikke gjenkjennes, ikke nødvendigvis at elektronikken mangler en summer.</li>
+<li>Prøv BEEP én gang. Hvis det ikke kommer lyd, prøv alternativt format og eventuelt port 6101. Ikke endre <code>device.languages</code> eller andre varige innstillinger.</li>
+</ol>
+</details>
+<div class="notice">Ikke lim kommandoene inn i vanlige etikettmaler. Test bare én skriver av gangen. Rytmetesten sender tre korte kommandoer; den kan ikke gi musikalsk tonehøyde.</div>
 </section>
-<footer>Eksperimentet bruker normale ZPL-utskriftskommandoer. Ingen installasjon, firmwareopplasting eller fjernstyrt motor-PWM.</footer>
+
+<section class="card">
+<h2>4. Resultatene vi trenger</h2>
+<p>Gi meg svarene fra <code>info</code>-testen, om <code>beep</code>, <code>beep_alt</code> eller <code>bel</code> ga lyd, og hvilken port du brukte. Fortell også om skriveren reagerte med feilmelding, uønsket papirmating eller ikke reagerte i det hele tatt.</p>
+<p class="hint">Hvis pipelyd fungerer, kan vi eksperimentere med rytmer og finne ut om den støtter forskjellig tonehøyde. Hvis alle lydkommandoene avvises, må vi undersøke andre maskinvare- eller firmwaregrensesnitt; mer variasjon i normal utskriftshastighet vil neppe hjelpe.</p>
+</section>
+<footer>Dette er kontrollerte nettverksforsøk. Ingen firmware, vedvarende innstillinger eller motor-PWM endres av testverktøyet.</footer>
 </main>
 <script>
 (()=>{'use strict';
-const el=id=>document.getElementById(id);
-const listKey='zebra-etikettstudio-printer-list-v1',ipKey='zebra-etikettstudio-printer-ip';
-let printerData=[],plan=null,hasSent=false;
-function status(msg,cls=''){const n=el('status');n.textContent=msg;n.className='status'+(cls?' '+cls:'')}
-function validIp(value){
-  const p=value.trim().split('.');
-  if(p.length!==4||p.some(x=>!/^\d{1,3}$/.test(x)||Number(x)>255))return null;
-  const n=p.map(Number);
-  return (n[0]===10||(n[0]===172&&n[1]>=16&&n[1]<=31)||(n[0]===192&&n[1]===168))?n.join('.'):null;
+const el=id=>document.getElementById(id),listKey='zebra-etikettstudio-printer-list-v1',ipKey='zebra-etikettstudio-printer-ip';
+const specs={
+  info:{label:'Spør etter device.languages og device.alarm.command. Dette er skrivebeskyttet. Nettleser-POST kan ikke lese svar; bruk nettverksverktøyet.',payload:'! U1 getvar "device.languages"\r\n! U1 getvar "device.alarm.command"\r\n'},
+  beep:{label:'Én kort CPCL utility-kommando: BEEP 8 betyr 8 × 0,125 sek = 1 sekund dersom modellen støtter en summer.',payload:'! U1 BEEP 8\r\n'},
+  beep_alt:{label:'Samme BEEP-forespørsel i full CPCL utilities-økt. Brukes bare dersom første BEEP ikke gir lyd.',payload:'! UTILITIES\r\nBEEP 8\r\nEND\r\n'},
+  bel:{label:'Sender ett ASCII-kontrolltegn, BEL (0x07). Fungerer bare hvis skriverens språk/parser har aktiv beeper-støtte.',payload:'\x07'},
+  rhythm:{label:'Tre korte pip med pauser fra TCP-programmet. Test kun dersom BEEP allerede har gitt lyd. Nettleseren kan ikke garantere nøyaktig timing.',payload:'! U1 BEEP 2\r\n[0,45 s pause]\r\n! U1 BEEP 1\r\n[0,325 s pause]\r\n! U1 BEEP 2\r\n'}
+};
+function ipv4(input){
+ const parts=String(input||'').trim().split('.');
+ if(parts.length!==4||parts.some(p=>!/^\d{1,3}$/.test(p)||Number(p)>255))return null;
+ const a=parts.map(Number);
+ if(!(a[0]===10||(a[0]===172&&a[1]>=16&&a[1]<=31)||(a[0]===192&&a[1]===168)))return null;
+ return a.join('.');
 }
-function validNumber(id,min,max){
-  const raw=el(id).value.trim(),n=Number(raw);
-  if(!raw||!Number.isFinite(n)||n<min||n>max)throw Error('Kontroller feltet «'+(id==='labelW'?'Etikettbredde':'Etiketthøyde')+'» ('+min+'–'+max+' mm).');
-  return n;
+function showStatus(msg,kind=''){el('browserStatus').textContent=msg;el('browserStatus').className='status'+(kind?' '+kind:'')}
+function activeInfo(){return {ip:ipv4(el('printerIp').value),port:Number(el('port').value),mode:el('probeMode').value}}
+function pythonCmd(){const a=activeInfo();return 'py -3 zebra-lydprobe.py '+(a.ip||'SKRIVER-IP')+' '+a.mode+' --port '+a.port}
+function safePowerShell(){
+ const a=activeInfo();
+ if(!a.ip)return '# Velg en gyldig skriver-IP først.';
+ if(a.mode==='info'){
+  return '$ip="'+a.ip+'"; $port='+a.port+'; foreach($key in @("device.languages","device.alarm.command","ip.port","ip.port_alternate")) {'+
+  '$c=[Net.Sockets.TcpClient]::new($ip,$port); try {$s=$c.GetStream();$s.ReadTimeout=1800;'+
+  '$cmd=\'! U1 getvar "\'+$key+\'"\' + [char]13 + [char]10;'+
+  '$bytes=[Text.Encoding]::ASCII.GetBytes($cmd);$s.Write($bytes,0,$bytes.Length);'+
+  '$buffer=New-Object byte[] 1024;try{$len=$s.Read($buffer,0,$buffer.Length);'+
+  'Write-Host ($key+": "+[Text.Encoding]::ASCII.GetString($buffer,0,$len).Trim())}'+
+  'catch{Write-Host ($key+": (intet svar)")}}finally{$c.Close()}}';
+ }
+ if(a.mode==='rhythm')return '# Rytmen testes med Python-verktøyet, ikke med PowerShell-ettlinjeren.';
+ const payload=a.mode==='beep'?'! U1 BEEP 8':a.mode==='beep_alt'?'! UTILITIES':null;
+ const bytes=a.mode==='bel'?'[byte[]](7)':a.mode==='beep_alt'?'[Text.Encoding]::ASCII.GetBytes("! UTILITIES"+[char]13+[char]10+"BEEP 8"+[char]13+[char]10+"END"+[char]13+[char]10)':
+ '[Text.Encoding]::ASCII.GetBytes("'+payload+'"+[char]13+[char]10)';
+ return '$c=[Net.Sockets.TcpClient]::new("'+a.ip+'",'+a.port+'); try {$s=$c.GetStream();$b='+bytes+';$s.Write($b,0,$b.Length)}finally{$c.Close()}';
 }
-function labelSize(info){
-  const m=String(info.name||'').match(/(?:^|_)(\d{1,3})X(\d{1,3})(?:_|$)/i);
-  if(m)return [Number(m[1]),Number(m[2])];
-  const dpi=Number(info.dpi)==200?203:Number(info.dpi);
-  return [Number(info.widthDots)*25.4/dpi,Number(info.lengthDots)*25.4/dpi].map(v=>Math.round(v*10)/10);
+function display(){
+ const {ip,mode}=activeInfo(),spec=specs[mode];
+ el('testDescription').textContent=spec.label;
+ el('payload').textContent=mode==='bel'?'0x07 (ASCII BEL, ett byte)':spec.payload.replace(/\r\n/g,'\n');
+ el('cmdPreview').textContent=pythonCmd()+'\n# Linux/macOS: '+pythonCmd().replace(/^py -3 /,'python3 ');
+ el('browserSend').disabled=mode==='info'||mode==='rhythm';
+ el('browserSend').textContent=mode==='info'?'Bruk TCP for å lese svar':mode==='rhythm'?'Bruk TCP for rytmetest':'Prøv via nettleseren';
 }
-function speeds(){
-  const dpi=Number(el('dpi').value),max=dpi===300?4:6,sel=el('originalSpeed'),old=sel.value;
-  sel.replaceChildren();
-  const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Velg faktisk hastighet …';sel.append(placeholder);
-  for(let n=2;n<=max;n++){
-    const opt=document.createElement('option');opt.value=String(n);opt.textContent=n+' tommer/sekund';sel.append(opt);
-  }
-  if(old&&Number(old)<=max)sel.value=old;else sel.value='';
-}
-function invalidate(){
-  plan=null;hasSent=false;el('send').disabled=true;el('prepared').hidden=true;el('restore').disabled=true;
-}
-function choosePrinter(){
-  const entry=printerData.find(p=>p.ip===el('printer').value);
-  if(!entry)return;
-  el('manualIp').value=entry.ip;
-  const dpi=entry.dpi==='200'?'203':String(entry.dpi);
-  el('dpi').value=dpi==='300'?'300':'203';speeds();
-  const sz=labelSize(entry);
-  if(sz[0]>=15&&sz[0]<=104)el('labelW').value=String(sz[0]);
-  if(sz[1]>=6.35&&sz[1]<=100)el('labelH').value=String(sz[1]);
-  el('printerNote').textContent=entry.name+' · '+entry.ip+' · '+dpi+' dpi. Sjekk fysisk etikettstørrelse før testen.';
-  invalidate();
+function selected(){
+ const opt=el('printer').selectedOptions[0];
+ if(!opt||!opt.value)return;
+ el('printerIp').value=opt.value;
+ el('printerNote').textContent=opt.dataset.note||'Kontroller valgt skriver før testen.';
+ display();
 }
 function loadPrinters(){
-  try{
-    const raw=JSON.parse(localStorage.getItem(listKey)||'[]');
-    if(Array.isArray(raw))printerData=raw.filter(p=>p&&validIp(String(p.ip||''))&&['200','203','300'].includes(String(p.dpi))).slice(0,254);
-  }catch(e){}
-  printerData.sort((a,b)=>String(a.name||a.ip).localeCompare(String(b.name||b.ip),'nb'));
-  for(const p of printerData){
-    const opt=document.createElement('option');opt.value=p.ip;opt.textContent=(p.name||'Zebra-skriver')+' · '+p.ip;el('printer').append(opt);
-  }
-  let lastIp='';
-  try{lastIp=localStorage.getItem(ipKey)||''}catch(e){}
-  if(lastIp){el('manualIp').value=lastIp;if(printerData.some(p=>p.ip===lastIp)){el('printer').value=lastIp;choosePrinter()}}
-  if(!printerData.length)el('printerNote').textContent='Ingen importert skriverliste her. Skriv inn IP, DPI og fysiske etikettmål manuelt.';
+ let entries=[];
+ try{entries=JSON.parse(localStorage.getItem(listKey)||'[]');if(!Array.isArray(entries))entries=[]}catch(e){}
+ entries=entries.filter(p=>p&&ipv4(p.ip)).slice(0,254).sort((a,b)=>String(a.name).localeCompare(String(b.name),'nb'));
+ for(const p of entries){
+  const opt=document.createElement('option');
+  opt.value=p.ip;opt.textContent=(p.name||'Zebra-skriver')+' · '+p.ip;
+  opt.dataset.note=(p.model||'ZD421')+' · '+(p.dpi||'?')+' dpi. Kontroller at dette er en testsriver.';
+  el('printer').appendChild(opt);
+ }
+ let remembered='';
+ try{remembered=localStorage.getItem(ipKey)||''}catch(e){}
+ if(ipv4(remembered)){el('printerIp').value=remembered;if(entries.some(p=>p.ip===remembered)){el('printer').value=remembered;selected()}}
+ if(!entries.length)el('printerNote').textContent='Ingen skrivere importert på denne enheten. Oppgi IP manuelt; det fungerer også.';
+ display();
 }
-function makeLabel(speed,w,h,index){
-  // Et minimalt fysisk merke gjør at det ikke bare mates et tomt format.
-  // Hver ^PQ1 gir kun én etikett; ingen cutter/peel/calibration-kommandoer.
-  const markW=Math.min(28,Math.max(12,Math.floor(w/8)));
-  const stroke=6;
-  return '^XA\n^PR'+speed+'\n^PW'+w+'\n^LL'+h+
-     '\n^LH0,0\n^FO3,3^GB'+markW+','+stroke+','+stroke+'^FS\n^PQ1\n^XZ\n';
+async function copy(text){
+ try{await navigator.clipboard.writeText(text);showStatus('Kopiert til utklippstavlen.','good')}
+ catch(e){showStatus('Nettleseren tillot ikke kopiering. Marker teksten manuelt i feltet.','warn')}
 }
-function makeRestore(speed){
-  // ^PR er vedvarende til ny kommando eller omstart.
-  // Et tomt format bør gjenopprette uten fysisk etikett, men dette kan variere.
-  return '^XA\n^PR'+speed+'\n^XZ\n';
+function sendOne(ip,payload){
+ // Browser transport is only an approximation; direct TCP using Python is preferred.
+ const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),5000);
+ return fetch('http://'+ip+'/pstprnt',{method:'POST',mode:'no-cors',
+  headers:{'Content-Type':'text/plain'},body:payload,cache:'no-store',
+  targetAddressSpace:'local',signal:controller.signal}).finally(()=>clearTimeout(timeout));
 }
-function generate(){
-  const ip=validIp(el('manualIp').value);
-  if(!ip)throw Error('Angi en gyldig privat IPv4-adresse.');
-  const dpi=Number(el('dpi').value),baseline=Number(el('originalSpeed').value);
-  if(!Number.isInteger(baseline)||baseline<2||baseline>(dpi===300?4:6))throw Error('Velg skriverens faktiske hastighet før testen.');
-  const wMM=validNumber('labelW',15,104),hMM=validNumber('labelH',6.35,100);
-  if(!el('confirm').checked)throw Error('Bekreft at testskriveren er klar og har riktig papir.');
-  const dotsW=Math.round(wMM*dpi/25.4),dotsH=Math.round(hMM*dpi/25.4);
-  const steps=el('pattern').value==='rhythm'?[2,4,2]:[2,4];
-  let zpl='';
-  for(let i=0;i<steps.length;i++)zpl+=makeLabel(steps[i],dotsW,dotsH,i);
-  zpl+=makeRestore(baseline);
-  return {ip,dpi,baseline,width:wMM,height:hMM,steps,zpl,restore:makeRestore(baseline)};
-}
-function formPost(ip,zpl){
-  // Samme brukerutløste HTML text/plain POST til /pstprnt som Etikettstudio bruker.
-  const form=document.createElement('form');
-  form.method='POST';form.enctype='text/plain';form.action='http://'+ip+'/pstprnt';form.target='_blank';form.style.display='none';
-  const field=document.createElement('input');
-  field.type='hidden';field.name=zpl;field.value='';
-  form.append(field);document.body.append(form);
-  try{form.submit()}finally{setTimeout(()=>form.remove(),5000)}
-}
-function copy(text){
-  if(!navigator.clipboard?.writeText){status('Nettleseren kan ikke kopiere automatisk. Merk og kopier ZPL-feltet manuelt.','warn');return}
-  navigator.clipboard.writeText(text).then(()=>status('ZPL kopiert.','good')).catch(()=>status('Kunne ikke kopiere ZPL.','warn'));
-}
-el('printer').addEventListener('change',choosePrinter);
-for(const id of ['manualIp','dpi','originalSpeed','labelW','labelH','pattern','confirm']){
-  el(id).addEventListener('change',()=>{
-    if(id==='dpi')speeds();
-    invalidate();
-  });
-  if(id==='manualIp'||id==='labelW'||id==='labelH')el(id).addEventListener('input',invalidate);
-}
-el('prepare').addEventListener('click',()=>{
-  try{
-    plan=generate();hasSent=false;el('send').disabled=false;
-    el('prepared').hidden=false;el('zplPreview').textContent=plan.zpl;el('restore').disabled=true;
-    status('Klar: '+plan.steps.length+' etiketter til '+plan.ip+' ved '+plan.steps.join(' → ')+' ips. Avsluttes med et forsøk på å gjenopprette '+plan.baseline+' ips.','good');
-  }catch(e){invalidate();status(e.message,'warn')}
+el('printer').addEventListener('change',selected);
+el('printerIp').addEventListener('input',()=>{if(el('printer').value!==el('printerIp').value)el('printer').value='';display()});
+el('port').addEventListener('change',display);
+el('probeMode').addEventListener('change',()=>{display();showStatus('')});
+el('copyRaw').addEventListener('click',()=>copy(specs[activeInfo().mode].payload));
+el('copyPython').addEventListener('click',()=>copy(pythonCmd()));
+el('copyPowerShell').addEventListener('click',()=>copy(safePowerShell()));
+el('browserSend').addEventListener('click',async()=>{
+ const a=activeInfo();
+ if(!a.ip){showStatus('Oppgi en gyldig lokal IPv4-adresse først.','warn');return}
+ if(!el('testConfirm').checked){showStatus('Bekreft at du tester en ledig skriver først.','warn');return}
+ if(a.mode==='info'||a.mode==='rhythm'){showStatus('Denne testen krever rå TCP-verktøyet.','warn');return}
+ el('browserSend').disabled=true;
+ showStatus('Forsøker å sende '+a.mode+' til '+a.ip+' via HTTP. Dette kan bli blokkert.');
+ try{
+  await sendOne(a.ip,specs[a.mode].payload);
+  showStatus('Nettleseren fullførte forespørselen. Det er IKKE en kvittering for at skriveren utførte lydkommandoen. Sjekk fysisk.','warn');
+ }catch(e){
+  showStatus('Nettleseren blokkerte forespørselen, eller skriveren svarte ikke. Bruk Python-verktøyet på TCP-port '+a.port+' for å prøve med rå kommando.','warn');
+ }finally{display()}
 });
-el('send').addEventListener('click',()=>{
-  if(!plan||hasSent)return;
-  try{
-    formPost(plan.ip,plan.zpl);
-    hasSent=true;el('send').disabled=true;el('restore').disabled=false;
-    status('HTML-POST forsøkt til '+plan.ip+'. Kontroller fysisk at etikettene kom ut. Nettleseren kan ikke bekrefte jobben eller hastighetsgjenopprettingen. Ikke trykk på nytt uten å kontrollere.','warn');
-  }catch(e){status('Kunne ikke starte utskriftsforsøket: '+e.message,'warn')}
-});
-el('restore').addEventListener('click',()=>{
-  if(!plan||!hasSent)return;
-  try{
-    formPost(plan.ip,plan.restore);
-    status('Forsøkte å gjenopprette '+plan.baseline+' ips til '+plan.ip+'. Dette er ikke bekreftet; kontroller skriverinnstillingen etterpå. Mulig ekstra tom etikett.','warn');
-  }catch(e){status('Kunne ikke forsøke gjenoppretting: '+e.message,'warn')}
-});
-el('copyZpl').addEventListener('click',()=>{if(plan)copy(plan.zpl)});
-speeds();loadPrinters();
+loadPrinters();
 })();
 </script>
 </body>
