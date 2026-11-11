@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="no">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#14263d">
+<title>ZD421 – Motorlydtest | Zebra Etikettstudio</title>
+<style>
+:root{color-scheme:light;--bg:#edf2f7;--card:#fff;--ink:#16253a;--muted:#637389;--border:#d8e3ef;--blue:#145be3;--warning:#885918}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif;margin:0}
+main{max-width:830px;margin:auto;padding:0 14px 42px}
+header{background:linear-gradient(130deg,#102039,#29446b);color:#fff;margin:0 -14px 16px;padding:23px 20px 27px;border-radius:0 0 21px 21px}
+header h1{font-size:24px;line-height:1.2;margin:9px 0 7px}header p{margin:0;opacity:.9}
+a{color:#1451b1}header a{color:#e8f2ff}header .back{font-size:13px;text-decoration:none}
+.card{background:var(--card);border:1px solid var(--border);border-radius:15px;margin:12px 0;padding:17px;box-shadow:0 3px 18px #18375608}
+.card h2{font-size:17px;margin:0 0 7px}.card h3{font-size:15px;margin:8px 0}
+.hint{color:var(--muted);font-size:13px;margin:5px 0 11px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+label.caption{display:block;font-size:13px;font-weight:700;margin:12px 0 5px}
+input:not([type=checkbox]),select,textarea{width:100%;padding:11px;border:1px solid #c6d6e7;border-radius:10px;background:#fff;color:var(--ink);font:inherit}
+input[type=checkbox]{width:21px;height:21px;flex:none;accent-color:var(--blue)}
+.check{display:flex;gap:11px;align-items:flex-start;border:1px solid #d6e0eb;background:#f8fbff;padding:13px;border-radius:11px;margin:13px 0;cursor:pointer}
+.btn{min-height:45px;padding:11px 14px;border-radius:10px;background:#f1f5fb;border:1px solid #ccd7e4;font:700 14px/1.3 inherit;color:#264469;cursor:pointer}
+.btn.main{background:var(--blue);border-color:var(--blue);color:#fff}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.buttons{display:flex;gap:9px;flex-wrap:wrap;margin-top:11px}
+.buttons .btn{flex:1 1 180px}
+.notice{background:#fff8e9;border:1px solid #ebd8ae;border-radius:11px;padding:12px 14px;color:#705017;font-size:13px;margin:12px 0}
+.status{font-size:13px;border-radius:9px;padding:10px 12px;background:#edf4ff;color:#25508a;margin-top:12px}
+.status:empty{display:none}
+.status.warn{background:#fff3e0;color:#78551b}
+.status.good{background:#e7f7ef;color:#176344}
+code,pre{font:12px/1.5 ui-monospace,Consolas,monospace}
+pre{max-height:260px;white-space:pre-wrap;overflow:auto;background:#f1f5f9;border:1px solid #d8e3ee;border-radius:11px;padding:12px;overflow-wrap:anywhere}
+small{font-size:12px;color:var(--muted)}
+ul{margin:6px 0;padding-left:22px}li{margin:5px 0}
+summary{cursor:pointer;font-weight:700}
+footer{text-align:center;font-size:12px;color:var(--muted);padding:17px}
+:focus-visible{outline:3px solid #4a86f6;outline-offset:2px}
+[hidden]{display:none!important}
+@media(max-width:570px){.grid{grid-template-columns:1fr;gap:0}main{padding-left:10px;padding-right:10px}header{margin-left:-10px;margin-right:-10px}.card{padding:14px}.buttons{flex-direction:column}.buttons .btn{width:100%;flex:auto}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<a class="back" href="./index.html">← Tilbake til Etikettstudio</a>
+<h1>ZD421 · Motorlyd-laboratorium</h1>
+<p>Undersøk om papirhastigheten påvirker motorlyden. Eksperimentell test med vanlig ZPL – ingen firmwareendringer.</p>
+</header>
+<section class="card">
+<h2>Hva kan vi teste?</h2>
+<p>ZD421 har en drivmotor for etikettmating. ZPL-kommandoen <code>^PR</code> kan endre hvor raskt motoren flytter etiketten. Her sammenligner vi lyden fra 2 og 4 tommer per sekund – ikke bestemte musikalske toner.</p>
+<div class="notice"><strong>Viktig:</strong> Dette vil faktisk skrive ut og mate frem 2 eller 3 etiketter. En avsluttende gjenopprettingskommando kan i noen tilfeller mate frem en ekstra tom etikett. Test på en skriver som ikke er i produksjon, med riktige etiketter installert.</div>
+<details><summary>Har ZD421 innebygd summer?</summary>
+<p>Zebras offentlige reservedelsliste for ZD421 Direct Thermal beskriver motor, hovedkort og kontrollpanel, men ikke en egen buzzer eller høyttaler. Brukerveiledningen beskriver varsellys. Det beviser ikke at det ikke finnes en liten summer loddet til kretskortet – bare at vi ikke har dokumentasjon på en tilgjengelig lydfunksjon. Denne siden tester kun motorlyd.</p>
+<p class="hint"><a href="https://www.zebra.com/content/dam/zebra_dam/en/guide/portfolio/zd421-direct-thermal-parts-catalog.pdf" target="_blank" rel="noopener">Zebra: reservedelsliste</a> · <a href="https://docs.zebra.com/us/en/printers/desktop/zd421-and-zd621-desktop-printers-user-guide/c-zd620-420-controls-and-indicators/r-zd421-zd621-ug-standard-interface-controls.html" target="_blank" rel="noopener">Zebra: indikatorer</a></p>
+</details>
+</section>
+<section class="card">
+<h2>1. Velg en testskriver</h2>
+<label class="caption" for="printer">Skriver fra Etikettstudio</label>
+<select id="printer"><option value="">Velg skriver …</option></select>
+<p id="printerNote" class="hint">Skriverlisten hentes lokalt fra samme nettleser som Etikettstudio.</p>
+<label class="caption" for="manualIp">IP-adresse (kan fylles inn manuelt)</label>
+<input id="manualIp" inputmode="decimal" spellcheck="false" autocomplete="off" placeholder="172.30.99.18">
+<div class="grid">
+<div><label class="caption" for="dpi">Oppløsning</label><select id="dpi"><option value="203">203 dpi</option><option value="300">300 dpi</option></select></div>
+<div><label class="caption" for="originalSpeed">Nåværende utskriftshastighet (for gjenoppretting)</label><select id="originalSpeed"><option value="">Velg etter å ha kontrollert skriveren …</option></select></div>
+<div><label class="caption" for="labelW">Fysisk etikettbredde (mm)</label><input id="labelW" type="number" min="15" max="104" step="0.1" value="50"></div>
+<div><label class="caption" for="labelH">Fysisk etiketthøyde (mm)</label><input id="labelH" type="number" min="6.35" max="100" step="0.1" value="30"></div>
+</div>
+<p class="hint">Kontroller <strong>PRINT SPEED</strong> på konfigurasjonsetiketten eller i skriverens webgrensesnitt, og velg den faktiske verdien. Vi forsøker å gjenopprette den etter testen. Målene må stemme med papiret som er satt inn.</p>
+</section>
+<section class="card">
+<h2>2. Velg motorlydtest</h2>
+<label class="caption" for="pattern">Testprogram</label>
+<select id="pattern">
+<option value="comparison">Sammenligning: sakte → raskt (2 etiketter)</option>
+<option value="rhythm">Kort mønster: sakte → raskt → sakte (3 etiketter)</option>
+</select>
+<p class="hint">Hastighetene er 2 og 4 tommer/sekund og ligger innenfor Zebras publiserte grenser for både 203 og 300 dpi. Forskjellen kan oppfattes som endring i motorstøy – ikke nødvendigvis en musikalsk tone.</p>
+<label class="check"><input id="confirm" type="checkbox"><span>Jeg har valgt riktig skriver, kontrollert den opprinnelige hastigheten og etikettstørrelsen, og satt inn tilstrekkelig papir. Skriveren er ledig for test.</span></label>
+<div class="buttons">
+<button id="prepare" class="btn" type="button">Forbered og vis ZPL</button>
+<button id="send" class="btn main" type="button" disabled>Send testen til skriveren</button>
+</div>
+<div id="status" class="status" role="status" aria-live="polite"></div>
+<div id="prepared" hidden>
+<h3>Testkommandoen</h3>
+<pre id="zplPreview"></pre>
+<div class="buttons">
+<button id="copyZpl" class="btn" type="button">Kopier ZPL</button>
+<button id="restore" class="btn" type="button" disabled>Send gjenoppretting på nytt</button>
+</div>
+<p class="hint">Utskrift går via samme HTML-POST-metode som Etikettstudio. Chrome kan åpne en fane, vise sikkerhetsadvarsel eller blokkere forespørselen. Utskrift er ikke bekreftet når knappen er trykket.</p>
+</div>
+</section>
+<section class="card">
+<h2>3. Lytt og gi tilbakemelding</h2>
+<p>Se etter forskjell i motorlyd mellom etikettene. Lytt etter tonehøyde, summing, rytme og unormale lyder. Stopp testen dersom det oppstår papirstopp eller uvanlig mekanisk belastning.</p>
+<p class="hint">Fortell meg gjerne hvilke hastigheter som hørtes forskjellige ut, hvor mange etiketter som kom ut, og om hastigheten ble gjenopprettet. Da kan vi avgjøre om motoren er egnet for videre lydforsøk.</p>
+</section>
+<footer>Eksperimentet bruker normale ZPL-utskriftskommandoer. Ingen installasjon, firmwareopplasting eller fjernstyrt motor-PWM.</footer>
+</main>
+<script>
+(()=>{'use strict';
+const el=id=>document.getElementById(id);
+const listKey='zebra-etikettstudio-printer-list-v1',ipKey='zebra-etikettstudio-printer-ip';
+let printerData=[],plan=null,hasSent=false;
+function status(msg,cls=''){const n=el('status');n.textContent=msg;n.className='status'+(cls?' '+cls:'')}
+function validIp(value){
+  const p=value.trim().split('.');
+  if(p.length!==4||p.some(x=>!/^\d{1,3}$/.test(x)||Number(x)>255))return null;
+  const n=p.map(Number);
+  return (n[0]===10||(n[0]===172&&n[1]>=16&&n[1]<=31)||(n[0]===192&&n[1]===168))?n.join('.'):null;
+}
+function validNumber(id,min,max){
+  const raw=el(id).value.trim(),n=Number(raw);
+  if(!raw||!Number.isFinite(n)||n<min||n>max)throw Error('Kontroller feltet «'+(id==='labelW'?'Etikettbredde':'Etiketthøyde')+'» ('+min+'–'+max+' mm).');
+  return n;
+}
+function labelSize(info){
+  const m=String(info.name||'').match(/(?:^|_)(\d{1,3})X(\d{1,3})(?:_|$)/i);
+  if(m)return [Number(m[1]),Number(m[2])];
+  const dpi=Number(info.dpi)==200?203:Number(info.dpi);
+  return [Number(info.widthDots)*25.4/dpi,Number(info.lengthDots)*25.4/dpi].map(v=>Math.round(v*10)/10);
+}
+function speeds(){
+  const dpi=Number(el('dpi').value),max=dpi===300?4:6,sel=el('originalSpeed'),old=sel.value;
+  sel.replaceChildren();
+  const placeholder=document.createElement('option');placeholder.value='';placeholder.textContent='Velg faktisk hastighet …';sel.append(placeholder);
+  for(let n=2;n<=max;n++){
+    const opt=document.createElement('option');opt.value=String(n);opt.textContent=n+' tommer/sekund';sel.append(opt);
+  }
+  if(old&&Number(old)<=max)sel.value=old;else sel.value='';
+}
+function invalidate(){
+  plan=null;hasSent=false;el('send').disabled=true;el('prepared').hidden=true;el('restore').disabled=true;
+}
+function choosePrinter(){
+  const entry=printerData.find(p=>p.ip===el('printer').value);
+  if(!entry)return;
+  el('manualIp').value=entry.ip;
+  const dpi=entry.dpi==='200'?'203':String(entry.dpi);
+  el('dpi').value=dpi==='300'?'300':'203';speeds();
+  const sz=labelSize(entry);
+  if(sz[0]>=15&&sz[0]<=104)el('labelW').value=String(sz[0]);
+  if(sz[1]>=6.35&&sz[1]<=100)el('labelH').value=String(sz[1]);
+  el('printerNote').textContent=entry.name+' · '+entry.ip+' · '+dpi+' dpi. Sjekk fysisk etikettstørrelse før testen.';
+  invalidate();
+}
+function loadPrinters(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(listKey)||'[]');
+    if(Array.isArray(raw))printerData=raw.filter(p=>p&&validIp(String(p.ip||''))&&['200','203','300'].includes(String(p.dpi))).slice(0,254);
+  }catch(e){}
+  printerData.sort((a,b)=>String(a.name||a.ip).localeCompare(String(b.name||b.ip),'nb'));
+  for(const p of printerData){
+    const opt=document.createElement('option');opt.value=p.ip;opt.textContent=(p.name||'Zebra-skriver')+' · '+p.ip;el('printer').append(opt);
+  }
+  let lastIp='';
+  try{lastIp=localStorage.getItem(ipKey)||''}catch(e){}
+  if(lastIp){el('manualIp').value=lastIp;if(printerData.some(p=>p.ip===lastIp)){el('printer').value=lastIp;choosePrinter()}}
+  if(!printerData.length)el('printerNote').textContent='Ingen importert skriverliste her. Skriv inn IP, DPI og fysiske etikettmål manuelt.';
+}
+function makeLabel(speed,w,h,index){
+  // Et minimalt fysisk merke gjør at det ikke bare mates et tomt format.
+  // Hver ^PQ1 gir kun én etikett; ingen cutter/peel/calibration-kommandoer.
+  const markW=Math.min(28,Math.max(12,Math.floor(w/8)));
+  const stroke=6;
+  return '^XA\n^PR'+speed+'\n^PW'+w+'\n^LL'+h+
+     '\n^LH0,0\n^FO3,3^GB'+markW+','+stroke+','+stroke+'^FS\n^PQ1\n^XZ\n';
+}
+function makeRestore(speed){
+  // ^PR er vedvarende til ny kommando eller omstart.
+  // Et tomt format bør gjenopprette uten fysisk etikett, men dette kan variere.
+  return '^XA\n^PR'+speed+'\n^XZ\n';
+}
+function generate(){
+  const ip=validIp(el('manualIp').value);
+  if(!ip)throw Error('Angi en gyldig privat IPv4-adresse.');
+  const dpi=Number(el('dpi').value),baseline=Number(el('originalSpeed').value);
+  if(!Number.isInteger(baseline)||baseline<2||baseline>(dpi===300?4:6))throw Error('Velg skriverens faktiske hastighet før testen.');
+  const wMM=validNumber('labelW',15,104),hMM=validNumber('labelH',6.35,100);
+  if(!el('confirm').checked)throw Error('Bekreft at testskriveren er klar og har riktig papir.');
+  const dotsW=Math.round(wMM*dpi/25.4),dotsH=Math.round(hMM*dpi/25.4);
+  const steps=el('pattern').value==='rhythm'?[2,4,2]:[2,4];
+  let zpl='';
+  for(let i=0;i<steps.length;i++)zpl+=makeLabel(steps[i],dotsW,dotsH,i);
+  zpl+=makeRestore(baseline);
+  return {ip,dpi,baseline,width:wMM,height:hMM,steps,zpl,restore:makeRestore(baseline)};
+}
+function formPost(ip,zpl){
+  // Samme brukerutløste HTML text/plain POST til /pstprnt som Etikettstudio bruker.
+  const form=document.createElement('form');
+  form.method='POST';form.enctype='text/plain';form.action='http://'+ip+'/pstprnt';form.target='_blank';form.style.display='none';
+  const field=document.createElement('input');
+  field.type='hidden';field.name=zpl;field.value='';
+  form.append(field);document.body.append(form);
+  try{form.submit()}finally{setTimeout(()=>form.remove(),5000)}
+}
+function copy(text){
+  if(!navigator.clipboard?.writeText){status('Nettleseren kan ikke kopiere automatisk. Merk og kopier ZPL-feltet manuelt.','warn');return}
+  navigator.clipboard.writeText(text).then(()=>status('ZPL kopiert.','good')).catch(()=>status('Kunne ikke kopiere ZPL.','warn'));
+}
+el('printer').addEventListener('change',choosePrinter);
+for(const id of ['manualIp','dpi','originalSpeed','labelW','labelH','pattern','confirm']){
+  el(id).addEventListener('change',()=>{
+    if(id==='dpi')speeds();
+    invalidate();
+  });
+  if(id==='manualIp'||id==='labelW'||id==='labelH')el(id).addEventListener('input',invalidate);
+}
+el('prepare').addEventListener('click',()=>{
+  try{
+    plan=generate();hasSent=false;el('send').disabled=false;
+    el('prepared').hidden=false;el('zplPreview').textContent=plan.zpl;el('restore').disabled=true;
+    status('Klar: '+plan.steps.length+' etiketter til '+plan.ip+' ved '+plan.steps.join(' → ')+' ips. Avsluttes med et forsøk på å gjenopprette '+plan.baseline+' ips.','good');
+  }catch(e){invalidate();status(e.message,'warn')}
+});
+el('send').addEventListener('click',()=>{
+  if(!plan||hasSent)return;
+  try{
+    formPost(plan.ip,plan.zpl);
+    hasSent=true;el('send').disabled=true;el('restore').disabled=false;
+    status('HTML-POST forsøkt til '+plan.ip+'. Kontroller fysisk at etikettene kom ut. Nettleseren kan ikke bekrefte jobben eller hastighetsgjenopprettingen. Ikke trykk på nytt uten å kontrollere.','warn');
+  }catch(e){status('Kunne ikke starte utskriftsforsøket: '+e.message,'warn')}
+});
+el('restore').addEventListener('click',()=>{
+  if(!plan||!hasSent)return;
+  try{
+    formPost(plan.ip,plan.restore);
+    status('Forsøkte å gjenopprette '+plan.baseline+' ips til '+plan.ip+'. Dette er ikke bekreftet; kontroller skriverinnstillingen etterpå. Mulig ekstra tom etikett.','warn');
+  }catch(e){status('Kunne ikke forsøke gjenoppretting: '+e.message,'warn')}
+});
+el('copyZpl').addEventListener('click',()=>{if(plan)copy(plan.zpl)});
+speeds();loadPrinters();
+})();
+</script>
+</body>
+</html>
