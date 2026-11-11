@@ -92,7 +92,7 @@ footer{text-align:center;color:#79879c;font-size:12px;padding:15px}
 <button class="btn main" id="browserSend" type="button">Prøv via nettleseren</button>
 </div>
 <div id="browserStatus" class="status" role="status" aria-live="polite"></div>
-<p class="hint">Nettleseren sender en HTTP-forespørsel til <code>/pstprnt</code> uten USB. HTTPS → lokal HTTP kan blokkeres, og responsen bekrefter ikke at skriveren forsto kommandoen. For pålitelig rå TCP-test og tilbakemeldinger fra skriveren, bruk verktøyet nedenfor.</p>
+<p class="hint">Nettleseren sender en HTTP-forespørsel til <code>/pstprnt</code> uten USB. HTTPS → lokal HTTP kan blokkeres, og responsen bekrefter ikke at skriveren forsto kommandoen. For pålitelig rå TCP-test og tilbakemeldinger fra skriveren, bruk verktøyet nedenfor. En returverdi på <code>?</code> for <code>device.alarm.command</code> tyder på at funksjonen er ukjent for modellen.</p>
 </section>
 
 <section class="card">
@@ -119,7 +119,8 @@ footer{text-align:center;color:#79879c;font-size:12px;padding:15px}
 
 <section class="card">
 <h2>4. Resultatene vi trenger</h2>
-<p>Gi meg svarene fra <code>info</code>-testen, om <code>beep</code>, <code>beep_alt</code> eller <code>bel</code> ga lyd, og hvilken port du brukte. Fortell også om skriveren reagerte med feilmelding, uønsket papirmating eller ikke reagerte i det hele tatt.</p>
+<p>En tidligere test på en ZD421 viste <code>device.languages = "epl_zpl"</code> og <code>device.alarm.command = "?"</code> uten lyd ved BEEP/BEL. Dette tyder på at CPCL-summerfunksjonen ikke gjenkjennes. Gjenta derfor ikke pipetestene dersom du fikk samme resultat.</p>
+<p>Den nyttigste neste testen er å kjøre <code>info</code> og sende meg <code>device.product_name</code>, <code>appl.name</code> og <code>zbi.key</code>. ZBI er Zebras programmeringsmiljø; selv en aktiv lisens innebærer ikke nødvendigvis direkte tilgang til motorstyringen.</p>
 <p class="hint">Hvis pipelyd fungerer, kan vi eksperimentere med rytmer og finne ut om den støtter forskjellig tonehøyde. Hvis alle lydkommandoene avvises, må vi undersøke andre maskinvare- eller firmwaregrensesnitt; mer variasjon i normal utskriftshastighet vil neppe hjelpe.</p>
 </section>
 <footer>Dette er kontrollerte nettverksforsøk. Ingen firmware, vedvarende innstillinger eller motor-PWM endres av testverktøyet.</footer>
@@ -128,7 +129,7 @@ footer{text-align:center;color:#79879c;font-size:12px;padding:15px}
 (()=>{'use strict';
 const el=id=>document.getElementById(id),listKey='zebra-etikettstudio-printer-list-v1',ipKey='zebra-etikettstudio-printer-ip';
 const specs={
-  info:{label:'Spør etter device.languages og device.alarm.command. Dette er skrivebeskyttet. Nettleser-POST kan ikke lese svar; bruk nettverksverktøyet.',payload:'! U1 getvar "device.languages"\r\n! U1 getvar "device.alarm.command"\r\n'},
+  info:{label:'Undersøk modell, firmware, programmeringsspråk, summerstøtte og ZBI-lisens. Alle spørsmål er skrivebeskyttede. Nettleseren kan ikke lese svar; bruk en nettverkskommando.',payload:'! U1 getvar "device.product_name"\r\n! U1 getvar "appl.name"\r\n! U1 getvar "device.languages"\r\n! U1 getvar "device.alarm.command"\r\n! U1 getvar "zbi.key"\r\n'},
   beep:{label:'Én kort CPCL utility-kommando: BEEP 8 betyr 8 × 0,125 sek = 1 sekund dersom modellen støtter en summer.',payload:'! U1 BEEP 8\r\n'},
   beep_alt:{label:'Samme BEEP-forespørsel i full CPCL utilities-økt. Brukes bare dersom første BEEP ikke gir lyd.',payload:'! UTILITIES\r\nBEEP 8\r\nEND\r\n'},
   bel:{label:'Sender ett ASCII-kontrolltegn, BEL (0x07). Fungerer bare hvis skriverens språk/parser har aktiv beeper-støtte.',payload:'\x07'},
@@ -148,7 +149,7 @@ function safePowerShell(){
  const a=activeInfo();
  if(!a.ip)return '# Velg en gyldig skriver-IP først.';
  if(a.mode==='info'){
-  return '$ip="'+a.ip+'"; $port='+a.port+'; foreach($key in @("device.languages","device.alarm.command","ip.port","ip.port_alternate")) {'+
+  return '$ip="'+a.ip+'"; $port='+a.port+'; foreach($key in @("device.product_name","appl.name","device.languages","device.alarm.command","zbi.key","ip.port","ip.port_alternate")) {'+
   '$c=[Net.Sockets.TcpClient]::new($ip,$port); try {$s=$c.GetStream();$s.ReadTimeout=1800;'+
   '$cmd=\'! U1 getvar "\'+$key+\'"\' + [char]13 + [char]10;'+
   '$bytes=[Text.Encoding]::ASCII.GetBytes($cmd);$s.Write($bytes,0,$bytes.Length);'+
