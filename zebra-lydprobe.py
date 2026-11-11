@@ -45,7 +45,7 @@ def send(ip: str, port: int, payload: bytes, expect_reply: bool = False) -> str:
         return b"".join(chunks).decode("ascii", errors="replace").strip()
 
 def inspect(ip: str, port: int):
-    keys = ("device.product_name", "appl.name", "device.languages", "device.alarm.command", "zbi.key", "ip.port", "ip.port_alternate")
+    keys = ("device.product_name", "appl.name", "device.languages", "device.alarm.command", "zbi.key", "zbi.enable", "ip.port", "ip.port_alternate")
     print("Leser skriverinnstillinger (ingen endringer):")
     for key in keys:
         cmd = f'! U1 getvar "{key}"\r\n'.encode("ascii")
